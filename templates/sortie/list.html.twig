@@ -5,7 +5,10 @@
 {% block body %}
     <div class="search">
 <h2>Filtrer les sorties </h2>
-
+{{ form_start(form) }}
+{{ form_widget(form) }}
+        <button type="submit"> Recherche! </button>
+{{ form_end(form) }}
 
     </div>
 <h1>Here is the list</h1>

@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Sortie;
+use App\Entity\SortieSearch;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
@@ -24,16 +25,39 @@ class SortieRepository extends ServiceEntityRepository
       * @return Sortie[] Returns an array of Sortie objects
       */
 
-    public function findFinished(): Query
+    public function findSearch(SortieSearch $search)
     {
-        $entityManager = $this->getEntityManager();
-        $dql = "
-                SELECT s
-                FROM App\Entity\Sortie s
-                JOIN App\Entity\Etat e
-                WHERE e.libelle = 'Passée'
-        ";
-        return $entityManager->createQuery($dql)->getResult();
+        $query = $this
+            ->createQueryBuilder('s')
+            ->select('s', 'e', 'c')
+            ->join('s.etat', 'e')
+            ->join('s.campus', 'c');
+        if (!empty($search->getQ())) {
+            $query = $query
+                ->andWhere('s.nom LIKE :q')
+                ->setParameter('q', "%{$search->getQ()}%");
+        }
+        if (($search->isSortiePassee())) {
+            $query = $query
+                ->andWhere('e.libelle LIKE :passe')
+                ->setParameter('passe', "Passée");
+        }
+        if (!empty($search->getCampus())) {
+            $query = $query
+                ->andWhere('c.nom LIKE :campus')
+                ->setParameter('campus', "%{$search->getCampus()}%");
+        }
+//        if (!(empty($search->getPremierDate()) && empty($search->getDeuxiemeDate()))) {
+//            $query = $query
+//                ->andWhere('s.dateDebut > :premiereDate AND s.dateDebut < :deuxiemeDate :')
+//                ->setParameters(
+//                    array(
+//                        'premiereDate' => $search->getPremierDate(),
+//                        'deuxiemeDate' => $search->getDeuxiemeDate()
+//                    )
+//                );
+//        }
+        return $query->getQuery()->getResult();
     }
 
 

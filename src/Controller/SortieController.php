@@ -2,7 +2,8 @@
 
 namespace App\Controller;
 
-use App\Entity\Sortie;
+use App\Entity\SortieSearch;
+use App\Form\SortieSearchType;
 use App\Form\SortieType;
 use App\Repository\SortieRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -51,9 +52,14 @@ class SortieController extends AbstractController
      */
     public function list(Request $request, SortieRepository $sortieRepository): Response
     {
-        $sorties = $sortieRepository->findBy([], ['dateDebut' => 'ASC']);
+        $data = new SortieSearch();
+        $searchSortieForm = $this->createForm(SortieSearchType::class, $data);
+        $searchSortieForm->handleRequest($request);
+        $sorties = $sortieRepository->findSearch($data);
         return $this->render('sortie/list.html.twig', [
-            'sorties' => $sorties
+            'sorties' => $sorties,
+            'form' => $searchSortieForm->createView()
         ]);
     }
+
 }
