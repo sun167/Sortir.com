@@ -71,9 +71,15 @@ class Sortie
      */
     private $campus;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Participant::class, mappedBy="inscription")
+     */
+    private $participants;
+
 
     public function __construct()
     {
+        $this->participants = new ArrayCollection();
     }
 
 
@@ -201,6 +207,33 @@ class Sortie
     public function setCampus(?Campus $campus): self
     {
         $this->campus = $campus;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Participant[]
+     */
+    public function getParticipants(): Collection
+    {
+        return $this->participants;
+    }
+
+    public function addParticipant(Participant $participant): self
+    {
+        if (!$this->participants->contains($participant)) {
+            $this->participants[] = $participant;
+            $participant->addInscription($this);
+        }
+
+        return $this;
+    }
+
+    public function removeParticipant(Participant $participant): self
+    {
+        if ($this->participants->removeElement($participant)) {
+            $participant->removeInscription($this);
+        }
 
         return $this;
     }

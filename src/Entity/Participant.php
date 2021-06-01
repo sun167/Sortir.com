@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ParticipantRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -63,6 +65,21 @@ class Participant implements UserInterface
      * @ORM\Column(type="boolean", nullable=true)
      */
     private $isActif;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Sortie::class, inversedBy="participants")
+     */
+    private $inscription;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Campus::class, inversedBy="participants")
+     */
+    private $campus;
+
+    public function __construct()
+    {
+        $this->inscription = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -213,6 +230,42 @@ class Participant implements UserInterface
     public function setIsActif(?bool $isActif): self
     {
         $this->isActif = $isActif;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Sortie[]
+     */
+    public function getInscription(): Collection
+    {
+        return $this->inscription;
+    }
+
+    public function addInscription(Sortie $inscription): self
+    {
+        if (!$this->inscription->contains($inscription)) {
+            $this->inscription[] = $inscription;
+        }
+
+        return $this;
+    }
+
+    public function removeInscription(Sortie $inscription): self
+    {
+        $this->inscription->removeElement($inscription);
+
+        return $this;
+    }
+
+    public function getCampus(): ?Campus
+    {
+        return $this->campus;
+    }
+
+    public function setCampus(?Campus $campus): self
+    {
+        $this->campus = $campus;
 
         return $this;
     }
