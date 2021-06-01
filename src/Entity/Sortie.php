@@ -54,10 +54,6 @@ class Sortie
      */
     private $urlPhoto;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Participant::class, mappedBy="inscription")
-     */
-    private $participants;
 
     /**
      * @ORM\ManyToOne(targetEntity=Etat::class, inversedBy="sortie")
@@ -74,10 +70,17 @@ class Sortie
      */
     private $campus;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=User::class, mappedBy="inscription")
+     */
+    private $users;
+
     public function __construct()
     {
-        $this->participants = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
+
+
 
     public function getId(): ?int
     {
@@ -168,32 +171,7 @@ class Sortie
         return $this;
     }
 
-    /**
-     * @return Collection|Participant[]
-     */
-    public function getParticipants(): Collection
-    {
-        return $this->participants;
-    }
 
-    public function addParticipant(Participant $participant): self
-    {
-        if (!$this->participants->contains($participant)) {
-            $this->participants[] = $participant;
-            $participant->addInscription($this);
-        }
-
-        return $this;
-    }
-
-    public function removeParticipant(Participant $participant): self
-    {
-        if ($this->participants->removeElement($participant)) {
-            $participant->removeInscription($this);
-        }
-
-        return $this;
-    }
 
     public function getEtat(): ?Etat
     {
@@ -227,6 +205,33 @@ class Sortie
     public function setCampus(?Campus $campus): self
     {
         $this->campus = $campus;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|User[]
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): self
+    {
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+            $user->addInscription($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): self
+    {
+        if ($this->users->removeElement($user)) {
+            $user->removeInscription($this);
+        }
 
         return $this;
     }
