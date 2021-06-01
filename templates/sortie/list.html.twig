@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% endblock %}
+
+{% block body %}
+<h1>Here is the list</h1>
+<table>
+
+<div class="table-header">
+    <thead>
+
+            <tr>
+                <th>Nom de la sortie</th>
+                <th>Date de la sortie</th>
+                <th>Cloture</th>
+                <th>Inscrits / Places</th>
+
+            </tr>
+    </thead>
+
+    </div>
+    {% for sortie in sorties %}
+
+        <div class="table-body">
+<tbody>
+
+            <tr>
+                    <td>{{ sortie.nom }}</td>
+                    <td>{{ sortie.dateDebut|date('d-m-Y H:m') }}</td>
+                    <td>{{ sortie.dateFin|date('d-m-Y H:m') }}</td>
+                    <td>{{ sortie.nbInscriptionsMax }}</td>
+             </tr>
+</tbody>
+
+        </div>
+        </table>
+    {% endfor %}
+{% endblock %}
