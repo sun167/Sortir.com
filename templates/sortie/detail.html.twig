@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} {{ parent()  }} | Détail de la sortie{% endblock %}
+
+{% block body %}
+<h1>Détail Sortie</h1>
+    <div>
+        <h4> Numéro : {{ sortie.id }}</h4>
+        <h4> Nom : {{ sortie.nom }}</h4>
+        <h4> Date de début : {{ sortie.dateDebut|date('Y-m-d-h-m') }}</h4>
+        <h4> Date de Fin : {{ sortie.dateFin|date('Y-m-d-h-m')  }}</h4>
+        <h4> Durée : {{ sortie.duree }}</h4>
+        <h4> Nombre max d'Inscription : {{ sortie.nbInscriptionsMax }}</h4>
+        <h4> Description : {{ sortie.description }}</h4>
+        <h4> Photo : {{ sortie.urlPhoto }}</h4>
+    </div>
+
+{% endblock %}
