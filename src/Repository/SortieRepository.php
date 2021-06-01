@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Sortie;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -19,22 +20,22 @@ class SortieRepository extends ServiceEntityRepository
         parent::__construct($registry, Sortie::class);
     }
 
-    // /**
-    //  * @return Sortie[] Returns an array of Sortie objects
-    //  */
-    /*
-    public function findByExampleField($value)
+     /**
+      * @return Sortie[] Returns an array of Sortie objects
+      */
+
+    public function findFinished(): Query
     {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('s.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        $entityManager = $this->getEntityManager();
+        $dql = "
+                SELECT s
+                FROM App\Entity\Sortie s
+                JOIN App\Entity\Etat e
+                WHERE e.libelle = 'Passée'
+        ";
+        return $entityManager->createQuery($dql)->getResult();
     }
-    */
+
 
     /*
     public function findOneBySomeField($value): ?Sortie
