@@ -2,14 +2,18 @@ security:
     encoders:
         App\Entity\User:
             algorithm: auto
+        App\Entity\Participant:
+            algorithm: auto
+
 
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
         # used to reload user from session & other features (e.g. switch_user)
         app_user_provider:
             entity:
-                class: App\Entity\User
-                property: email
+                class: App\Entity\Participant
+                property: pseudo
+        # used to reload user from session & other features (e.g. switch_user)
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -21,6 +25,7 @@ security:
             guard:
                 authenticators:
                     - App\Security\AppAuthenticator
+                entry_point: App\Security\AppAuthenticator
             logout:
                 path: app_logout
                 # where to redirect after logout

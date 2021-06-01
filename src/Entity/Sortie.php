@@ -54,10 +54,7 @@ class Sortie
      */
     private $urlPhoto;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=User::class, mappedBy="inscription")
-     */
-    private $user;
+
 
     /**
      * @ORM\ManyToOne(targetEntity=Etat::class, inversedBy="sortie")
@@ -74,14 +71,9 @@ class Sortie
      */
     private $campus;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=User::class, mappedBy="inscription")
-     */
-    private $users;
 
     public function __construct()
     {
-        $this->users = new ArrayCollection();
     }
 
 
@@ -213,30 +205,5 @@ class Sortie
         return $this;
     }
 
-    /**
-     * @return Collection|User[]
-     */
-    public function getUsers(): Collection
-    {
-        return $this->users;
-    }
 
-    public function addUser(User $user): self
-    {
-        if (!$this->users->contains($user)) {
-            $this->users[] = $user;
-            $user->addInscription($this);
-        }
-
-        return $this;
-    }
-
-    public function removeUser(User $user): self
-    {
-        if ($this->users->removeElement($user)) {
-            $user->removeInscription($this);
-        }
-
-        return $this;
-    }
 }

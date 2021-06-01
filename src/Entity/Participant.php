@@ -2,19 +2,14 @@
 
 namespace App\Entity;
 
-use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Repository\ParticipantRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * @ORM\Entity(repositoryClass=UserRepository::class)
- * @ORM\Table(name="`user`")
- * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
+ * @ORM\Entity(repositoryClass=ParticipantRepository::class)
  */
-class User implements UserInterface
+class Participant implements UserInterface
 {
     /**
      * @ORM\Id
@@ -26,7 +21,7 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      */
-    private $email;
+    private $pseudo;
 
     /**
      * @ORM\Column(type="json")
@@ -40,17 +35,12 @@ class User implements UserInterface
     private $password;
 
     /**
-     * @ORM\Column(type="string", length=30)
-     */
-    private $pseudo;
-
-    /**
-     * @ORM\Column(type="string", length=30)
+     * @ORM\Column(type="string", length=50)
      */
     private $nom;
 
     /**
-     * @ORM\Column(type="string", length=30)
+     * @ORM\Column(type="string", length=50)
      */
     private $prenom;
 
@@ -60,43 +50,33 @@ class User implements UserInterface
     private $telephone;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="string", length=50)
+     */
+    private $email;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
      */
     private $isAdmin;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", nullable=true)
      */
     private $isActif;
-
-    /**
-     * @ORM\ManyToMany(targetEntity=Sortie::class, inversedBy="users")
-     */
-    private $inscription;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=Campus::class, inversedBy="users")
-     */
-    private $campus;
-
-    public function __construct()
-    {
-        $this->inscription = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getEmail(): ?string
+    public function getPseudo(): ?string
     {
-        return $this->email;
+        return $this->pseudo;
     }
 
-    public function setEmail(string $email): self
+    public function setPseudo(string $pseudo): self
     {
-        $this->email = $email;
+        $this->pseudo = $pseudo;
 
         return $this;
     }
@@ -108,7 +88,7 @@ class User implements UserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->email;
+        return (string) $this->pseudo;
     }
 
     /**
@@ -117,6 +97,8 @@ class User implements UserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
+        // guarantee every participant at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
     }
@@ -159,20 +141,8 @@ class User implements UserInterface
      */
     public function eraseCredentials()
     {
-        // If you store any temporary, sensitive data on the user, clear it here
+        // If you store any temporary, sensitive data on the participant, clear it here
         // $this->plainPassword = null;
-    }
-
-    public function getPseudo(): ?string
-    {
-        return $this->pseudo;
-    }
-
-    public function setPseudo(string $pseudo): self
-    {
-        $this->pseudo = $pseudo;
-
-        return $this;
     }
 
     public function getNom(): ?string
@@ -211,12 +181,24 @@ class User implements UserInterface
         return $this;
     }
 
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): self
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
     public function getIsAdmin(): ?bool
     {
         return $this->isAdmin;
     }
 
-    public function setIsAdmin(bool $isAdmin): self
+    public function setIsAdmin(?bool $isAdmin): self
     {
         $this->isAdmin = $isAdmin;
 
@@ -228,45 +210,9 @@ class User implements UserInterface
         return $this->isActif;
     }
 
-    public function setIsActif(bool $isActif): self
+    public function setIsActif(?bool $isActif): self
     {
         $this->isActif = $isActif;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Sortie[]
-     */
-    public function getInscription(): Collection
-    {
-        return $this->inscription;
-    }
-
-    public function addInscription(Sortie $inscription): self
-    {
-        if (!$this->inscription->contains($inscription)) {
-            $this->inscription[] = $inscription;
-        }
-
-        return $this;
-    }
-
-    public function removeInscription(Sortie $inscription): self
-    {
-        $this->inscription->removeElement($inscription);
-
-        return $this;
-    }
-
-    public function getCampus(): ?Campus
-    {
-        return $this->campus;
-    }
-
-    public function setCampus(?Campus $campus): self
-    {
-        $this->campus = $campus;
 
         return $this;
     }
