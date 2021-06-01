@@ -24,7 +24,6 @@ class Campus
      */
     private $nom;
 
-
     /**
      * @ORM\OneToMany(targetEntity=Sortie::class, mappedBy="campus")
      */

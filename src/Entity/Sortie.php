@@ -54,6 +54,10 @@ class Sortie
      */
     private $urlPhoto;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=User::class, mappedBy="inscription")
+     */
+    private $user;
 
     /**
      * @ORM\ManyToOne(targetEntity=Etat::class, inversedBy="sortie")
