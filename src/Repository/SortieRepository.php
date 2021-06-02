@@ -7,6 +7,7 @@ use App\Entity\SortieSearch;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
+use function Doctrine\ORM\QueryBuilder;
 
 /**
  * @method Sortie|null find($id, $lockMode = null, $lockVersion = null)
@@ -31,9 +32,7 @@ class SortieRepository extends ServiceEntityRepository
             ->createQueryBuilder('s')
             ->select('s', 'e', 'c')
             ->join('s.etat', 'e')
-            ->join('s.campus', 'c')
-            ->join('s.participant_sortie', 'i');
-
+            ->join('s.campus', 'c');
         if (!empty($search->getQ())) {
             $query = $query
                 ->andWhere('s.nom LIKE :q')
@@ -56,11 +55,16 @@ class SortieRepository extends ServiceEntityRepository
                 ->andWhere('e.libelle LIKE :passe')
                 ->setParameter('passe', "Passée");
         }
-//        if (!empty($search->isInscrit())) {
-//            $query = $query
-//                ->andWhere('i. LIKE :passe')
-//                ->setParameter('passe', "Passée");
-//        }
+        if (!empty($search->isInscrit()) && empty($search->isNonInscrit())) {
+            $query = $query
+                ->andWhere($query->expr()->isMemberOf(':participants','s.participants'))
+                ->setParameter('participants',$search->isInscrit());
+        }
+        if (!empty($search->isNonInscrit()) && empty($search->isInscrit())) {
+            $query = $query
+                ->andWhere(':participants NOT MEMBER OF s.participants')
+                ->setParameter('participants',$search->isNonInscrit());
+        }
         return $query->getQuery()->getResult();
     }
 
