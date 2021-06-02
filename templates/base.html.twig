@@ -3,7 +3,8 @@
     <head>
         <meta charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
-
+        <link rel="stylesheet" href="{{ asset('css/sortie.css') }}"> {# CSS POUR LA CREATION ET DETAIL DES SORTIES #}
+        <link rel="stylesheet" href="{{ asset('css/index.css') }}"> {# CSS POUR LE THEME DU PROJET #}
     </head>
     <body>
         {% block body %}<h1>COUCOU PLUS GRAND</h1>{% endblock %}

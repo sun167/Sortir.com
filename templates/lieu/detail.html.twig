@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} {{ parent()  }} | Détail du lieu{% endblock %}
+
+{% block body %}
+<h1>Détail Lieu</h1>
+    <div class="sortie-container">
+        <div class="sortie-detail">
+            <h4> Nom : {{ lieu.nom  }}</h4>
+            <h4> Rue : {{ lieu.rue }}</h4>
+            {% for ville in lieu.ville %}
+                <h4> Ville : {{ ville.nom }}</h4>
+            {% endfor %}
+            <h4> Latitude : {{ lieu.latitude }}</h4>
+            <h4> Longitude : {{ lieu.longitude }}</h4>
+        </div>
+    </div>
+{% endblock %}
+
