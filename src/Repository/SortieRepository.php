@@ -22,7 +22,7 @@ class SortieRepository extends ServiceEntityRepository
     }
 
      /**
-      * @return Sortie[] Returns an array of Sortie objects
+      * @return Sortie[] Returns an array of searched objects
       */
 
     public function findSearch(SortieSearch $search)
@@ -31,31 +31,35 @@ class SortieRepository extends ServiceEntityRepository
             ->createQueryBuilder('s')
             ->select('s', 'e', 'c')
             ->join('s.etat', 'e')
-            ->join('s.campus', 'c');
+            ->join('s.campus', 'c')
+            ->join('s.participant_sortie', 'i');
+
         if (!empty($search->getQ())) {
             $query = $query
                 ->andWhere('s.nom LIKE :q')
                 ->setParameter('q', "%{$search->getQ()}%");
-        }
-        if (($search->isSortiePassee())) {
-            $query = $query
-                ->andWhere('e.libelle LIKE :passe')
-                ->setParameter('passe', "Passée");
         }
         if (!empty($search->getCampus())) {
             $query = $query
                 ->andWhere('c.nom LIKE :campus')
                 ->setParameter('campus', "%{$search->getCampus()}%");
         }
-//        if (!(empty($search->getPremierDate()) && empty($search->getDeuxiemeDate()))) {
+        if (!(empty($search->getPremierDate()) && empty($search->getDeuxiemeDate()))) {
+            $query = $query
+                ->andWhere('s.dateDebut > :premierDate')
+                ->andWhere('s.dateDebut < :deuxiemeDate')
+                ->setParameter('premierDate', $search->getPremierDate())
+                ->setParameter('deuxiemeDate', $search->getDeuxiemeDate());
+        }
+        if (!empty($search->isSortiePassee())) {
+            $query = $query
+                ->andWhere('e.libelle LIKE :passe')
+                ->setParameter('passe', "Passée");
+        }
+//        if (!empty($search->isInscrit())) {
 //            $query = $query
-//                ->andWhere('s.dateDebut > :premiereDate AND s.dateDebut < :deuxiemeDate :')
-//                ->setParameters(
-//                    array(
-//                        'premiereDate' => $search->getPremierDate(),
-//                        'deuxiemeDate' => $search->getDeuxiemeDate()
-//                    )
-//                );
+//                ->andWhere('i. LIKE :passe')
+//                ->setParameter('passe', "Passée");
 //        }
         return $query->getQuery()->getResult();
     }

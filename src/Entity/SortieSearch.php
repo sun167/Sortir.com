@@ -2,33 +2,23 @@
 
 
 namespace App\Entity;
-use App\Entity\Sortie;
 
 class SortieSearch
 {
 
     /**
      * STRING DE LA BARRE DE RECHERCHE
-     * @var string
+     * @var string|null
      */
     private $q = '';
-
-
-    /**
-     * @var boolean
-     */
     private $sortiePassee = false;
-
-    /**
-     *
-     */
     private $campus;
-    /**
-     * @return string
-     */
+    private $premierDate;
+    private $deuxiemeDate;
+    private $inscrit = false;
+    private $nonInscrit = false;
+    private $organisateur = false;
 
-//    private $premiereDate;
-//    private $deuxiemeDate;
     public function getQ(): string
     {
         return $this->q;
@@ -105,6 +95,54 @@ class SortieSearch
     public function setDeuxiemeDate($deuxiemeDate): void
     {
         $this->deuxiemeDate = $deuxiemeDate;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isInscrit(): bool
+    {
+        return $this->inscrit;
+    }
+
+    /**
+     * @param bool $inscrit
+     */
+    public function setInscrit(bool $inscrit): void
+    {
+        $this->inscrit = $inscrit;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isNonInscrit(): bool
+    {
+        return $this->nonInscrit;
+    }
+
+    /**
+     * @param bool $nonInscrit
+     */
+    public function setNonInscrit(bool $nonInscrit): void
+    {
+        $this->nonInscrit = $nonInscrit;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isOrganisateur(): bool
+    {
+        return $this->organisateur;
+    }
+
+    /**
+     * @param bool $organisateur
+     */
+    public function setOrganisateur(bool $organisateur): void
+    {
+        $this->organisateur = $organisateur;
     }
 
 

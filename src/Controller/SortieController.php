@@ -48,7 +48,7 @@ class SortieController extends AbstractController
     }
 
     /**
-     * @Route("/", name="sortie_list")
+     * @Route("/list", name="sortie_list")
      */
     public function list(Request $request, SortieRepository $sortieRepository): Response
     {
@@ -56,6 +56,9 @@ class SortieController extends AbstractController
         $searchSortieForm = $this->createForm(SortieSearchType::class, $data);
         $searchSortieForm->handleRequest($request);
         $sorties = $sortieRepository->findSearch($data);
+        if(!$sorties) {
+            throw $this->createNotFoundException("Sortie inexistant");
+        }
         return $this->render('sortie/list.html.twig', [
             'sorties' => $sorties,
             'form' => $searchSortieForm->createView()
