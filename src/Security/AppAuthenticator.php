@@ -2,6 +2,7 @@
 
 namespace App\Security;
 
+use App\Entity\Participant;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -67,7 +68,7 @@ class AppAuthenticator extends AbstractFormLoginAuthenticator implements Passwor
             throw new InvalidCsrfTokenException();
         }
 
-        $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $credentials['email']]);
+        $user = $this->entityManager->getRepository(Participant::class)->findOneBy(['email' => $credentials['email']]);
 
         if (!$user) {
             throw new UsernameNotFoundException('Email could not be found.');
@@ -95,8 +96,7 @@ class AppAuthenticator extends AbstractFormLoginAuthenticator implements Passwor
             return new RedirectResponse($targetPath);
         }
 
-        // For example : return new RedirectResponse($this->urlGenerator->generate('some_route'));
-        throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
+        return new RedirectResponse($this->urlGenerator->generate('sortie_list'));
     }
 
     protected function getLoginUrl()
