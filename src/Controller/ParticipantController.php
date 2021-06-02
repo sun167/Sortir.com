@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Participant;
 use App\Form\ParticipantType;
+use App\ManageEntity\UpdateEntity;
 use App\Repository\CampusRepository;
 use App\Repository\ParticipantRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -50,14 +52,16 @@ class ParticipantController extends AbstractController
     public function edit($id,
                          EntityManagerInterface $entityManager,
                          Request $request,
-                         ParticipantRepository $participantRepository): Response
+                         ParticipantRepository $participantRepository,
+                         CampusRepository $campusRepository): Response
     {
         $participant = $participantRepository->find($id);
         if (!$participant) {
             throw $this->createNotFoundException("Oups ce participant n'éxiste pas");
         }
 
-        $participantForm = $this->createForm(ParticipantType::class,$participant);
+        $campus = $campusRepository->find($id);
+        $participantForm = $this->createForm(ParticipantType::class, $participant);
         $participantForm->handleRequest($request);
 
         if ($participantForm->isSubmitted() && $participantForm->isValid()) { // dans cet ordre là
@@ -71,10 +75,54 @@ class ParticipantController extends AbstractController
         }
 
         return $this->render('participant/edit.html.twig', [
-            "participant"=> $participant,
+            "campus"=> $campus,
+            "participant" => $participant,
             'participantForm' => $participantForm->createView()
         ]);
 
+    }
+
+    /**
+     * @Route("/participant/create", name="participant_create")
+     */
+    public function create(Request $request,
+                           EntityManagerInterface $entityManager,
+                           UpdateEntity $updateEntity
+                           //SerieImage $serieImage
+                            ): Response
+    {
+
+        // Générer un formulaire pour créer un nouveau participant
+        $participant = new Participant();
+        $participantForm = $this->createForm(ParticipantType::class, $participant);
+
+        $participantForm->handleRequest($request);
+
+        // $file = $participantForm->get('poster')->getData();
+
+
+        if ($participantForm->isSubmitted() && $participantForm->isValid()) { // dans cet ordre là
+
+
+            //  $file = $participantForm->get('poster')->getData();
+            // /**
+           //  * @var UploadedFile $file
+           //  */
+           // if($file){
+           //     $directory = $this->getParameter('upload_posters_series_dir');
+           //     $serieImage->save($file,$participant,$directory);
+           // }
+
+            $updateEntity->save($participant);
+
+            $this->addFlash('success', 'Serie added !!');
+
+            return $this->redirectToRoute('serie_detail', ['id' => $participant->getId()]);
+        }
+
+        return $this->render('participant/create.html.twig', [
+            'participantForm' => $participantForm->createView()
+        ]);
     }
 
 
