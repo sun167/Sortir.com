@@ -54,10 +54,7 @@ class Sortie
      */
     private $urlPhoto;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=User::class, mappedBy="inscription")
-     */
-    private $user;
+
 
     /**
      * @ORM\ManyToOne(targetEntity=Etat::class, inversedBy="sortie")
@@ -75,9 +72,9 @@ class Sortie
     private $campus;
 
     /**
-     * @ORM\ManyToMany(targetEntity=User::class, mappedBy="inscription")
+     * @ORM\ManyToMany(targetEntity=Participant::class, mappedBy="inscription")
      */
-    private $users;
+    private $participants;
 
     /**
      * @ORM\Column (type="integer", nullable=true)
@@ -85,9 +82,10 @@ class Sortie
     private $nb_dispo;
 
 
+
     public function __construct()
     {
-        $this->users = new ArrayCollection();
+        $this->participants = new ArrayCollection();
     }
 
 
@@ -220,27 +218,27 @@ class Sortie
     }
 
     /**
-     * @return Collection|User[]
+     * @return Collection|Participant[]
      */
-    public function getUsers(): Collection
+    public function getParticipants(): Collection
     {
-        return $this->users;
+        return $this->participants;
     }
 
-    public function addUser(User $user): self
+    public function addParticipant(Participant $participant): self
     {
-        if (!$this->users->contains($user)) {
-            $this->users[] = $user;
-            $user->addInscription($this);
+        if (!$this->participants->contains($participant)) {
+            $this->participants[] = $participant;
+            $participant->addInscription($this);
         }
 
         return $this;
     }
 
-    public function removeUser(User $user): self
+    public function removeParticipant(Participant $participant): self
     {
-        if ($this->users->removeElement($user)) {
-            $user->removeInscription($this);
+        if ($this->participants->removeElement($participant)) {
+            $participant->removeInscription($this);
         }
 
         return $this;
@@ -251,8 +249,9 @@ class Sortie
         return $this->nb_dispo;
     }
     public function setNbDispo(int $nb_dispo): self {
-       $this->nb_dispo = $nb_dispo;
+        $this->nb_dispo = $nb_dispo;
 
-       return $this;
+        return $this;
     }
+
 }
