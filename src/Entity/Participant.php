@@ -6,10 +6,13 @@ use App\Repository\ParticipantRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=ParticipantRepository::class)
+ * @UniqueEntity("pseudo")
  */
 class Participant implements UserInterface
 {
@@ -21,7 +24,9 @@ class Participant implements UserInterface
     private $id;
 
     /**
+     *
      * @ORM\Column(type="string", length=180, unique=true)
+     *
      */
     private $pseudo;
 
@@ -159,7 +164,7 @@ class Participant implements UserInterface
     public function eraseCredentials()
     {
         // If you store any temporary, sensitive data on the participant, clear it here
-        // $this->plainPassword = null;
+        // $this->password = null;
     }
 
     public function getNom(): ?string
@@ -261,6 +266,7 @@ class Participant implements UserInterface
     public function getCampus(): ?Campus
     {
         return $this->campus;
+
     }
 
     public function setCampus(?Campus $campus): self
