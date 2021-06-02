@@ -2,17 +2,16 @@
 
 namespace App\Controller;
 
+use App\Entity\SortieSearch;
+use App\Form\SortieSearchType;
 use App\Entity\Sortie;
 use App\Form\LieuType;
 use App\Form\SortieType;
-use App\Form\VilleType;
 use App\Repository\SortieRepository;
 use App\Upload\SortieImage;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\ManageEntity\UpdateEntity;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -61,17 +60,22 @@ class SortieController extends AbstractController
         return $this->render('sortie/detail.html.twig', ["sortie" => $sortie]);
     }
 
-    //TODO NORMALEMENT C'EST TEMPORAIRE A VOIR AVEC CAO-SON
     /**
-     *@Route("/sortie/list", name="sortie_list")
+     * @Route("/list", name="sortie_list")
      */
-    public function list(SortieRepository $sortieRepository) : Response {
-        //Liste des sorties
-        $sortie = $sortieRepository->findAll();
-        if(!$sortie) {
-            throw $this->createNotFoundException("Erreur dans le chargement des listes de sorties");
+    public function list(Request $request, SortieRepository $sortieRepository): Response
+    {
+        $data = new SortieSearch();
+        $searchSortieForm = $this->createForm(SortieSearchType::class, $data);
+        $searchSortieForm->handleRequest($request);
+        $sorties = $sortieRepository->findSearch($data);
+        if(!$sorties) {
+            throw $this->createNotFoundException("Sortie inexistant");
         }
-        return $this->render('sortie/list.html.twig', ["sortie" => $sortie]);
+        return $this->render('sortie/list.html.twig', [
+            'sorties' => $sorties,
+            'form' => $searchSortieForm->createView()
+        ]);
     }
 
     /**
