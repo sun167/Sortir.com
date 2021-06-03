@@ -59,9 +59,11 @@ class SortieController extends AbstractController
         if(!$sorties) {
             throw $this->createNotFoundException("Sortie inexistant");
         }
+
         return $this->render('sortie/list.html.twig', [
             'sorties' => $sorties,
             'form' => $searchSortieForm->createView()
+
         ]);
     }
 

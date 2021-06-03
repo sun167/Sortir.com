@@ -30,9 +30,7 @@ class SortieRepository extends ServiceEntityRepository
     {
         $query = $this
             ->createQueryBuilder('s')
-            ->select('s', 'e', 'c')
-            ->join('s.etat', 'e')
-            ->join('s.campus', 'c');
+            ->select('s');
         if (!empty($search->getQ())) {
             $query = $query
                 ->andWhere('s.nom LIKE :q')
@@ -40,8 +38,10 @@ class SortieRepository extends ServiceEntityRepository
         }
         if (!empty($search->getCampus())) {
             $query = $query
-                ->andWhere('c.nom LIKE :campus')
-                ->setParameter('campus', "%{$search->getCampus()}%");
+                ->addSelect('c')
+                ->join('s.campus', 'c')
+                ->andWhere('c.nom LIKE :nomCampus')
+                ->setParameter('nomCampus', "%{$search->getCampus()->getNom()}%");
         }
         if (!(empty($search->getPremierDate()) && empty($search->getDeuxiemeDate()))) {
             $query = $query
@@ -52,6 +52,8 @@ class SortieRepository extends ServiceEntityRepository
         }
         if (!empty($search->isSortiePassee())) {
             $query = $query
+                ->addSelect('e')
+                ->join('s.etat', 'e')
                 ->andWhere('e.libelle LIKE :passe')
                 ->setParameter('passe', "Passée");
         }
