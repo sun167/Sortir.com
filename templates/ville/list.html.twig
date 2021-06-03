@@ -1,10 +1,18 @@
 {% extends 'base.html.twig' %}
 
+{% block title %} {{ parent() }} | Ville {% endblock %}
+
 {% block body %}
-
-{% endblock %}
-
-{% block title %}
-
+    <div class="nav_right">
+        <li><a href="{{ path('ville_create') }}">Creation Ville</a></li>
+    </div>
+    <h2>Listes des villes</h2>
+    <div>
+        {% for ville in ville %}
+            <article>
+                <a href="{{ path('ville_detail', {'id' : ville.id}) }}" title="{{ ville.nom }} | {{ ville.codePostal }}">{{ ville.nom }} | {{ ville.codePostal }}</a>
+            </article>
+        {% endfor %}
+    </div>
 {% endblock %}
 

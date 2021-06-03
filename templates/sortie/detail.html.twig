@@ -27,6 +27,9 @@
             {% for campus in sortie.campus %}
                 <h4> Organiser par : {{ campus.nom }}</h4>
             {% endfor %}
+            {% for etat in sortie.etat %}
+                <h4>Etat : {{ sortie.etat }}</h4>
+            {% endfor %}
         </div>
     </div>
     <div>

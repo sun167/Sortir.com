@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} {{ parent() }} | Detail profil{% endblock %}
+
+{% block body %}
+    <h2>{{ participant.pseudo }}</h2>
+    <div>
+
+        <h4> Prenom : {{ participant.prenom }}</h4>
+        <h4> Nom : {{ participant.nom }}</h4>
+        <h4> Téléphone :
+            {% if participant.telephone %}
+                {{ participant.telephone }}
+            {% else %}
+                Pas de numéro indiqué
+            {% endif %}</h4>
+        <h4> Email : {{ participant.email }}</h4>
+        <h4> Ville de rattachement : {{ campus.nom }}</h4>
+    </div>
+
+{% endblock %}

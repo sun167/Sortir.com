@@ -1,7 +1,5 @@
 security:
     encoders:
-        App\Entity\User:
-            algorithm: auto
         App\Entity\Participant:
             algorithm: auto
 
@@ -19,6 +17,10 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime: 6048000
+                path: /
             anonymous: true
             lazy: true
             provider: app_user_provider
@@ -28,6 +30,7 @@ security:
                 entry_point: App\Security\AppAuthenticator
             logout:
                 path: app_logout
+
                 # where to redirect after logout
                 # target: app_any_route
 

@@ -3,10 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Sortie;
-use App\Entity\SortieSearch;
-
-use App\Form\SortieSearchType;
 use App\Form\LieuType;
+use App\Entity\SortieSearch;
+use App\Form\SortieSearchType;
 use App\Form\SortieType;
 use App\Form\VilleType;
 use App\Repository\SortieRepository;
@@ -23,6 +22,28 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class SortieController extends AbstractController
 {
+
+    /**
+     * @Route("/accueil", name="accueil_list")
+     */
+    public function accueil(Request $request, SortieRepository $sortieRepository): Response
+    {
+        $sorties = $sortieRepository->findAll();
+        $data = new SortieSearch();
+        $searchSortieForm = $this->createForm(SortieSearchType::class, $data);
+        $searchSortieForm->handleRequest($request);
+        //$sorties = $sortieRepository->findSearch($data);
+        if(!$sorties) {
+            throw $this->createNotFoundException("Sortie inexistant");
+        }
+        return $this->render('accueil.html.twig', [
+            'sorties' => $sorties,
+            'form' => $searchSortieForm->createView()
+        ]);
+    }
+
+
+
     /**
      *@Route("/sortie/create", name="sortie_create")
      */
@@ -39,14 +60,13 @@ class SortieController extends AbstractController
              * @var UploadedFile $file
              */
             if($file) {
-                $directory = $this->getParameter('upload_img_sortie_dir');
-                $image->save($file,$sortie,$directory);
+                $newFileName = $sortie->getNom().'-'.uniqid().'.'.$file->guessExtension();
+                $file->move($this->getParameter('upload_image_sortie'), $newFileName);
+                $sortie->setUrlPhoto($newFileName);
             }
-
             //Ajout
             $updateEntity->save($sortie);
             $this->addFlash('succes', 'Nouvelle sortie ajouter !!');
-
             return $this->redirectToRoute('sortie_detail', ['id' => $sortie->getId()]);
         }
 
@@ -82,14 +102,14 @@ class SortieController extends AbstractController
             'user' => $user,
             'sorties' => $sorties,
             'form' => $searchSortieForm->createView()
-
         ]);
     }
 
     /**
      * @Route("/sortie/detail/ajax-inscription", name="sortie_ajax_inscription")
      */
-    public function inscription(Request $request,SortieRepository $sortieRepository,EntityManagerInterface $entityManager): Response {
+    public function inscription(Request $request,SortieRepository $sortieRepository,EntityManagerInterface $entityManager): JsonResponse
+    {
         $data = json_decode($request->getContent());
         $sortie_id = $data->sortie_id;
         $inscription = $data->inscription;

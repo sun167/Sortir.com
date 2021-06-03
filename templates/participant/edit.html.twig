@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Modification profil{% endblock %}
+{% block body %}
+
+
+    <p>Modification profil</p>
+
+    {# {{  form(participantForm) }} #}
+
+    <div>
+        {{  form_start(participantForm) }}
+        {{  form_widget(participantForm) }}
+        <button>Modifier profil</button>
+        {{  form_end(participantForm) }}
+
+    </div>
+{% endblock %}
+
+{% block extrastyles %}
+
+{% endblock %}

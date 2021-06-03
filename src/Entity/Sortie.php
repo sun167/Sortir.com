@@ -86,7 +86,6 @@ class Sortie
     public function __construct()
     {
         $this->participants = new ArrayCollection();
-        $this->setNbDispo(1);
     }
 
 
@@ -250,8 +249,9 @@ class Sortie
         return $this->nb_dispo;
     }
     public function setNbDispo(int $nb_dispo): self {
-       $this->nb_dispo = $nb_dispo;
+        $this->nb_dispo = $nb_dispo;
 
-       return $this;
+        return $this;
     }
+
 }
