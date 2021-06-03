@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} {{ parent() }} | Campus {% endblock %}
+
+{% block body %}
+    <div class="nav_right">
+        <li><a href="{{ path('campus_create') }}">Creation Campus</a></li>
+    </div>
+    <h2>Listes des campus</h2>
+    <div>
+        {% for campus in campus %}
+            <article>
+                <a href="{{ path('campus_detail', {'id' : campus.id}) }}" title="{{ campus.nom }}">{{ campus.nom }}</a>
+            </article>
+        {% endfor %}
+    </div>
+
+{% endblock %}
+

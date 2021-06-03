@@ -1,0 +1,88 @@
+/*************************** Flash *******************************/
+
+.flash {
+    padding: 20px;
+    font-weight: bold;
+    font-size: 1.4rem;
+    margin: 1rem 0;
+    border-radius: 5px;
+    color: #132135;
+}
+
+.flash-success {
+    background-color: lawngreen
+}
+
+.flash-error {
+    background-color: red
+}
+
+/*************************** Création Sortie *******************************/
+.sortie-create {
+    display: inline-grid;
+    grid-template-columns: 1fr;
+    grid-gap: 5px;
+    margin-bottom: 5rem;
+    font-weight: 100;
+    font-size: 1.15rem;
+}
+.sortie-column {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content : center;
+    align-items:center;
+    width:500%;
+    column-count: 3;
+}
+
+.form_widget {
+    font-size: 20px;
+    margin-left:50px;
+    display:inline-block;
+    float:left;
+    margin-right:100px;
+    width:110px;
+    align-items:center;
+}
+
+
+/*************************** Détail Sortie *******************************/
+.sortie-detail {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-gap: 5px;
+    margin-bottom: 1rem;
+    font-weight: 1000;
+    font-size: 1.15rem;
+    column-count: 3;
+
+}
+.sortie-image {
+    max-width: 40vw;
+    max-height: 30vh;
+    margin: auto;
+    margin-block: 5vh;
+}
+.sortie-container {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-between;
+    margin-inline-start: 5vw;
+}
+
+@media screen and (min-width: 700px) {
+    .sortie-detail {
+        grid-template-columns: 300px 1fr;
+    }
+}
+
+
+/*************************** Bouttons Sortie *******************************/
+
+.Button-sortie{
+    width: 15rem;
+    height:1.5rem;
+    display:flex;
+    justify-content: center;
+    margin-block:2vh;
+}

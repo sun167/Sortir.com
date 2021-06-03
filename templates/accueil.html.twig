@@ -1,19 +1,20 @@
 {% extends '/base.html.twig' %}
 
-{% block title %} {{ parent() }} | Liste des Sorties{% endblock %}
+{% block title %} {{ parent() }} | Accueil{% endblock %}
 
 {% block body %}
-    <div class="nav_right">
-        <li><a href="{{ path('sortie_create') }}">Creation Sortie</a></li>
-    </div>
-<div class="search">
-    <h2>Filtrer les sorties </h2>
-        {{ form_start(form) }}
-        {{ form_widget(form) }}
+
+    <div class="search">
+<h2>Filtrer les sorties </h2>
+{{ form_start(form) }}
+{{ form_widget(form) }}
         <button type="submit"> Recherche! </button>
-        {{ form_end(form) }}
-</div>
+{{ form_end(form) }}
+
+    </div>
+<h1>Here is the list</h1>
 <table>
+
 <div class="table-header">
     <thead>
 
@@ -27,9 +28,30 @@
 
             </tr>
     </thead>
-</div>
-<h2>Listes des sorties</h2>
-    <div class="sortie-detail">
+
+    </div>
+    {% for sortie in sorties %}
+
+        <div class="table-body">
+    <tbody>
+
+            <tr>
+                    <td>{{ sortie.nom }}</td>
+                    <td>{{ sortie.dateDebut|date('d-m-Y H:m') }}</td>
+                    <td>{{ sortie.dateFin|date('d-m-Y H:m') }}</td>
+                    <td> 0 / {{ sortie.nbInscriptionsMax }}</td>
+                    {#  <td> {{ sortie.etat.libelle }}</td> #}
+
+             </tr>
+
+    </tbody>
+
+        </div>
+        </table>
+    {% endfor %}
+
+    <h2>Listes des sorties</h2>
+    <div>
         {% for sortie in sorties %}
             <article>
                 <a href="{{ path('sortie_detail', {'id' : sortie.id}) }}" title="{{ sortie.nom }} | {{ sortie.description }}">

@@ -1,31 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
-    {# favicon #}
-    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('img/favicon.ico') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('img/ENIZeneca.png') }}">
     <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Cairo&family=Montserrat&display=swap" rel="stylesheet"> <title>{% block title %}Bucket List {% endblock %} - Welcome!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo&family=Montserrat&display=swap" rel="stylesheet"> <title>{% block title %} ENIZeneca {% endblock %}</title>
     {% block stylesheets %}
-        <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-        <link rel="stylesheet" href="{{ asset('css/normalize.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/normalize.css') }}">         {# CSS ECRITURE #}
+        <link rel="stylesheet" href="{{ asset('css/sortie.css') }}">            {# CSS POUR LA CREATION ET DETAIL DES SORTIES #}
+        <link rel="stylesheet" href="{{ asset('css/index.css') }}">             {# CSS GENERAL #}
+        <link rel="stylesheet" href="{{ asset('css/navigation.css') }}">        {# CSS DES LIEN DE NAVIGATION #}
     {% endblock %}
 </head>
 
 
 <body>
-{% include 'menu/nav.html.twig' %}
-{# read and display all flash messages #}
-{% for label, messages in app.flashes %}
-    {% for message in messages %}
-        <div class="flash-{{ label }}">
-            {{ message }}
-        </div>
+<div class="container">
+    <header>
+        {% include 'menu/nav.html.twig' %}
+    </header>
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="flash-{{ label }}">
+                {{ message }}
+            </div>
+        {% endfor %}
     {% endfor %}
-{% endfor %}
-{% block body %}{% endblock %}
-
+    <main>
+        {% block body %} {% endblock %}
+    </main>
+    <footer>
+    </footer>
+</div>
 </body>
-
-{% include 'menu/footer.html.twig' %}
+    {% include 'menu/footer.html.twig' %}
 </html>

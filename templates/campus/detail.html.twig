@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} {{ parent()  }} | Détail du campus{% endblock %}
+
+{% block body %}
+    <h1>Détail Campus</h1>
+    <div class="sortie-container">
+        <div class="sortie-detail">
+            <h4> Nom : {{ campus.nom  }}</h4>
+        </div>
+    </div>
+{% endblock %}
+
