@@ -17,7 +17,6 @@ use App\ManageEntity\UpdateEntity;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use App\ManageEntity\UpdateEntity;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -78,8 +77,9 @@ class SortieController extends AbstractController
         if(!$sorties) {
             throw $this->createNotFoundException("Sortie inexistant");
         }
-
+        $user = $this->getUser();
         return $this->render('sortie/list.html.twig', [
+            'user' => $user,
             'sorties' => $sorties,
             'form' => $searchSortieForm->createView()
 
