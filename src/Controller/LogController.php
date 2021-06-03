@@ -14,7 +14,7 @@ class LogController extends AbstractController
      */
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
-         if ($this->getUser()) {
+        if ($this->getUser()) {
              return $this->redirectToRoute('sortie_list');
          }
 

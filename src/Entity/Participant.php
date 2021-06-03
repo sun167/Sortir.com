@@ -26,6 +26,7 @@ class Participant implements UserInterface
     /**
      *
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Assert\NotBlank
      *
      */
     private $pseudo;
@@ -57,7 +58,9 @@ class Participant implements UserInterface
     private $telephone;
 
     /**
+     * @Assert\NotBlank()
      * @ORM\Column(type="string", length=50)
+     * @Assert\Email()
      */
     private $email;
 
@@ -164,7 +167,7 @@ class Participant implements UserInterface
     public function eraseCredentials()
     {
         // If you store any temporary, sensitive data on the participant, clear it here
-        // $this->password = null;
+        // $this->plainPassword = null;
     }
 
     public function getNom(): ?string
