@@ -23,26 +23,6 @@ use Symfony\Component\Routing\Annotation\Route;
 class SortieController extends AbstractController
 {
 
-    /**
-     * @Route("/accueil", name="accueil_list")
-     */
-    public function accueil(Request $request, SortieRepository $sortieRepository): Response
-    {
-        $sorties = $sortieRepository->findAll();
-        $data = new SortieSearch();
-        $searchSortieForm = $this->createForm(SortieSearchType::class, $data);
-        $searchSortieForm->handleRequest($request);
-        //$sorties = $sortieRepository->findSearch($data);
-        if(!$sorties) {
-            throw $this->createNotFoundException("Sortie inexistant");
-        }
-        return $this->render('accueil.html.twig', [
-            'sorties' => $sorties,
-            'form' => $searchSortieForm->createView()
-        ]);
-    }
-
-
 
     /**
      *@Route("/sortie/create", name="sortie_create")
