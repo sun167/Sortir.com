@@ -4,10 +4,12 @@
 
 {% block body %}
 <h2>Création d'une nouvelle sortie</h2>
-    <div>
-        {{ form_start(sortieForm) }}
-        {{ form_widget(sortieForm) }}
-        <button>Ajouter</button>
-        {{ form_end(sortieForm) }}
+    <div class="sortie-create">
+        <div class="sortie-column">
+            {{ form_start(sortieForm) }}
+            <div class="form_widget">{{ form_widget(sortieForm) }}
+            <button class="Button-sortie">Ajouter</button>
+            {{ form_end(sortieForm) }}
+        </div>
     </div>
 {% endblock %}
