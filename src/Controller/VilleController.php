@@ -67,7 +67,7 @@ class VilleController extends AbstractController
         if(!$ville) {
             throw $this->createNotFoundException("Erreur dans le chargement des listes des villes");
         }
-        return $this->render('campus/list.html.twig', [
+        return $this->render('ville/list.html.twig', [
             'ville' => $ville
         ]);
     }

@@ -60,7 +60,7 @@ class LieuController extends AbstractController
     }
 
     /**
-     * @Route("/lieu/list", name="lie_list")
+     * @Route("/lieu/list", name="lieu_list")
      */
     public function list(LieuRepository $lieuRepository): Response
     {
