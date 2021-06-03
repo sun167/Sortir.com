@@ -167,7 +167,7 @@ class Participant implements UserInterface
     public function eraseCredentials()
     {
         // If you store any temporary, sensitive data on the participant, clear it here
-        // $this->password = null;
+        // $this->plainPassword = null;
     }
 
     public function getNom(): ?string

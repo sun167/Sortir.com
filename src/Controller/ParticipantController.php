@@ -40,7 +40,7 @@ class ParticipantController extends AbstractController
 
         $campus = $campusRepository->find($id);
 
-        return $this->render('participant/detail.html.twig', [
+        return $this->render('sortie/list.html.twig', [
             "campus" => $campus,
             "participant" => $participant
         ]);
@@ -115,9 +115,9 @@ class ParticipantController extends AbstractController
 
             $updateEntity->save($participant);
 
-            $this->addFlash('success', 'Serie added !!');
+            $this->addFlash('success', 'Participant added !!');
 
-            return $this->redirectToRoute('serie_detail', ['id' => $participant->getId()]);
+            return $this->redirectToRoute('participant_detail', ['id' => $participant->getId()]);
         }
 
         return $this->render('participant/create.html.twig', [

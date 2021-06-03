@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Sortie;
 use App\Entity\SortieSearch;
 use App\Form\SortieSearchType;
 use App\Form\SortieType;
@@ -48,15 +49,19 @@ class SortieController extends AbstractController
     }
 
     /**
-     * @Route("/list", name="sortie_list")
+     * @Route("sortie/list", name="sortie_list")
      */
     public function list(Request $request, SortieRepository $sortieRepository): Response
     {
+        //$sorties = $sortieRepository->findAll();
+
         $data = new SortieSearch();
         $searchSortieForm = $this->createForm(SortieSearchType::class, $data);
         $searchSortieForm->handleRequest($request);
+
         $sorties = $sortieRepository->findSearch($data);
-        if(!$sorties) {
+
+       if(!$sorties) {
             throw $this->createNotFoundException("Sortie inexistant");
         }
         return $this->render('sortie/list.html.twig', [
