@@ -28,6 +28,11 @@ class SortieController extends AbstractController
      */
     public function accueil(Request $request, SortieRepository $sortieRepository): Response
     {
+        $isAdmin = $this->isGranted("ROLE_PARTICIPANT");
+        if(!$isAdmin){
+            throw new AccessDeniedException("Réservé aux personnes inscrites sur ce site!");
+        }
+
         $participant=$this->getUser();
         $sorties = $sortieRepository->findAll();
         $data = new SortieSearch();
@@ -51,10 +56,11 @@ class SortieController extends AbstractController
      */
     public function create(Request $request, EntityManagerInterface $entityManager, UpdateEntity $updateEntity, SortieImage $image) : Response {
 
-        /*$isAdmin = $this->isGranted("ROLE_ADMIN");
+        $isAdmin = $this->isGranted("ROLE_PARTICIPANT");
         if(!$isAdmin){
-            throw new AccessDeniedException("Réservé aux admins !");
-        }*/
+            throw new AccessDeniedException("Réservé aux personnes inscrites sur ce site!");
+        }
+
         //Création d'une nouvelle sortie
         $participant = $this->getUser();
         $sortie = new Sortie();
@@ -86,6 +92,12 @@ class SortieController extends AbstractController
      *@Route("/sortie/detail/{id}", name="sortie_detail")
      */
     public function detail($id, SortieRepository $sortieRepository) : Response {
+        $isAdmin = $this->isGranted("ROLE_PARTICIPANT");
+        if(!$isAdmin){
+            throw new AccessDeniedException("Réservé aux personnes inscrites sur ce site!");
+        }
+
+
         //Détail d'une sortie
         $participant = $this->getUser();
         $sortie = $sortieRepository->find($id);
@@ -103,6 +115,11 @@ class SortieController extends AbstractController
      */
     public function list(Request $request, SortieRepository $sortieRepository): Response
     {
+        $isAdmin = $this->isGranted("ROLE_PARTICIPANT");
+        if(!$isAdmin){
+            throw new AccessDeniedException("Réservé aux personnes inscrites sur ce site!");
+        }
+
         //$sorties = $sortieRepository->findAll();
         $participant = $this->getUser();
         $data = new SortieSearch();

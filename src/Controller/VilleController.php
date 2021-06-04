@@ -8,6 +8,7 @@ use App\ManageEntity\UpdateEntity;
 use App\Repository\VilleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -29,6 +30,11 @@ class VilleController extends AbstractController
      */
     public function create(Request $request, EntityManagerInterface $entityManager, UpdateEntity $updateEntity): Response
     {
+        $isAdmin = $this->isGranted("ROLE_PARTICIPANT");
+        if(!$isAdmin){
+            throw new AccessDeniedException("Réservé aux personnes inscrites sur ce site!");
+        }
+
         $participant = $this->getUser();
         //Création d'une nouvelle ville
         $ville = new Ville();
@@ -53,6 +59,11 @@ class VilleController extends AbstractController
      */
     public function detail($id, VilleRepository $villeRepository): Response
     {
+        $isAdmin = $this->isGranted("ROLE_PARTICIPANT");
+        if(!$isAdmin){
+            throw new AccessDeniedException("Réservé aux personnes inscrites sur ce site!");
+        }
+
         $participant = $this->getUser();
         $ville = $villeRepository->find($id);
         if(!$ville) {
@@ -69,6 +80,11 @@ class VilleController extends AbstractController
      */
     public function list(VilleRepository $villeRepository): Response
     {
+        $isAdmin = $this->isGranted("ROLE_PARTICIPANT");
+        if(!$isAdmin){
+            throw new AccessDeniedException("Réservé aux personnes inscrites sur ce site!");
+        }
+
         $participant = $this->getUser();
         $ville = $villeRepository->findAll();
         if(!$ville) {

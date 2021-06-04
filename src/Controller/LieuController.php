@@ -9,6 +9,7 @@ use App\Repository\LieuRepository;
 use App\Repository\ParticipantRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -30,6 +31,11 @@ class LieuController extends AbstractController
      */
     public function create(Request $request, EntityManagerInterface $entityManager, UpdateEntity $updateEntity): Response
     {
+        $isAdmin = $this->isGranted("ROLE_PARTICIPANT");
+        if(!$isAdmin){
+            throw new AccessDeniedException("Réservé aux personnes inscrites sur ce site!");
+        }
+
         $participant = $this->getUser();
         //Création d'un nouveau lieu
         $lieu = new Lieu();
@@ -55,6 +61,11 @@ class LieuController extends AbstractController
      */
     public function detail($id, LieuRepository $lieuRepository): Response
     {
+        $isAdmin = $this->isGranted("ROLE_PARTICIPANT");
+        if(!$isAdmin){
+            throw new AccessDeniedException("Réservé aux personnes inscrites sur ce site!");
+        }
+
         $participant = $this->getUser();
         $lieu = $lieuRepository->find($id);
         if (!$lieu) {
@@ -71,6 +82,11 @@ class LieuController extends AbstractController
      */
     public function list(LieuRepository $lieuRepository): Response
     {
+        $isAdmin = $this->isGranted("ROLE_PARTICIPANT");
+        if(!$isAdmin){
+            throw new AccessDeniedException("Réservé aux personnes inscrites sur ce site!");
+        }
+
         $participant = $this->getUser();
         $lieu = $lieuRepository->findAll();
         if (!$lieu) {

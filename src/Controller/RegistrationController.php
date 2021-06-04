@@ -6,6 +6,7 @@ use App\Entity\Participant;
 use App\Form\RegistrationFormType;
 use App\Security\AppAuthenticator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -19,6 +20,11 @@ class RegistrationController extends AbstractController
      */
     public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, GuardAuthenticatorHandler $guardHandler, AppAuthenticator $authenticator): Response
     {
+        $isAdmin = $this->isGranted("ROLE_ADMIN");
+        if(!$isAdmin){
+            throw new AccessDeniedException("Réservé aux administrateurs de ce site!");
+        }
+
         $participant = $this->getUser();
         $newParticipant = new Participant();
         $form = $this->createForm(RegistrationFormType::class, $newParticipant);

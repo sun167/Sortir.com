@@ -8,7 +8,10 @@
 
         <div class="nav_right">
             {%  if is_granted("ROLE_ADMIN") %}
-            <li><a href="{{ path('campus_list') }}">Campus</a></li>
+                <li><a href="{{ path('campus_list') }}">Campus</a></li>
+            {% endif %}
+
+            {%  if is_granted("ROLE_PARTICIPANT") %}
             <li><a href="{{ path('ville_list') }}">Ville</a></li>
             <li><a href="{{ path('lieu_list') }}">Lieu</a></li>
             {% endif %}
