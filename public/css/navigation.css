@@ -1,7 +1,7 @@
 ul {
     list-style-type: none;
     margin: 0;
-    padding: 0;
+    padding: 1px;
     overflow: hidden;
     background-color: #999999;
 }
@@ -21,4 +21,10 @@ li a {
 .nav_right {
     display: flex;
     justify-content: right;
+}
+
+.footer_zeneca{
+    background-color: #999999;
+    padding: 1px 0;
+    text-align: center;
 }
