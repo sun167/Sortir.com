@@ -3,9 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\Sortie;
+use App\Form\LieuType;
 use App\Entity\SortieSearch;
 use App\Form\SortieSearchType;
 use App\Form\SortieType;
+use App\Form\VilleType;
+use App\Repository\ParticipantRepository;
 use App\Repository\SortieRepository;
 use App\Upload\SortieImage;
 use Doctrine\ORM\EntityManagerInterface;
@@ -125,12 +128,16 @@ class SortieController extends AbstractController
         $data = new SortieSearch();
         $searchSortieForm = $this->createForm(SortieSearchType::class, $data);
         $searchSortieForm->handleRequest($request);
+        $sorties = $sortieRepository->findSearch($data);
+        if(!$sorties) {
 
         $sorties = $sortieRepository->findSearch($data);
 
        if(!$sorties) {
             throw $this->createNotFoundException("Sortie inexistant");
         }
+
+        $user = $this->getUser();
         return $this->render('sortie/list.html.twig', [
             'sorties' => $sorties,
             'participant'=> $participant,
@@ -139,22 +146,27 @@ class SortieController extends AbstractController
     }
 
     /**
-     * @Route("/sortie/detail/ajax-inscription", name="sortie_ajax_inscription")
+     * @Route("/ajax-inscription", name="sortie_ajax_inscription")
      */
-    public function inscription(Request $request,SortieRepository $sortieRepository,EntityManagerInterface $entityManager): JsonResponse
+    public function inscription(Request $request,ParticipantRepository $participantRepository,SortieRepository $sortieRepository,EntityManagerInterface $entityManager)
     {
         $data = json_decode($request->getContent());
-        $sortie_id = $data->sortie_id;
-        $inscription = $data->inscription;
+        $sortie_id = $data->sortieID;
+        $participant_id = $data->participantID;
         $sortie = $sortieRepository->find($sortie_id);
-        if ($inscription == 0) {
-            $sortie->setNbDispo($sortie->getNbDispo()+1);
+        $participant = $participantRepository->find($participant_id);
+
+        $user = $this->getUser();
+        if ($sortie->getParticipants()->contains($user)) {
+            $sortie->removeParticipant($participant);
         } else {
-            $sortie->setNbDispo($sortie->getNbDispo()-1);
+            $sortie->addParticipant($participant);
         }
         $entityManager->persist($sortie);
         $entityManager->flush();
-
-        return new JsonResponse(['nbinscription' => $sortie->getNbDispo()]);
+        return new JsonResponse([
+            'participants' => sizeof($sortie->getParticipants())
+            ]);
     }
+
 }

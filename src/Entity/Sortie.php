@@ -82,7 +82,6 @@ class Sortie
     private $nb_dispo;
 
 
-
     public function __construct()
     {
         $this->participants = new ArrayCollection();
