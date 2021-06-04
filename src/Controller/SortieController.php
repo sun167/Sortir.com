@@ -120,4 +120,50 @@ class SortieController extends AbstractController
 
         return new JsonResponse(['nbinscription' => $sortie->getNbDispo()]);
     }
+
+    /**
+     *@Route("/sortie/edit/{id}", name="sortie_edit")
+     */
+    public function edit($id, SortieRepository $sortieRepository,EntityManagerInterface $entityManager, Request $request) : Response {
+        //Modification d'une sortie
+        $sortie = $sortieRepository->find($id);
+        if(!$sortie) {
+            throw $this->createNotFoundException("Détail de la sortie inexistant");
+        }
+        $sortieForm = $this->createForm(SortieType::class, $sortie);
+        $sortieForm->handleRequest($request);
+
+        if($sortieForm->isSubmitted() && $sortieForm->isValid()) {
+            $entityManager->persist($sortie);
+            $entityManager->flush();
+
+            $this->addFlash('succes', 'Sortie modifier !!');
+            return $this->redirectToRoute('sortie_detail', ['id' => $sortie->getId()]);
+        }
+
+        return $this->render('sortie/edit.html.twig', ["sortie" => $sortie, 'sortieForm' => $sortieForm->createView()]);
+    }
+
+    /**
+     *@Route("/sortie/suppr/{id}", name="sortie_suppr")
+     */
+    public function delete($id, EntityManagerInterface $entityManager) : Response {
+        //Supprimer une sortie
+        //TODO PAGE DE RAISON DE SUPPRESSION
+        $sortie = $entityManager->find(Sortie::class, $id);
+        $entityManager->remove($sortie);
+        $entityManager->flush();
+        return $this->redirectToRoute('accueil_list');
+    }
+
+    /**
+     *@Route("/sortie/archivage/{id}", name="sortie_archiver")
+     */
+    public function archive($id, EntityManagerInterface $entityManager,SortieRepository $sortieRepository) : Response {
+        //Archiver une sortie
+        $sortie = $entityManager->find(Sortie::class, $id);
+        $entityManager->remove($sortie);
+        $entityManager->flush();
+        return $this->render('sortie/detail.html.twig', ["sortie" => $sortie]);
+    }
 }

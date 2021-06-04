@@ -18,7 +18,7 @@ class SortieSearchType extends AbstractType
     {
         $builder
             ->add('campus',ChoiceType::class, [
-                'label' => 'Campus',
+                'label' => 'Campus :',
                 'required' => false,
                 'choices' => [
                     'Colas' => 'Colas',
@@ -27,7 +27,7 @@ class SortieSearchType extends AbstractType
                 ]
             ])
             ->add('q', TextType::class, [
-                'label' => 'Le nom de la sortie contient',
+                'label' => 'Le nom de la sortie contient :',
                 'empty_data' => '',
                 'required' => false,
                 'attr' => [
@@ -35,12 +35,12 @@ class SortieSearchType extends AbstractType
                 ]
             ])
             ->add('premierDate', DateType::class, [
-                'label' => 'Entre',
+                'label' => 'Entre le :',
                 'widget' => 'single_text',
                 'required' => false,
             ])
             ->add('deuxiemeDate', DateType::class, [
-                'label' => 'et',
+                'label' => 'Et le :',
                 'widget' => 'single_text',
                 'required' => false,
             ])
