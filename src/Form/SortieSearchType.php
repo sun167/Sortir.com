@@ -2,7 +2,9 @@
 
 namespace App\Form;
 
+use App\Entity\Campus;
 use App\Entity\SortieSearch;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -17,14 +19,9 @@ class SortieSearchType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('campus',ChoiceType::class, [
-                'label' => 'Campus :',
-                'required' => false,
-                'choices' => [
-                    'Colas' => 'Colas',
-                    'Guillou' => 'Guillou',
-                    'Chauvet' => 'Chauvet'
-                ]
+            ->add('campus',EntityType::class, [
+                'class' => Campus::class,
+                'choice_label' => 'nom'
             ])
             ->add('q', TextType::class, [
                 'label' => 'Le nom de la sortie contient :',
