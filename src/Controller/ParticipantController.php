@@ -62,9 +62,7 @@ class ParticipantController extends AbstractController
 
        // $participant = $participantRepository->find($id);
         $participant= $this->getUser();
-        if (!$participant) {
-            throw $this->createNotFoundException("Oups ce participant n'éxiste pas");
-        }
+
 
         $campus = $campusRepository->find($id);
         $participantForm = $this->createForm(ParticipantType::class, $participant);
@@ -75,7 +73,7 @@ class ParticipantController extends AbstractController
             $participant->setPassword(
                 $passwordEncoder->encodePassword(
                     $participant,
-                    $participantForm->get('plainPassword')->getData()));
+                    $participantForm->get('password')->getData()));
 
             // $this->getDoctrine()->getManager(); Deuxieme façon sans le metre en paramètre
             $entityManager->persist($participant);
