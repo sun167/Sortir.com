@@ -29,6 +29,7 @@ class VilleController extends AbstractController
      */
     public function create(Request $request, EntityManagerInterface $entityManager, UpdateEntity $updateEntity): Response
     {
+        $participant = $this->getUser();
         //Création d'une nouvelle ville
         $ville = new Ville();
         $villeForm = $this->createForm(VilleType::class, $ville);
@@ -37,11 +38,14 @@ class VilleController extends AbstractController
         if($villeForm->isSubmitted() && $villeForm->isValid()) {
             //Ajout
             $updateEntity->save($ville);
-            $this->addFlash('succes', 'Nouvelle ville ajouter !!');
+            $this->addFlash('succes', 'Nouvelle ville ajoutée !!');
             return $this->redirectToRoute('ville_detail', ['id' => $ville->getId()]);
         }
 
-        return $this->render('ville/create.html.twig', ['villeForm' => $villeForm->createView()]);
+        return $this->render('ville/create.html.twig', [
+            'villeForm' => $villeForm->createView(),
+            'participant'=> $participant
+        ]);
     }
 
     /**
@@ -49,12 +53,14 @@ class VilleController extends AbstractController
      */
     public function detail($id, VilleRepository $villeRepository): Response
     {
+        $participant = $this->getUser();
         $ville = $villeRepository->find($id);
         if(!$ville) {
-            throw $this->createNotFoundException("Détail de la ville inexistante");
+            throw $this->createNotFoundException("Aucune ville sélectionnée");
         }
         return $this->render('ville/detail.html.twig', [
-            'ville' => $ville
+            'ville' => $ville,
+            'participant'=>$participant
         ]);
     }
 
@@ -63,12 +69,14 @@ class VilleController extends AbstractController
      */
     public function list(VilleRepository $villeRepository): Response
     {
+        $participant = $this->getUser();
         $ville = $villeRepository->findAll();
         if(!$ville) {
-            throw $this->createNotFoundException("Erreur dans le chargement des listes des villes");
+            throw $this->createNotFoundException("Il n'y a pas de ville à afficher");
         }
         return $this->render('ville/list.html.twig', [
-            'ville' => $ville
+            'ville' => $ville,
+            'participant'=>$participant
         ]);
     }
 }

@@ -9,7 +9,9 @@ use App\Form\SortieType;
 use App\Repository\SortieRepository;
 use App\Upload\SortieImage;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Request;
 use App\ManageEntity\UpdateEntity;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -26,6 +28,7 @@ class SortieController extends AbstractController
      */
     public function accueil(Request $request, SortieRepository $sortieRepository): Response
     {
+        $participant=$this->getUser();
         $sorties = $sortieRepository->findAll();
         $data = new SortieSearch();
         $searchSortieForm = $this->createForm(SortieSearchType::class, $data);
@@ -36,6 +39,7 @@ class SortieController extends AbstractController
         }
         return $this->render('accueil.html.twig', [
             'sorties' => $sorties,
+            'particpant'=>$participant,
             'form' => $searchSortieForm->createView()
         ]);
     }
@@ -46,7 +50,13 @@ class SortieController extends AbstractController
      *@Route("/sortie/create", name="sortie_create")
      */
     public function create(Request $request, EntityManagerInterface $entityManager, UpdateEntity $updateEntity, SortieImage $image) : Response {
+
+        /*$isAdmin = $this->isGranted("ROLE_ADMIN");
+        if(!$isAdmin){
+            throw new AccessDeniedException("Réservé aux admins !");
+        }*/
         //Création d'une nouvelle sortie
+        $participant = $this->getUser();
         $sortie = new Sortie();
         $sortieForm = $this->createForm(SortieType::class, $sortie);
         $sortieForm->handleRequest($request);
@@ -64,10 +74,12 @@ class SortieController extends AbstractController
             }
             //Ajout
             $updateEntity->save($sortie);
-            $this->addFlash('succes', 'Nouvelle sortie ajouter !!');
+            $this->addFlash('succes', 'Nouvelle sortie ajoutée !!');
             return $this->redirectToRoute('sortie_detail', ['id' => $sortie->getId()]);
         }
-        return $this->render('sortie/create.html.twig', ['sortieForm' => $sortieForm->createView()]);
+        return $this->render('sortie/create.html.twig', ['sortieForm' => $sortieForm->createView(),
+            'participant'=>$participant
+            ]);
     }
 
     /**
@@ -75,11 +87,15 @@ class SortieController extends AbstractController
      */
     public function detail($id, SortieRepository $sortieRepository) : Response {
         //Détail d'une sortie
+        $participant = $this->getUser();
         $sortie = $sortieRepository->find($id);
         if(!$sortie) {
             throw $this->createNotFoundException("Détail de la sortie inexistant");
         }
-        return $this->render('sortie/detail.html.twig', ["sortie" => $sortie]);
+        return $this->render('sortie/detail.html.twig', [
+            "sortie" => $sortie,
+            'participant'=>$participant
+        ]);
     }
 
     /**
@@ -88,7 +104,7 @@ class SortieController extends AbstractController
     public function list(Request $request, SortieRepository $sortieRepository): Response
     {
         //$sorties = $sortieRepository->findAll();
-
+        $participant = $this->getUser();
         $data = new SortieSearch();
         $searchSortieForm = $this->createForm(SortieSearchType::class, $data);
         $searchSortieForm->handleRequest($request);
@@ -100,6 +116,7 @@ class SortieController extends AbstractController
         }
         return $this->render('sortie/list.html.twig', [
             'sorties' => $sorties,
+            'participant'=> $participant,
             'form' => $searchSortieForm->createView()
         ]);
     }

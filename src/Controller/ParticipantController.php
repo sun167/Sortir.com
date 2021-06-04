@@ -9,9 +9,11 @@ use App\Repository\CampusRepository;
 use App\Repository\ParticipantRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class ParticipantController extends AbstractController
 {
@@ -34,7 +36,7 @@ class ParticipantController extends AbstractController
 
         $participant = $participantRepository->find($id);
         if (!$participant) {
-            // throw $this -> createNotFoundException("Oops ! This serie doesn't exist !");
+            // throw $this -> createNotFoundException("Oops ! Ce participant n'éxiste pas !");
             return $this->redirectToRoute('sortie_list');
         }
 
@@ -52,10 +54,14 @@ class ParticipantController extends AbstractController
     public function edit($id,
                          EntityManagerInterface $entityManager,
                          Request $request,
+                         UserPasswordEncoderInterface $passwordEncoder,
                          ParticipantRepository $participantRepository,
                          CampusRepository $campusRepository): Response
     {
-        $participant = $participantRepository->find($id);
+
+
+       // $participant = $participantRepository->find($id);
+        $participant= $this->getUser();
         if (!$participant) {
             throw $this->createNotFoundException("Oups ce participant n'éxiste pas");
         }
@@ -66,12 +72,17 @@ class ParticipantController extends AbstractController
 
         if ($participantForm->isSubmitted() && $participantForm->isValid()) { // dans cet ordre là
 
+            $participant->setPassword(
+                $passwordEncoder->encodePassword(
+                    $participant,
+                    $participantForm->get('plainPassword')->getData()));
+
             // $this->getDoctrine()->getManager(); Deuxieme façon sans le metre en paramètre
             $entityManager->persist($participant);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Participant modifié !!');
-            return $this->redirectToRoute('participant_detail', ['id' => $participant->getId()]);
+            $this->addFlash('success', 'Profil correctement modifié !!');
+            return $this->redirectToRoute('sortie_list', ['id' => $participant->getId()]);
         }
 
         return $this->render('participant/edit.html.twig', [
@@ -91,6 +102,11 @@ class ParticipantController extends AbstractController
                            //SerieImage $serieImage
                             ): Response
     {
+
+        $isAdmin = $this->isGranted("ROLE_ADMIN");
+        if(!$isAdmin){
+            throw new AccessDeniedException("Réservé aux admins !");
+        }
 
         // Générer un formulaire pour créer un nouveau participant
         $participant = new Participant();
@@ -115,7 +131,7 @@ class ParticipantController extends AbstractController
 
             $updateEntity->save($participant);
 
-            $this->addFlash('success', 'Participant added !!');
+            $this->addFlash('success', 'Participant créé !!');
 
             return $this->redirectToRoute('participant_detail', ['id' => $participant->getId()]);
         }
