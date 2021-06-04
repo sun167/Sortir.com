@@ -1,52 +1,112 @@
 {% extends '/base.html.twig' %}
 
 {% block title %} {{ parent() }} | Liste des Sorties{% endblock %}
+{% block scripts %}
 
+    <script>
+        window.onload = init;
+
+        function init() {
+            let sorties = Array.from(document.getElementsByClassName('uneSortie'));
+            let buttons = Array.from(document.getElementsByClassName('btn-inscire'));
+            let participant_id = document.querySelector('.participantID').value;
+
+
+            buttons.forEach(function (elem, idx) {
+                elem.addEventListener('click', function (event) {
+                    console.log(elem);
+
+                    event.preventDefault();
+                    let sortie_id = elem.querySelector('.sortieID').value;
+                    let data = {
+                        'sortieID': sortie_id,
+                        'participantID': participant_id
+                    };
+
+                    fetch("ajax-inscription", {method: 'POST', body: JSON.stringify(data)}).then(function (response) {
+                        return response.json()
+                    }).then(function (data) {
+                    });
+                });
+            });
+        }
+    </script>
+{% endblock %}
 {% block body %}
     <div class="nav_right">
         <li><a href="{{ path('sortie_create') }}">Creation Sortie</a></li>
     </div>
-<div class="search">
-    <h2>Filtrer les sorties </h2>
+    <div class="search">
+        <h2>Filtrer les sorties </h2>
         {{ form_start(form) }}
         {{ form_widget(form) }}
-        <button type="submit"> Recherche! </button>
+        <button type="submit"> Recherche!</button>
         {{ form_end(form) }}
-</div>
-<table>
-<div class="table-header">
-    <thead>
+    </div>
+    <table>
+        <div class="table-header">
+            <thead>
 
             <tr>
                 <th>Nom de la sortie</th>
                 <th>Date de la sortie</th>
                 <th>Cloture</th>
                 <th>Inscrits / Places</th>
-                <th>Etat </th>
+                <th>Etat</th>
                 <th>Inscrit</th>
+                <th>Organisateur</th>
+                <th>Actions</th>
 
             </tr>
-    </thead>
+            </thead>
 
-    </div>
-    <div class="table-body">
-    <tbody>
-    {% for sortie in sorties %}
+        </div>
+        <div class="table-body">
+            <tbody>
+            {% for sortie in sorties %}
 
 
 
-            <tr>
+                <tr class="uneSortie">
                     <td>{{ sortie.nom }}</td>
                     <td>{{ sortie.dateDebut|date('d-m-Y H:m') }}</td>
                     <td>{{ sortie.dateFin|date('d-m-Y H:m') }}</td>
                     <td> {{ sortie.participants|length }}/ {{ sortie.nbInscriptionsMax }}</td>
                     <td> {{ sortie.etat.libelle }}</td>
+                    <td>
+                        {% if user in sortie.participants %}
+                            x
+                        {% endif %}
+                    </td>
+                    <td id="test"> {{ sortie.nbDispo }}</td>
+                    <td><a href="{{ path('sortie_detail',{id : sortie.id}) }}">
+                            <button>Afficher</button>
+                        </a></td>
+                    {% if  "now"|date('d-m-Y') <= sortie.dateFin|date('d-m-Y')
+                        and sortie.etat.libelle == "Ouverte" %}
+                        <td>
+                            <a class="btn-inscire"
+                               href="{{ path('sortie_ajax_inscription') }}"
+                            >
+                                <input type="hidden" class="sortieID" value="{{ sortie.id }}">
+                                <input type="hidden" class="participantID" value="{{ user.id }}">
+                                <button>
+                                    {% if user in sortie.participants %}
+                                        Desister
+                                    {% else %}
+                                        S'inscrire
+                                    {% endif %}
 
-             </tr>
+                                </button>
+                            </a>
+                        </td>
+                    {% endif %}
 
-    {% endfor %}
-    </tbody>
+                </tr>
 
-    </div>
-</table>
+            {% endfor %}
+            </tbody>
+
+        </div>
+    </table>
 {% endblock %}
