@@ -78,7 +78,15 @@
                             x
                         {% endif %}
                     </td>
-                    <td id="test"> {{ sortie.nbDispo }}</td>
+                    <td>
+                        {% if sortie.organisateur %}
+                        <a href="{{ path('participant_detail',{id : sortie.organisateur.id}) }}">
+                            {{ sortie.organisateur.nom ~ " " ~ sortie.organisateur.prenom }}
+                        </a>
+                        {% else %}
+                            Admin
+                        {% endif %}
+                    </td>
                     <td><a href="{{ path('sortie_detail',{id : sortie.id}) }}">
                             <button>Afficher</button>
                         </a></td>

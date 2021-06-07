@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %} {{ parent()  }} | Détail de la sortie{% endblock %}
+{% block title %} {{ parent() }} | Détail de la sortie{% endblock %}
 
 {% block body %}
-<h1>Détail Sortie</h1>
+    <h1>Détail Sortie</h1>
     <div class="sortie-container">
         <div class="sortie-image">
             <img src="{{ asset('img/photoVisite/' ~ sortie.urlPhoto) }}" alt="{{ sortie.urlPhoto }}" width="500">
@@ -11,19 +11,19 @@
         <div>
             <h4> Nom : {{ sortie.nom }}</h4>
             <h4> Date de début : {{ sortie.dateDebut|date('d/m/Y') }}</h4>
-            <h4> Date de fin d'inscription : {{ sortie.dateFin|date('d/m/Y')  }}</h4>
+            <h4> Date de fin d'inscription : {{ sortie.dateFin|date('d/m/Y') }}</h4>
             <h4> Durée : {{ sortie.duree }} minutes</h4>
             <h4> Description : {{ sortie.description }}</h4>
-                {% for lieu in sortie.lieu %}
-                    <h4> Lieu : {{ lieu.nom }}</h4>
-                    <h4> Rue : {{ lieu.rue }}</h4>
-                    {% for ville in lieu.ville %}
-                        <h4> Code Postal : {{ ville.code_postal  }}</h4>
-                        <h4> Ville : {{ ville.nom }} minutes</h4>
-                    {% endfor %}
-                    <h4> Latitude : {{ lieu.latitude }}</h4>
-                    <h4> Longitude : {{ lieu.longitude }}</h4>
+            {% for lieu in sortie.lieu %}
+                <h4> Lieu : {{ lieu.nom }}</h4>
+                <h4> Rue : {{ lieu.rue }}</h4>
+                {% for ville in lieu.ville %}
+                    <h4> Code Postal : {{ ville.code_postal }}</h4>
+                    <h4> Ville : {{ ville.nom }} minutes</h4>
                 {% endfor %}
+                <h4> Latitude : {{ lieu.latitude }}</h4>
+                <h4> Longitude : {{ lieu.longitude }}</h4>
+            {% endfor %}
             {% for campus in sortie.campus %}
                 <h4> Organiser par : {{ campus.nom }}</h4>
             {% endfor %}
@@ -34,10 +34,16 @@
     </div>
     <div>
         <h3>Listes des participants</h3>
-        <button class="button_inscription" value="1">Inscription</button>
-        <button class="button_inscription" value="0">Désinscription</button>
-        <div> Il y a <span id="nb_dispo">{{ sortie.nbDispo }}</span> personnes inscrites sur {{ sortie.nbInscriptionsMax }}</div>
-        <input type="hidden" id="sortie_id" value="{{ sortie.id }}">
+        {% for participant in sortie.participants %}
+            <a href="{{ path('participant_detail',{id : participant.id}) }}">
+                <p>{{ participant.nom ~ " " ~ participant.prenom }}</p>
+            </a>
+        {% endfor %}
+
+        {# <button class="button_inscription" value="1">Inscription</button> #}
+        {# <button class="button_inscription" value="0">Désinscription</button> #}
+        {# <div> Il y a <span id="nb_dispo">{{ sortie.nbDispo }}</span> personnes inscrites sur {{ sortie.nbInscriptionsMax }}</div> #}
+        {# <input type="hidden" id="sortie_id" value="{{ sortie.id }}"> #}
         {#
         {% for user in sortie.users %}
             <h5>{{ user.nom }}</h5>
