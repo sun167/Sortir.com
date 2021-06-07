@@ -79,6 +79,11 @@ class Sortie
      */
     private $nb_dispo;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Participant::class, inversedBy="sorties")
+     */
+    private $organisateur;
+
 
     public function __construct()
     {
@@ -247,6 +252,18 @@ class Sortie
     }
     public function setNbDispo(int $nb_dispo): self {
         $this->nb_dispo = $nb_dispo;
+
+        return $this;
+    }
+
+    public function getOrganisateur(): ?Participant
+    {
+        return $this->organisateur;
+    }
+
+    public function setOrganisateur(?Participant $organisateur): self
+    {
+        $this->organisateur = $organisateur;
 
         return $this;
     }

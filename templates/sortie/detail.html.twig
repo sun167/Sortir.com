@@ -14,32 +14,66 @@
             <h4> Date de fin d'inscription : {{ sortie.dateFin|date('d/m/Y') }}</h4>
             <h4> Durée : {{ sortie.duree }} minutes</h4>
             <h4> Description : {{ sortie.description }}</h4>
-            <h4> Lieu : {{ sortie.lieu.nom }}</h4>
-            <h4> Rue : {{ sortie.lieu.rue }}</h4>
-            <h4> Code Postal : {{ sortie.lieu.ville.codePostal }}</h4>
-            <h4> Ville : {{ sortie.lieu.ville.nom }} minutes</h4>
-            <h4> Latitude : {{ sortie.lieu.latitude }}</h4>
-            <h4> Longitude : {{ sortie.lieu.longitude }}</h4>
-            <h4> Organiser par : {{ sortie.campus.nom }}</h4>
-            <h4> Etat : {{ sortie.etat.libelle }}</h4>
+            {% for lieu in sortie.lieu %}
+                <h4> Lieu : {{ lieu.nom }}</h4>
+                <h4> Rue : {{ lieu.rue }}</h4>
+                {% for ville in lieu.ville %}
+                    <h4> Code Postal : {{ ville.code_postal }}</h4>
+                    <h4> Ville : {{ ville.nom }} minutes</h4>
+                {% endfor %}
+                <h4> Latitude : {{ lieu.latitude }}</h4>
+                <h4> Longitude : {{ lieu.longitude }}</h4>
+            {% endfor %}
+            {% for campus in sortie.campus %}
+                <h4> Organiser par : {{ campus.nom }}</h4>
+            {% endfor %}
+            {% for etat in sortie.etat %}
+                <h4>Etat : {{ sortie.etat }}</h4>
+            {% endfor %}
         </div>
     </div>
 
-    <div>
+  {#  <div>
         <button><a href="{{ path('sortie_edit', {'id' : sortie.id}) }}" title="Modifier la serie">Modifier</a></button>
     </div>
     <div>
         <button><a href="{{ path('sortie_suppr', {'id' : sortie.id}) }}" title="Supprimer la serie">Supprimer</a>
         </button>
-    </div>
+    </div>#}
 
     <div>
         <h3>Listes des participants</h3>
-        <button class="button_inscription" value="1">Inscription</button>
-        <button class="button_inscription" value="0">Désinscription</button>
-        <div> Il y a <span id="nb_dispo">{{ sortie.nbDispo }}</span> personnes inscrites
-            sur {{ sortie.nbInscriptionsMax }}</div>
-        <input type="hidden" id="sortie_id" value="{{ sortie.id }}">
+        <table>
+            <thead>
+            <tr>
+                <th>Pseudo</th>
+                <th>Nom</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+
+            {% for participant in sortie.participants %}
+                <tr>
+
+                    <td>{{ participant.pseudo }}</td>
+                    <td>{{ participant.nom ~ " " ~ participant.prenom }}</td>
+                    <td>
+                        <a href="{{ path('participant_detail',{id : participant.id}) }}">Details
+                        </a>
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+            </tbody>
+
+        </table>
+
+        {# <button class="button_inscription" value="1">Inscription</button> #}
+        {# <button class="button_inscription" value="0">Désinscription</button> #}
+        {# <div> Il y a <span id="nb_dispo">{{ sortie.nbDispo }}</span> personnes inscrites sur {{ sortie.nbInscriptionsMax }}</div> #}
+        {# <input type="hidden" id="sortie_id" value="{{ sortie.id }}"> #}
         {#
         {% for user in sortie.users %}
             <h5>{{ user.nom }}</h5>

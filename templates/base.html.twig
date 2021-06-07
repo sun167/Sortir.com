@@ -9,7 +9,8 @@
     {% block stylesheets %}
         <link rel="stylesheet" href="{{ asset('css/style.css') }}">
         <link rel="stylesheet" href="{{ asset('css/normalize.css') }}">         {# CSS ECRITURE #}
-        <link rel="stylesheet" href="{{ asset('css/sortie.css') }}">            {# CSS POUR LA CREATION ET DETAIL DES SORTIES #}
+        <link rel="stylesheet"
+              href="{{ asset('css/sortie.css') }}">            {# CSS POUR LA CREATION ET DETAIL DES SORTIES #}
         <link rel="stylesheet" href="{{ asset('css/index.css') }}">             {# CSS GENERAL #}
         <link rel="stylesheet" href="{{ asset('css/navigation.css') }}">        {# CSS DES LIEN DE NAVIGATION #}
         <link rel="stylesheet" href="{{ asset('css/search.css') }}">            {# CSS DE RECHERCHE #}
@@ -34,5 +35,5 @@
     </main>
 </div>
 </body>
-    {% include 'menu/footer.html.twig' %}
+{% include 'menu/footer.html.twig' %}
 </html>

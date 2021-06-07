@@ -20,6 +20,7 @@
             {% endif %}</h4>
         <h4> Email : {{ participant.email }}</h4>
         <h4> Ville de rattachement : {{ participant.campus.nom }}</h4>
+        <a href="{{ path("sortie_list") }}"><button>Retour </button></a>
     </div>
 
 {% endblock %}
