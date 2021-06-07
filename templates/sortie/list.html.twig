@@ -49,7 +49,7 @@
         {{ form_end(form) }}
 </div>
 
-{#<div class="table-header">
+<div class="table-header">
     <thead>
 
             <tr>
@@ -79,7 +79,7 @@
                     <td> {{ sortie.participants|length }}/ {{ sortie.nbInscriptionsMax }}</td>
                     <td> {{ sortie.etat.libelle }}</td>
                     <td>
-                        {% if user in sortie.participants %}
+                        {% if participant in sortie.participants %}
                             x
                         {% endif %}
                     </td>
@@ -94,9 +94,9 @@
                                href="{{ path('sortie_ajax_inscription') }}"
                             >
                                 <input type="hidden" class="sortieID" value="{{ sortie.id }}">
-                                <input type="hidden" class="participantID" value="{{ user.id }}">
+                                <input type="hidden" class="participantID" value="{{ participant.id }}">
                                 <button>
-                                    {% if user in sortie.participants %}
+                                    {% if participant in sortie.participants %}
                                         Desister
                                     {% else %}
                                         S'inscrire

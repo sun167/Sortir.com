@@ -22,7 +22,7 @@
                 <li><a href="{{ path('app_login') }}">Connexion</a></li>
             {% endif %}
             {% if app.user %}
-                <li><a href="{{ path('participant_edit', {'id': participant.id}) }}">Mon Profil</a></li>
+                <li><a href="{{ path('participant_edit', {'id': app.user.id}) }}">Mon Profil</a></li>
                 <li><a href="{{ path('app_logout') }}">Déconnexion</a></li>
             {% endif %}
 

@@ -6,6 +6,10 @@
     <h2>{{ participant.pseudo }}</h2>
     <div>
 
+        <div class="sortie-image">
+            <img src="{{ asset('img/photoParticipant/' ~ participant.urlPhoto) }}" alt="{{ participant.urlPhoto }}" width="500">
+        </div>
+
         <h4> Prenom : {{ participant.prenom }}</h4>
         <h4> Nom : {{ participant.nom }}</h4>
         <h4> Téléphone :

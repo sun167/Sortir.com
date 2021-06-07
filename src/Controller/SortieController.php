@@ -67,6 +67,7 @@ class SortieController extends AbstractController
         //Création d'une nouvelle sortie
         $participant = $this->getUser();
         $sortie = new Sortie();
+        //$sortie->setOrganisateur($this->getUser());
         $sortieForm = $this->createForm(SortieType::class, $sortie);
         $sortieForm->handleRequest($request);
 
@@ -118,13 +119,14 @@ class SortieController extends AbstractController
      */
     public function list(Request $request, SortieRepository $sortieRepository): Response
     {
+        $participant = $this->getUser();
         $isAdmin = $this->isGranted("ROLE_PARTICIPANT");
         if(!$isAdmin){
             throw new AccessDeniedException("Réservé aux personnes inscrites sur ce site!");
         }
 
         //$sorties = $sortieRepository->findAll();
-        $participant = $this->getUser();
+
         $data = new SortieSearch();
         $searchSortieForm = $this->createForm(SortieSearchType::class, $data);
         $searchSortieForm->handleRequest($request);
@@ -209,10 +211,13 @@ class SortieController extends AbstractController
      *@Route("/sortie/archivage/{id}", name="sortie_archiver")
      */
     public function archive($id, EntityManagerInterface $entityManager,SortieRepository $sortieRepository) : Response {
+        $participant = $this->getUser();
+
         //Archiver une sortie
+
         $sortie = $entityManager->find(Sortie::class, $id);
         $entityManager->remove($sortie);
         $entityManager->flush();
-        return $this->render('sortie/detail.html.twig', ["sortie" => $sortie]);
+        return $this->render('sortie/detail.html.twig', ["sortie" => $sortie, 'participant'=>$participant]);
     }
 }

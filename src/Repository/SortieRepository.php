@@ -26,7 +26,7 @@ class SortieRepository extends ServiceEntityRepository
       * @return Sortie[] Returns an array of searched objects
       */
 
-    public function findSearch(SortieSearch $search, Sortie $sortie, SortieRepository $sortieRepository)
+    public function findSearch(SortieSearch $search)
     {
         $query = $this
             ->createQueryBuilder('s')

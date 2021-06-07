@@ -54,8 +54,6 @@ class Sortie
      */
     private $urlPhoto;
 
-
-
     /**
      * @ORM\ManyToOne(targetEntity=Etat::class, inversedBy="sortie")
      */

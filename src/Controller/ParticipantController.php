@@ -10,6 +10,7 @@ use App\Repository\ParticipantRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -17,6 +18,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class ParticipantController extends AbstractController
 {
+
     /**
      * @Route("/participant", name="participant")
      */
@@ -35,6 +37,7 @@ class ParticipantController extends AbstractController
         // TODO recupérer la serie en fonction de son id
 
         $participant = $participantRepository->find($id);
+        //$participant= $this->getUser();
         if (!$participant) {
             // throw $this -> createNotFoundException("Oops ! Ce participant n'éxiste pas !");
             return $this->redirectToRoute('sortie_list');
@@ -63,10 +66,10 @@ class ParticipantController extends AbstractController
        // $participant = $participantRepository->find($id);
         $participant= $this->getUser();
 
-
         $campus = $campusRepository->find($id);
         $participantForm = $this->createForm(ParticipantType::class, $participant);
         $participantForm->handleRequest($request);
+        $entityManager->refresh($participant);
 
         if ($participantForm->isSubmitted() && $participantForm->isValid()) { // dans cet ordre là
 
@@ -75,9 +78,21 @@ class ParticipantController extends AbstractController
                     $participant,
                     $participantForm->get('password')->getData()));
 
+            //IMAGE
+            $file = $participantForm->get('urlPhoto')->getData();
+            /**
+             * @var UploadedFile $file
+             */
+            if($file) {
+                $newFileName = $participant->getNom().'-'.uniqid().'.'.$file->guessExtension();
+                $file->move($this->getParameter('upload_image_participant'), $newFileName);
+                $participant->setUrlPhoto($newFileName);
+            }
+
             // $this->getDoctrine()->getManager(); Deuxieme façon sans le metre en paramètre
             $entityManager->persist($participant);
             $entityManager->flush();
+
 
             $this->addFlash('success', 'Profil correctement modifié !!');
             return $this->redirectToRoute('sortie_list', ['id' => $participant->getId()]);
