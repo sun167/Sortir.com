@@ -14,24 +14,25 @@
             <h4> Date de fin d'inscription : {{ sortie.dateFin|date('d/m/Y') }}</h4>
             <h4> Durée : {{ sortie.duree }} minutes</h4>
             <h4> Description : {{ sortie.description }}</h4>
-            {% for lieu in sortie.lieu %}
-                <h4> Lieu : {{ lieu.nom }}</h4>
-                <h4> Rue : {{ lieu.rue }}</h4>
-                {% for ville in lieu.ville %}
-                    <h4> Code Postal : {{ ville.code_postal }}</h4>
-                    <h4> Ville : {{ ville.nom }} minutes</h4>
-                {% endfor %}
-                <h4> Latitude : {{ lieu.latitude }}</h4>
-                <h4> Longitude : {{ lieu.longitude }}</h4>
-            {% endfor %}
-            {% for campus in sortie.campus %}
-                <h4> Organiser par : {{ campus.nom }}</h4>
-            {% endfor %}
-            {% for etat in sortie.etat %}
-                <h4>Etat : {{ sortie.etat }}</h4>
-            {% endfor %}
+            <h4> Lieu : {{ sortie.lieu.nom }}</h4>
+            <h4> Rue : {{ sortie.lieu.rue }}</h4>
+            <h4> Code Postal : {{ sortie.lieu.ville.codePostal }}</h4>
+            <h4> Ville : {{ sortie.lieu.ville.nom }} minutes</h4>
+            <h4> Latitude : {{ sortie.lieu.latitude }}</h4>
+            <h4> Longitude : {{ sortie.lieu.longitude }}</h4>
+            <h4> Organiser par : {{ sortie.campus.nom }}</h4>
+            <h4> Etat : {{ sortie.etat.libelle }}</h4>
         </div>
     </div>
+
+    <div>
+        <button><a href="{{ path('sortie_edit', {'id' : sortie.id}) }}" title="Modifier la serie">Modifier</a></button>
+    </div>
+    <div>
+        <button><a href="{{ path('sortie_suppr', {'id' : sortie.id}) }}" title="Supprimer la serie">Supprimer</a>
+        </button>
+    </div>
+
     <div>
         <h3>Listes des participants</h3>
         <table>

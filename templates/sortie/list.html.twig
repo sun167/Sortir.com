@@ -33,8 +33,13 @@
     </script>
 {% endblock %}
 {% block body %}
+
+    <h3>Bienvenue {{  participant.prenom}} {{  participant.nom}}</h3>
+    <p>Nous sommes le : {{ "now"|date("m/d/Y") }}</p>
     <div class="nav_right">
+
         <li><a href="{{ path('sortie_create') }}">Creation Sortie</a></li>
+
     </div>
     <div class="search">
         <h2>Filtrer les sorties </h2>
@@ -42,17 +47,17 @@
         {{ form_widget(form) }}
         <button type="submit"> Recherche!</button>
         {{ form_end(form) }}
-    </div>
-    <table>
-        <div class="table-header">
-            <thead>
+</div>
+
+<div class="table-header">
+    <thead>
 
             <tr>
                 <th>Nom de la sortie</th>
                 <th>Date de la sortie</th>
                 <th>Cloture</th>
                 <th>Inscrits / Places</th>
-                <th>Etat</th>
+                <th>Etat </th>
                 <th>Inscrit</th>
                 <th>Organisateur</th>
                 <th>Actions</th>
@@ -74,7 +79,7 @@
                     <td> {{ sortie.participants|length }}/ {{ sortie.nbInscriptionsMax }}</td>
                     <td> {{ sortie.etat.libelle }}</td>
                     <td>
-                        {% if user in sortie.participants %}
+                        {% if participant in sortie.participants %}
                             x
                         {% endif %}
                     </td>
@@ -97,9 +102,9 @@
                                href="{{ path('sortie_ajax_inscription') }}"
                             >
                                 <input type="hidden" class="sortieID" value="{{ sortie.id }}">
-                                <input type="hidden" class="participantID" value="{{ user.id }}">
+                                <input type="hidden" class="participantID" value="{{ participant.id }}">
                                 <button>
-                                    {% if user in sortie.participants %}
+                                    {% if participant in sortie.participants %}
                                         Desister
                                     {% else %}
                                         S'inscrire

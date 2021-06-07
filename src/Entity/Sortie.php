@@ -54,8 +54,6 @@ class Sortie
      */
     private $urlPhoto;
 
-
-
     /**
      * @ORM\ManyToOne(targetEntity=Etat::class, inversedBy="sortie")
      */
@@ -76,8 +74,7 @@ class Sortie
      */
     private $participants;
 
-
-    /**
+  /**
      * @ORM\Column (type="integer", nullable=true)
      */
     private $nb_dispo;

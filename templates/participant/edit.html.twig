@@ -8,11 +8,16 @@
 
     {# {{  form(participantForm) }} #}
 
+    <div class="sortie-image">
+        <img src="{{ asset('img/photoParticipant/' ~ participant.urlPhoto) }}" alt="{{ participant.urlPhoto }}" width="500">
+    </div>
     <div>
         {{  form_start(participantForm) }}
         {{  form_widget(participantForm) }}
         <button>Modifier profil</button>
         {{  form_end(participantForm) }}
+
+        <button><a href="{{ path('sortie_list') }}">Annuler</a></button>
 
     </div>
 {% endblock %}

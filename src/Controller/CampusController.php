@@ -29,6 +29,7 @@ class CampusController extends AbstractController
      */
     public function create(Request $request, EntityManagerInterface $entityManager, UpdateEntity $updateEntity): Response
     {
+        $participant = $this->getUser();
         //Création d'un nouveau campus
         $campus = new Campus();
         $campusForm = $this->createForm(CampusType::class, $campus);
@@ -41,7 +42,10 @@ class CampusController extends AbstractController
             return $this->redirectToRoute('campus_detail', ['id' => $campus->getId()]);
         }
 
-        return $this->render('campus/create.html.twig', ['campusForm' => $campusForm->createView()]);
+        return $this->render('campus/create.html.twig', [
+            'campusForm' => $campusForm->createView(),
+            'participant' => $participant
+        ]);
     }
 
     /**
@@ -49,12 +53,14 @@ class CampusController extends AbstractController
      */
     public function detail($id, CampusRepository $campusRepository): Response
     {
+        $participant = $this->getUser();
         $campus = $campusRepository->find($id);
         if(!$campus) {
             throw $this->createNotFoundException("Détail du campus inexistant");
         }
         return $this->render('campus/detail.html.twig', [
-            'campus' => $campus
+            'campus' => $campus,
+            'participant' =>$participant
         ]);
     }
 
@@ -63,12 +69,14 @@ class CampusController extends AbstractController
      */
     public function list(CampusRepository $campusRepository): Response
     {
+        $participant = $this->getUser();
         $campus = $campusRepository->findAll();
         if(!$campus) {
-            throw $this->createNotFoundException("Erreur dans le chargement des listes des campus");
+            throw $this->createNotFoundException("Erreur de chargement de la liste des campus");
         }
         return $this->render('campus/list.html.twig', [
-            'campus' => $campus
+            'campus' => $campus,
+            'participant'=>$participant
         ]);
     }
 }

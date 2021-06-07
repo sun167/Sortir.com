@@ -68,6 +68,7 @@ class SortieRepository extends ServiceEntityRepository
                 ->setParameter('participants',$search->isNonInscrit());
         }
         return $query->getQuery()->getResult();
+
     }
 
 

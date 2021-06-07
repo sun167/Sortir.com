@@ -26,6 +26,7 @@ class Participant implements UserInterface
     /**
      *
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Assert\NotBlank
      *
      */
     private $pseudo;
@@ -57,7 +58,9 @@ class Participant implements UserInterface
     private $telephone;
 
     /**
+     * @Assert\NotBlank()
      * @ORM\Column(type="string", length=50)
+     * @Assert\Email()
      */
     private $email;
 
@@ -80,6 +83,10 @@ class Participant implements UserInterface
      * @ORM\ManyToOne(targetEntity=Campus::class, inversedBy="participants")
      */
     private $campus;
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $urlPhoto;
 
     /**
      * @ORM\OneToMany(targetEntity=Sortie::class, mappedBy="organisateur")
@@ -125,8 +132,6 @@ class Participant implements UserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every participant at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
     }
@@ -170,7 +175,7 @@ class Participant implements UserInterface
     public function eraseCredentials()
     {
         // If you store any temporary, sensitive data on the participant, clear it here
-        // $this->password = null;
+        // $this->plainPassword = null;
     }
 
     public function getNom(): ?string
@@ -308,6 +313,17 @@ class Participant implements UserInterface
                 $sorty->setOrganisateur(null);
             }
         }
+
+        return $this;
+    }
+    public function getUrlPhoto(): ?string
+    {
+        return $this->urlPhoto;
+    }
+
+    public function setUrlPhoto(?string $urlPhoto): self
+    {
+        $this->urlPhoto = $urlPhoto;
 
         return $this;
     }

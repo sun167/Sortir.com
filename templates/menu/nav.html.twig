@@ -1,18 +1,30 @@
 <nav>
     <ul>
-        <li><a href="{{ path('sortie_list') }}">Accueil</a></li>
-        <li><a href="{{ path('campus_list') }}">Campus</a></li>
-        <li><a href="{{ path('lieu_list') }}">Lieu</a></li>
-        <li><a href="{{ path('sortie_list') }}">Sortie</a></li>
-        <li><a href="{{ path('ville_list') }}">Ville</a></li>
+        {% if app.user %}
+            {# <li><a href="{{ path('accueil_list') }}">Accueil</a></li> #}
+            <li><a href="{{ path('sortie_list') }}">Accueil - Sorties</a></li>
+        {% endif %}
+
+
         <div class="nav_right">
-            <li><a href="{{ path('app_login') }}">Connection</a></li>
+            {%  if is_granted("ROLE_ADMIN") %}
+                <li><a href="{{ path('campus_list') }}">Campus</a></li>
+            {% endif %}
 
-            <li><a href="{{ path('app_register') }}">Inscription Utilisateur</a></li>
-
-
-            <li><a href="{{ path('app_register') }}">Mon Profil</a></li>
-            <li><a href="{{ path('app_logout') }}">Déconnection</a></li>
+            {%  if is_granted("ROLE_PARTICIPANT") %}
+            <li><a href="{{ path('ville_list') }}">Ville</a></li>
+            <li><a href="{{ path('lieu_list') }}">Lieu</a></li>
+            {% endif %}
+            {% if is_granted("ROLE_ADMIN") %}
+                <li><a href="{{ path('app_register') }}">Inscription Utilisateur</a></li>
+            {% endif %}
+            {% if not app.user %}
+                <li><a href="{{ path('app_login') }}">Connexion</a></li>
+            {% endif %}
+            {% if app.user %}
+                <li><a href="{{ path('participant_edit', {'id': app.user.id}) }}">Mon Profil</a></li>
+                <li><a href="{{ path('app_logout') }}">Déconnexion</a></li>
+            {% endif %}
 
         </div>
     </ul>
