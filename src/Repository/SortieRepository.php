@@ -59,13 +59,20 @@ class SortieRepository extends ServiceEntityRepository
         }
         if (!empty($search->isInscrit()) && empty($search->isNonInscrit())) {
             $query = $query
-                ->andWhere($query->expr()->isMemberOf(':participants','s.participants'))
-                ->setParameter('participants',$search->isInscrit());
+                ->addSelect('p')
+                ->join('s.participant', 'p')
+                ->andWhere($query->expr()->isMemberOf(':participant','p.id'))
+                ->setParameter('participant',$search->isInscrit());
         }
         if (!empty($search->isNonInscrit()) && empty($search->isInscrit())) {
             $query = $query
                 ->andWhere(':participants NOT MEMBER OF s.participants')
                 ->setParameter('participants',$search->isNonInscrit());
+        }
+        if (!empty($search->isOrganisateur())){
+            $query = $query
+                ->andWhere(':organisateurID = s.organisateur.id')
+                ->setParameter('organisateurID', $search->isOrganisateur());
         }
         return $query->getQuery()->getResult();
 

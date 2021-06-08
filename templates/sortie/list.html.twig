@@ -70,6 +70,7 @@
                         </a></td>
                     {% if  "now"|date('Y-m-d') <= sortie.dateFin|date('Y-m-d')
                         and sortie.etat.libelle == "Ouverte"
+                        and sortie.participants|length <= sortie.nbInscriptionsMax
                         and participant not in sortie.participants %}
                         <td>
                             <a href="{{ path('sortie_ajax_inscription') }}">
