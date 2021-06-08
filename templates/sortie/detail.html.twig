@@ -14,10 +14,11 @@
             <h4> Date de fin d'inscription : {{ sortie.dateFin|date('d/m/Y') }}</h4>
             <h4> Durée : {{ sortie.duree }} minutes</h4>
             <h4> Description : {{ sortie.description }}</h4>
+<<<<<<<<< Temporary merge branch 1
             <h4> Lieu : {{ sortie.lieu.nom }}</h4>
             <h4> Rue : {{ sortie.lieu.rue }}</h4>
             <h4> Code Postal : {{ sortie.lieu.ville.codePostal }}</h4>
-            <h4> Ville : {{ sortie.lieu.ville.nom }}</h4>
+            <h4> Ville : {{ sortie.lieu.ville.nom }} minutes</h4>
             <h4> Latitude : {{ sortie.lieu.latitude }}</h4>
             <h4> Longitude : {{ sortie.lieu.longitude }}</h4>
             <h4> Organiser par : {{ sortie.campus.nom }}</h4>
@@ -25,13 +26,13 @@
         </div>
     </div>
 
-  {#  <div>
+    <div>
         <button><a href="{{ path('sortie_edit', {'id' : sortie.id}) }}" title="Modifier la serie">Modifier</a></button>
     </div>
     <div>
         <button><a href="{{ path('sortie_suppr', {'id' : sortie.id}) }}" title="Supprimer la serie">Supprimer</a>
         </button>
-    </div>#}
+    </div>
 
     <div>
         <h3>Listes des participants</h3>
@@ -62,6 +63,15 @@
 
         </table>
 
+        {# <button class="button_inscription" value="1">Inscription</button> #}
+        {# <button class="button_inscription" value="0">Désinscription</button> #}
+        {# <div> Il y a <span id="nb_dispo">{{ sortie.nbDispo }}</span> personnes inscrites sur {{ sortie.nbInscriptionsMax }}</div> #}
+        {# <input type="hidden" id="sortie_id" value="{{ sortie.id }}"> #}
+        {#
+        {% for user in sortie.users %}
+            <h5>{{ user.nom }}</h5>
+        {% endfor %}
+        #}
     </div>
 
 {% endblock %}

@@ -26,6 +26,7 @@ class Participant implements UserInterface
     /**
      *
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Assert\NotBlank
      *
      */
     private $pseudo;
@@ -84,6 +85,7 @@ class Participant implements UserInterface
     private $campus;
 
     /**
+<<<<<<<<< Temporary merge branch 1
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $urlPhoto;
@@ -92,6 +94,7 @@ class Participant implements UserInterface
      * @ORM\OneToMany(targetEntity=Sortie::class, mappedBy="organisateur")
      */
     private $sorties;
+>>>>>>>>> Temporary merge branch 2
 
     public function __construct()
     {
@@ -325,6 +328,17 @@ class Participant implements UserInterface
                 $sorty->setOrganisateur(null);
             }
         }
+
+        return $this;
+    }
+    public function getUrlPhoto(): ?string
+    {
+        return $this->urlPhoto;
+    }
+
+    public function setUrlPhoto(?string $urlPhoto): self
+    {
+        $this->urlPhoto = $urlPhoto;
 
         return $this;
     }
