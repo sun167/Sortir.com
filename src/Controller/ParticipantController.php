@@ -34,7 +34,6 @@ class ParticipantController extends AbstractController
      */
     public function detail($id, ParticipantRepository $participantRepository, CampusRepository $campusRepository): Response
     {
-        // TODO recupérer la serie en fonction de son id
 
         $participant = $participantRepository->find($id);
         //$participant= $this->getUser();
@@ -45,7 +44,7 @@ class ParticipantController extends AbstractController
 
         $campus = $campusRepository->find($id);
 
-        return $this->render('sortie/list.html.twig', [
+        return $this->render('participant/detail.html.twig', [
             "campus" => $campus,
             "participant" => $participant
         ]);
@@ -63,8 +62,8 @@ class ParticipantController extends AbstractController
     {
 
 
-       // $participant = $participantRepository->find($id);
-        $participant= $this->getUser();
+        // $participant = $participantRepository->find($id);
+        $participant = $this->getUser();
 
         $campus = $campusRepository->find($id);
         $participantForm = $this->createForm(ParticipantType::class, $participant);
@@ -83,8 +82,8 @@ class ParticipantController extends AbstractController
             /**
              * @var UploadedFile $file
              */
-            if($file) {
-                $newFileName = $participant->getNom().'-'.uniqid().'.'.$file->guessExtension();
+            if ($file) {
+                $newFileName = $participant->getNom() . '-' . uniqid() . '.' . $file->guessExtension();
                 $file->move($this->getParameter('upload_image_participant'), $newFileName);
                 $participant->setUrlPhoto($newFileName);
             }
@@ -93,17 +92,15 @@ class ParticipantController extends AbstractController
             $entityManager->persist($participant);
             $entityManager->flush();
 
-
             $this->addFlash('success', 'Profil correctement modifié !!');
             return $this->redirectToRoute('sortie_list', ['id' => $participant->getId()]);
         }
 
         return $this->render('participant/edit.html.twig', [
-            "campus"=> $campus,
+            "campus" => $campus,
             "participant" => $participant,
             'participantForm' => $participantForm->createView()
         ]);
-
     }
 
     /**
@@ -111,13 +108,12 @@ class ParticipantController extends AbstractController
      */
     public function create(Request $request,
                            EntityManagerInterface $entityManager,
-                           UpdateEntity $updateEntity
-                           //SerieImage $serieImage
-                            ): Response
+                           UpdateEntity $updateEntity): Response
+
     {
 
         $isAdmin = $this->isGranted("ROLE_ADMIN");
-        if(!$isAdmin){
+        if (!$isAdmin) {
             throw new AccessDeniedException("Réservé aux admins !");
         }
 
@@ -135,12 +131,12 @@ class ParticipantController extends AbstractController
 
             //  $file = $participantForm->get('poster')->getData();
             // /**
-           //  * @var UploadedFile $file
-           //  */
-           // if($file){
-           //     $directory = $this->getParameter('upload_posters_series_dir');
-           //     $serieImage->save($file,$participant,$directory);
-           // }
+            //  * @var UploadedFile $file
+            //  */
+            // if($file){
+            //     $directory = $this->getParameter('upload_posters_series_dir');
+            //     $serieImage->save($file,$participant,$directory);
+            // }
 
             $updateEntity->save($participant);
 
@@ -153,7 +149,6 @@ class ParticipantController extends AbstractController
             'participantForm' => $participantForm->createView()
         ]);
     }
-
 
 
 }

@@ -7,8 +7,9 @@
     <div class="sortie-create">
         <div class="sortie-column">
             {{ form_start(sortieForm) }}
-            <div class="form_widget">{{ form_widget(sortieForm) }}
-                <button>Valider</button>
+            {{ form_widget(sortieForm) }}
+                <button type="submit" class="btn btn-lg btn-outline-light mb-1 mt-3">
+                    Valider</button>
             {{ form_end(sortieForm) }}
         </div>
     </div>

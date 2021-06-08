@@ -3,16 +3,36 @@
 {% block title %} {{ parent() }} | Ville {% endblock %}
 
 {% block body %}
-    <div class="nav_right">
-        <li><a href="{{ path('ville_create') }}">Creation Ville</a></li>
+
+<div class="container">
+    <div class="row">
+        <div class="col-9">
+            <h2>Liste des villes</h2>
+            <div>
+                {% for ville in ville %}
+
+                    <button type="button" class="btn btn-outline-light mb-1">
+                        <a class="navbar-brand" href="{{ path('ville_detail', {'id' : ville.id}) }}" title="{{ ville.nom }} | {{ ville.codePostal }}">{{ ville.nom }} | {{ ville.codePostal }}</a>
+
+                    </button>
+
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-3">
+
+
+
+            <button type="button" class="btn btn-light">
+                <a class="navbar-brand" href="{{ path('ville_create') }}">Creation Ville
+                </a>
+            </button>
+
+        </div>
     </div>
-    <h2>Listes des villes</h2>
-    <div>
-        {% for ville in ville %}
-            <article>
-                <a href="{{ path('ville_detail', {'id' : ville.id}) }}" title="{{ ville.nom }} | {{ ville.codePostal }}">{{ ville.nom }} | {{ ville.codePostal }}</a>
-            </article>
-        {% endfor %}
-    </div>
+</div>
+
+
+
 {% endblock %}
 

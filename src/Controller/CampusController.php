@@ -35,7 +35,7 @@ class CampusController extends AbstractController
         $campusForm = $this->createForm(CampusType::class, $campus);
         $campusForm->handleRequest($request);
 
-        if($campusForm->isSubmitted() && $campusForm->isValid()) {
+        if ($campusForm->isSubmitted() && $campusForm->isValid()) {
             //Ajout
             $updateEntity->save($campus);
             $this->addFlash('succes', 'Nouveau campus ajouter !!');
@@ -55,12 +55,12 @@ class CampusController extends AbstractController
     {
         $participant = $this->getUser();
         $campus = $campusRepository->find($id);
-        if(!$campus) {
+        if (!$campus) {
             throw $this->createNotFoundException("Détail du campus inexistant");
         }
         return $this->render('campus/detail.html.twig', [
             'campus' => $campus,
-            'participant' =>$participant
+            'participant' => $participant
         ]);
     }
 
@@ -71,12 +71,12 @@ class CampusController extends AbstractController
     {
         $participant = $this->getUser();
         $campus = $campusRepository->findAll();
-        if(!$campus) {
+        if (!$campus) {
             throw $this->createNotFoundException("Erreur de chargement de la liste des campus");
         }
         return $this->render('campus/list.html.twig', [
             'campus' => $campus,
-            'participant'=>$participant
+            'participant' => $participant
         ]);
     }
 }
