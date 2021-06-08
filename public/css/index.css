@@ -7,6 +7,12 @@ main {
     margin-bottom: 10rem;
 }
 
+.card-img-top {
+    min-height: 250px;
+    max-height: 250px;
+    background-size :contain ;
+}
+
 /*
 html{
     --hyperlink-color: white;

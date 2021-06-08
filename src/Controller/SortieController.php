@@ -19,6 +19,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 
 class SortieController extends AbstractController
@@ -54,7 +55,7 @@ class SortieController extends AbstractController
     /**
      * @Route("/sortie/create", name="sortie_create")
      */
-    public function create(Request $request, EntityManagerInterface $entityManager, UpdateEntity $updateEntity, SortieImage $image): Response
+    public function create(Request $request, UserInterface $userInterface, UpdateEntity $updateEntity): Response
     {
 
         $isParticipant = $this->isGranted("ROLE_PARTICIPANT");
@@ -63,9 +64,17 @@ class SortieController extends AbstractController
         }
 
         //Création d'une nouvelle sortie
+
         $participant = $this->getUser();
+
         $sortie = new Sortie();
+
+        //$participant_id = (int)$request->query->get('participantID');
+        //$participant = $participantRepository->find($participant_id);
+        dump($participant);
         $sortie->setOrganisateur($participant);
+
+
         $sortieForm = $this->createForm(SortieType::class, $sortie);
         $sortieForm->handleRequest($request);
 
@@ -122,27 +131,25 @@ class SortieController extends AbstractController
         $participant = $this->getUser();
         $isParticipant = $this->isGranted("ROLE_PARTICIPANT");
         if (!$isParticipant) {
-            $isAdmin = $this->isGranted("ROLE_PARTICIPANT");
-            if (!$isAdmin) {
-                throw new AccessDeniedException("Réservé aux personnes inscrites sur ce site!");
-            }
-            $data = new SortieSearch();
-            $searchSortieForm = $this->createForm(SortieSearchType::class, $data);
-            $searchSortieForm->handleRequest($request);
-
-            $sorties = $sortieRepository->findSearch($data);
-
-            if (!$sorties) {
-                throw $this->createNotFoundException("Sortie inexistant");
-            }
-
-            return $this->render('sortie/list.html.twig', [
-                'sorties' => $sorties,
-                'participant' => $participant,
-                'form' => $searchSortieForm->createView()
-            ]);
+            throw new AccessDeniedException("Réservé aux personnes inscrites sur ce site!");
         }
+
+        $data = new SortieSearch();
+        $searchSortieForm = $this->createForm(SortieSearchType::class, $data);
+        $searchSortieForm->handleRequest($request);
+
+        $sorties = $sortieRepository->findSearch($data);
+
+        if (!$sorties) {
+            throw $this->createNotFoundException("Sortie inexistant");
+        }
+        return $this->render('sortie/list.html.twig', [
+            'sorties' => $sorties,
+            'participant' => $participant,
+            'form' => $searchSortieForm->createView()
+        ]);
     }
+
 
     /**
      * @Route("sortie/ajax-inscription", name="sortie_ajax_inscription")
@@ -159,7 +166,6 @@ class SortieController extends AbstractController
         $participant_id = (int)$request->query->get('participantID');
         $sortie = $sortieRepository->find($sortie_id);
         $participant = $participantRepository->find($participant_id);
-
         $sortie->addParticipant($participant);
 
         $entityManager->persist($sortie);

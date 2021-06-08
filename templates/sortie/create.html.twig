@@ -8,20 +8,19 @@
         <div class="sortie-column">
             {{ form_start(sortieForm) }}
             {{ form_widget(sortieForm) }}
-                <button type="submit" class="btn btn-lg btn-outline-light mb-1 mt-3">
-                    Valider</button>
+            <button type="submit" class="btn btn-lg btn-outline-light mb-1 mt-3">
+                Publier
+            </button>
+            <button type="button" class="btn btn-lg btn-outline-light mb-1 mt-3">
+                <a class="text-decoration-none" href="{{ path('sortie_list') }}">
+                    Enregistrer</a></button>
+            <button type="button" class="btn btn-lg btn-outline-light mb-1 mt-3 ">
+                <a class="text-decoration-none" href="{{ path('sortie_list') }}">
+                    Annuler</a></button>
             {{ form_end(sortieForm) }}
+
+
         </div>
     </div>
-<a href="{{ path('sortie_list') }}">
 
-<button>Enregistrer</button>
-</a>
-<a href="{{ path('sortie_list') }}">
-
-<button>Publier la sortie</button>
-</a>
-    <a href="{{ path('sortie_list') }}">
-        <button>Annuler</button>
-    </a>
 {% endblock %}
