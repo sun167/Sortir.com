@@ -2,11 +2,15 @@
 
 namespace App\Form;
 
+use App\Entity\Campus;
 use App\Entity\Participant;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -27,10 +31,15 @@ class RegistrationFormType extends AbstractType
                     ])
                 ]
             ])
+
             ->add('prenom')
+
             ->add('nom')
+
             ->add('telephone', TelType::class)
+
             ->add('email', EmailType::class, [
+
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Please enter an email',
@@ -38,6 +47,21 @@ class RegistrationFormType extends AbstractType
                 ]
             ])
             ->add('telephone', TelType::class)
+
+            ->add('campus', EntityType::class, [
+                'class' => Campus::class,
+                'choice_label' => 'nom',
+                'attr' => ['readonly' => true,
+                ]])
+
+           /* ->add('roles', ChoiceType::class, [
+                'choices' =>[
+                    "ROLE_ADMIN"=>"admin",
+                    "ROLE_PARTICIPANT"=>"participant"
+                ],
+                'multiple'=>false
+                ])*/
+
             ->add('plainPassword', PasswordType::class, [
                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
@@ -54,7 +78,19 @@ class RegistrationFormType extends AbstractType
                         'max' => 4096,
                     ]),
                 ],
-            ]);
+            ])
+
+            /*->add('plainPassword', RepeatedType::class, [
+                'type' => PasswordType::class,
+                'invalid_message' => 'Les deux mot de passe ne sont pas identiques',
+                'options' => ['attr' => ['class' => 'password-field']],
+                'required' => true,
+                'first_options'  => ['label' => 'Mot de passe'],
+                'second_options' => ['label' => 'Confirmation'],
+            ])*/
+
+
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver)

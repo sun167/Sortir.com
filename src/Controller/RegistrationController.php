@@ -6,6 +6,7 @@ use App\Entity\Participant;
 use App\Form\RegistrationFormType;
 use App\Security\AppAuthenticator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -19,34 +20,42 @@ class RegistrationController extends AbstractController
      */
     public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, GuardAuthenticatorHandler $guardHandler, AppAuthenticator $authenticator): Response
     {
-        $participant = new Participant();
-        $form = $this->createForm(RegistrationFormType::class, $participant);
+        $isAdmin = $this->isGranted("ROLE_ADMIN");
+        if(!$isAdmin){
+            throw new AccessDeniedException("Réservé aux administrateurs de ce site!");
+        }
+
+        $participant = $this->getUser();
+        $newParticipant = new Participant();
+        $form = $this->createForm(RegistrationFormType::class, $newParticipant);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             // encode the plain password
-            $participant->setPassword(
+            $newParticipant->setPassword(
                 $passwordEncoder->encodePassword(
-                    $participant,
+                    $newParticipant,
                     $form->get('plainPassword')->getData()
                 )
             );
 
             $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($participant);
+            $entityManager->persist($newParticipant);
             $entityManager->flush();
+
+            $this->addFlash('success', 'Participant créé avec succès!!');
             // do anything else you need here, like send an email
 
-            return $guardHandler->authenticateUserAndHandleSuccess(
-                $participant,
-                $request,
-                $authenticator,
-                'main' // firewall name in security.yaml
-            );
+           // return $guardHandler->authenticateUserAndHandleSuccess(
+           //     $participant,
+           //     $request,
+           //     $authenticator,
+           //     'main' // firewall name in security.yaml
+           // );
         }
-
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form->createView(),
+            'participant'=> $participant
         ]);
     }
 }

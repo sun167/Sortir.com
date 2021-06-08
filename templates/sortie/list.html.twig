@@ -1,40 +1,15 @@
 {% extends '/base.html.twig' %}
 
 {% block title %} {{ parent() }} | Liste des Sorties{% endblock %}
-{% block scripts %}
 
-    <script>
-        window.onload = init;
-
-        function init() {
-            let sorties = Array.from(document.getElementsByClassName('uneSortie'));
-            let buttons = Array.from(document.getElementsByClassName('btn-inscire'));
-            let participant_id = document.querySelector('.participantID').value;
-
-
-            buttons.forEach(function (elem, idx) {
-                elem.addEventListener('click', function (event) {
-                    console.log(elem);
-
-                    event.preventDefault();
-                    let sortie_id = elem.querySelector('.sortieID').value;
-                    let data = {
-                        'sortieID': sortie_id,
-                        'participantID': participant_id
-                    };
-
-                    fetch("ajax-inscription", {method: 'POST', body: JSON.stringify(data)}).then(function (response) {
-                        return response.json()
-                    }).then(function (data) {
-                    });
-                });
-            });
-        }
-    </script>
-{% endblock %}
 {% block body %}
+
+    <h3>Bienvenue {{  participant.prenom}} {{  participant.nom}}</h3>
+    <p>Nous sommes le : {{ "now"|date("m/d/Y") }}</p>
     <div class="nav_right">
+
         <li><a href="{{ path('sortie_create') }}">Creation Sortie</a></li>
+
     </div>
     <div class="search">
         <h2>Filtrer les sorties </h2>
@@ -74,7 +49,7 @@
                     <td> {{ sortie.participants|length }}/ {{ sortie.nbInscriptionsMax }}</td>
                     <td> {{ sortie.etat.libelle }}</td>
                     <td>
-                        {% if user in sortie.participants %}
+                        {% if participant in sortie.participants %}
                             x
                         {% endif %}
                     </td>
@@ -89,9 +64,9 @@
                                href="{{ path('sortie_ajax_inscription') }}"
                             >
                                 <input type="hidden" class="sortieID" value="{{ sortie.id }}">
-                                <input type="hidden" class="participantID" value="{{ user.id }}">
+                                <input type="hidden" class="participantID" value="{{ participant.id }}">
                                 <button>
-                                    {% if user in sortie.participants %}
+                                    {% if participant in sortie.participants %}
                                         Desister
                                     {% else %}
                                         S'inscrire

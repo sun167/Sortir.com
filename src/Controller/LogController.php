@@ -15,7 +15,7 @@ class LogController extends AbstractController
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
         if ($this->getUser()) {
-             return $this->redirectToRoute('sortie_list');
+             return $this->redirectToRoute('accueil_list');
          }
 
         // get the login error if there is one

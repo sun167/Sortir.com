@@ -54,8 +54,6 @@ class Sortie
      */
     private $urlPhoto;
 
-
-
     /**
      * @ORM\ManyToOne(targetEntity=Etat::class, inversedBy="sortie")
      */
@@ -76,11 +74,15 @@ class Sortie
      */
     private $participants;
 
-
     /**
      * @ORM\Column (type="integer", nullable=true)
      */
     private $nb_dispo;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $Archive;
 
 
     public function __construct()
@@ -250,6 +252,18 @@ class Sortie
     }
     public function setNbDispo(int $nb_dispo): self {
         $this->nb_dispo = $nb_dispo;
+
+        return $this;
+    }
+
+    public function getArchive(): ?bool
+    {
+        return $this->Archive;
+    }
+
+    public function setArchive(?bool $Archive): self
+    {
+        $this->Archive = $Archive;
 
         return $this;
     }
