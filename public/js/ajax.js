@@ -1,7 +1,7 @@
-let buttons = Array.from(document.getElementsByClassName('btn-inscire'));
+let buttonsInscrire = Array.from(document.getElementsByClassName('btn-inscire'));
 let participantID = document.querySelector('.participantID').value;
 let sortieID;
-buttons.forEach(button =>
+buttonsInscrire.forEach(button =>
     button.addEventListener('click', function (event) {
         event.preventDefault();
         sortieID = button.querySelector('.sortieID').value;
@@ -15,15 +15,32 @@ buttons.forEach(button =>
                 console.log(response.data);
                 let nbInscritContainer = document.getElementById("inscription-" + sortieID);
                 let estInscritContainer = document.getElementById("estInscrit-" + sortieID);
-
                 nbInscritContainer.innerHTML = response.data;
-                if (estInscritContainer.innerHTML === "x") {
-                    estInscritContainer.innerHTML = "";
-                } else {
-                    estInscritContainer.innerHTML = "x";
-                }
-
+                estInscritContainer.innerHTML = "x";
+                button.style.display = "none";
             });
     })
 );
+let buttonsDesister = Array.from(document.getElementsByClassName('btn-desister'));
+buttonsDesister.forEach(button =>
+    button.addEventListener('click', function (event) {
+        event.preventDefault();
+        sortieID = button.querySelector('.sortieID').value;
+        axios.get(desisterBtnURL, {
+            params: {
+                'sortieID': sortieID,
+                'participantID': participantID
+            }
+        })
+            .then(function (response) {
+                    console.log(response.data);
+                    let nbInscritContainer = document.getElementById("inscription-" + sortieID);
+                    let estInscritContainer = document.getElementById("estInscrit-" + sortieID);
 
+                    nbInscritContainer.innerHTML = response.data;
+                    estInscritContainer.innerHTML = "";
+                    button.style.display = "none";
+                }
+            );
+    })
+);

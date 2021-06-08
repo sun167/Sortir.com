@@ -33,35 +33,35 @@ class SortieController extends AbstractController
     public function accueil(Request $request, SortieRepository $sortieRepository): Response
     {
         $isAdmin = $this->isGranted("ROLE_PARTICIPANT");
-        if(!$isAdmin){
+        if (!$isAdmin) {
             throw new AccessDeniedException("Réservé aux personnes inscrites sur ce site!");
         }
 
-        $participant=$this->getUser();
+        $participant = $this->getUser();
         $sorties = $sortieRepository->findAll();
         $data = new SortieSearch();
         $searchSortieForm = $this->createForm(SortieSearchType::class, $data);
         $searchSortieForm->handleRequest($request);
         //$sorties = $sortieRepository->findSearch($data);
-        if(!$sorties) {
+        if (!$sorties) {
             throw $this->createNotFoundException("Sortie inexistant");
         }
         return $this->render('accueil.html.twig', [
             'sorties' => $sorties,
-            'particpant'=>$participant,
+            'particpant' => $participant,
             'form' => $searchSortieForm->createView()
         ]);
     }
 
 
-
     /**
-     *@Route("/sortie/create", name="sortie_create")
+     * @Route("/sortie/create", name="sortie_create")
      */
-    public function create(Request $request, EntityManagerInterface $entityManager, UpdateEntity $updateEntity, SortieImage $image) : Response {
+    public function create(Request $request, EntityManagerInterface $entityManager, UpdateEntity $updateEntity, SortieImage $image): Response
+    {
 
         $isAdmin = $this->isGranted("ROLE_PARTICIPANT");
-        if(!$isAdmin){
+        if (!$isAdmin) {
             throw new AccessDeniedException("Réservé aux personnes inscrites sur ce site!");
         }
 
@@ -72,14 +72,14 @@ class SortieController extends AbstractController
         $sortieForm = $this->createForm(SortieType::class, $sortie);
         $sortieForm->handleRequest($request);
 
-        if($sortieForm->isSubmitted() && $sortieForm->isValid()) {
+        if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
             //IMAGE
             $file = $sortieForm->get('urlPhoto')->getData();
             /**
              * @var UploadedFile $file
              */
-            if($file) {
-                $newFileName = $sortie->getNom().'-'.uniqid().'.'.$file->guessExtension();
+            if ($file) {
+                $newFileName = $sortie->getNom() . '-' . uniqid() . '.' . $file->guessExtension();
                 $file->move($this->getParameter('upload_image_sortie'), $newFileName);
                 $sortie->setUrlPhoto($newFileName);
             }
@@ -90,16 +90,17 @@ class SortieController extends AbstractController
             return $this->redirectToRoute('sortie_detail', ['id' => $sortie->getId()]);
         }
         return $this->render('sortie/create.html.twig', ['sortieForm' => $sortieForm->createView(),
-            'participant'=>$participant
-            ]);
+            'participant' => $participant
+        ]);
     }
 
     /**
-     *@Route("/sortie/detail/{id}", name="sortie_detail")
+     * @Route("/sortie/detail/{id}", name="sortie_detail")
      */
-    public function detail($id, SortieRepository $sortieRepository) : Response {
+    public function detail($id, SortieRepository $sortieRepository): Response
+    {
         $isAdmin = $this->isGranted("ROLE_PARTICIPANT");
-        if(!$isAdmin){
+        if (!$isAdmin) {
             throw new AccessDeniedException("Réservé aux personnes inscrites sur ce site!");
         }
 
@@ -107,12 +108,12 @@ class SortieController extends AbstractController
         //Détail d'une sortie
         $participant = $this->getUser();
         $sortie = $sortieRepository->find($id);
-        if(!$sortie) {
+        if (!$sortie) {
             throw $this->createNotFoundException("Détail de la sortie inexistant");
         }
         return $this->render('sortie/detail.html.twig', [
             "sortie" => $sortie,
-            'participant'=>$participant
+            'participant' => $participant
         ]);
     }
 
@@ -123,7 +124,7 @@ class SortieController extends AbstractController
     {
         $participant = $this->getUser();
         $isAdmin = $this->isGranted("ROLE_PARTICIPANT");
-        if(!$isAdmin){
+        if (!$isAdmin) {
             throw new AccessDeniedException("Réservé aux personnes inscrites sur ce site!");
         }
         $data = new SortieSearch();
@@ -132,13 +133,13 @@ class SortieController extends AbstractController
 
         $sorties = $sortieRepository->findSearch($data);
 
-       if(!$sorties) {
+        if (!$sorties) {
             throw $this->createNotFoundException("Sortie inexistant");
         }
 
         return $this->render('sortie/list.html.twig', [
             'sorties' => $sorties,
-            'participant'=> $participant,
+            'participant' => $participant,
             'form' => $searchSortieForm->createView()
         ]);
     }
@@ -146,42 +147,56 @@ class SortieController extends AbstractController
     /**
      * @Route("sortie/ajax-inscription", name="sortie_ajax_inscription")
      */
-    public function inscription(Request $request,ParticipantRepository $participantRepository,SortieRepository $sortieRepository,EntityManagerInterface $entityManager)
+    public function inscription(Request $request, ParticipantRepository $participantRepository, SortieRepository $sortieRepository, EntityManagerInterface $entityManager)
     {
-        $sortie_id = (int) $request->query->get('sortieID');
-        $participant_id = (int) $request->query->get('participantID');
+        $sortie_id = (int)$request->query->get('sortieID');
+        $participant_id = (int)$request->query->get('participantID');
         $sortie = $sortieRepository->find($sortie_id);
         $participant = $participantRepository->find($participant_id);
 
-        $user = $this->getUser();
-        if ($sortie->getParticipants()->contains($user)) {
-            $sortie->removeParticipant($participant);
-        } else {
-            $sortie->addParticipant($participant);
-        }
+        $sortie->addParticipant($participant);
+
         $entityManager->persist($sortie);
         $entityManager->flush();
-        return $this->render("ajax/inscription.html.twig",[
-        //je veux le nombre de participant
+        return $this->render("ajax/inscription.html.twig", [
+            //je veux le nombre de participant
             "nbInscrit" => $sortie->getParticipants()->count(),
             "sortie" => $sortie
         ]);
     }
 
+    /**
+     * @Route("sortie/ajax-desister", name="sortie_ajax_desister")
+     */
+    public function desister(Request $request, ParticipantRepository $participantRepository, SortieRepository $sortieRepository, EntityManagerInterface $entityManager)
+    {
+        $sortie_id = (int)$request->query->get('sortieID');
+        $participant_id = (int)$request->query->get('participantID');
+        $sortie = $sortieRepository->find($sortie_id);
+        $participant = $participantRepository->find($participant_id);
+        $sortie->removeParticipant($participant);
+        $entityManager->persist($sortie);
+        $entityManager->flush();
+        return $this->render("ajax/inscription.html.twig", [
+            "nbInscrit" => $sortie->getParticipants()->count(),
+            "sortie" => $sortie
+        ]);
+    }
 
     /**
-     *@Route("/sortie/edit/{id}", name="sortie_edit")
+     * @Route("/sortie/edit/{id}", name="sortie_edit")
      */
-    public function edit($id, SortieRepository $sortieRepository,EntityManagerInterface $entityManager, Request $request) : Response {
+    public function edit($id, SortieRepository $sortieRepository, EntityManagerInterface $entityManager, Request $request): Response
+    {
         //Modification d'une sortie
         $sortie = $sortieRepository->find($id);
-        if(!$sortie) {
+        if (!$sortie) {
             throw $this->createNotFoundException("Détail de la sortie inexistant");
         }
         $sortieForm = $this->createForm(SortieType::class, $sortie);
         $sortieForm->handleRequest($request);
 
-        if($sortieForm->isSubmitted() && $sortieForm->isValid()) {
+        if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
             $entityManager->persist($sortie);
             $entityManager->flush();
 
@@ -193,9 +208,10 @@ class SortieController extends AbstractController
     }
 
     /**
-     *@Route("/sortie/suppr/{id}", name="sortie_suppr")
+     * @Route("/sortie/suppr/{id}", name="sortie_suppr")
      */
-    public function delete($id, EntityManagerInterface $entityManager) : Response {
+    public function delete($id, EntityManagerInterface $entityManager): Response
+    {
         //Supprimer une sortie
         //TODO PAGE DE RAISON DE SUPPRESSION
         $sortie = $entityManager->find(Sortie::class, $id);
@@ -205,9 +221,10 @@ class SortieController extends AbstractController
     }
 
     /**
-     *@Route("/sortie/archivage/{id}", name="sortie_archiver")
+     * @Route("/sortie/archivage/{id}", name="sortie_archiver")
      */
-    public function archive($id, EntityManagerInterface $entityManager,SortieRepository $sortieRepository) : Response {
+    public function archive($id, EntityManagerInterface $entityManager, SortieRepository $sortieRepository): Response
+    {
         $participant = $this->getUser();
 
         //Archiver une sortie
@@ -215,6 +232,6 @@ class SortieController extends AbstractController
         $sortie = $entityManager->find(Sortie::class, $id);
         $entityManager->remove($sortie);
         $entityManager->flush();
-        return $this->render('sortie/detail.html.twig', ["sortie" => $sortie, 'participant'=>$participant]);
+        return $this->render('sortie/detail.html.twig', ["sortie" => $sortie, 'participant' => $participant]);
     }
 }

@@ -68,26 +68,30 @@
                     <td><a href="{{ path('sortie_detail',{id : sortie.id}) }}">
                             <button>Afficher</button>
                         </a></td>
-                    {% if  "now"|date('d-m-Y') <= sortie.dateFin|date('d-m-Y')
-                        and sortie.etat.libelle == "Ouverte" %}
+                    {% if  "now"|date('Y-m-d') <= sortie.dateFin|date('Y-m-d')
+                        and sortie.etat.libelle == "Ouverte"
+                        and participant not in sortie.participants %}
                         <td>
-                            <a href="{{ path('sortie_ajax_inscription') }}"
-                            >
-                                <button class="btn-inscire">
+                            <a href="{{ path('sortie_ajax_inscription') }}">
+                                <button class="btn-inscire btn-{{ sortie.id }}">
                                     <input type="hidden" class="sortieID" value="{{ sortie.id }}">
                                     <input type="hidden" class="participantID" value="{{ participant.id }}">
-
-{#                                    {% if participant in sortie.participants %}#}
-{#                                        Desister#}
-{#                                    {% else %}#}
-                                        S'inscrire/ Desister
-{#                                    {% endif %}#}
-
+                                    S'inscrire
                                 </button>
                             </a>
                         </td>
                     {% endif %}
 
+                    {% if participant in sortie.participants
+                        and  "now"|date('Y-m-d') <= sortie.dateDebut|date('Y-m-d') %}
+                        <td>
+                            <button class="btn-desister btn-{{ sortie.id }}">
+                                <input type="hidden" class="sortieID" value="{{ sortie.id }}">
+                                <input type="hidden" class="participantID" value="{{ participant.id }}">
+                                Desister
+                            </button>
+                        </td>
+                    {% endif %}
                 </tr>
 
             {% endfor %}
@@ -98,8 +102,9 @@
 {% endblock %}
 {% block script %}
     <script>
-    const inscriptionBtnURL = "{{ path('sortie_ajax_inscription') }}";
+        const inscriptionBtnURL = "{{ path('sortie_ajax_inscription') }}";
+        const desisterBtnURL = "{{ path('sortie_ajax_desister') }}"
     </script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-        <script src="{{ asset('js/ajax.js') }}"></script>
+    <script src="{{ asset('js/ajax.js') }}"></script>
 {% endblock %}
