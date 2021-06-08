@@ -1,9 +1,11 @@
+/*
 h1, h2, h3, h4, h5, h6{
     font-family: 'Cairo', sans-serif;
 }
 
 body{
     font-family: 'Montserrat', sans-serif;
+    padding-bottom: 50px;
 }
 
 img{
@@ -18,10 +20,10 @@ ul {
     background-color: #B0413E;
 }
 .wish-container{
-    /*width: 50%;*/
-    /*height: 200px;*/
-    /*margin: auto;*/
-    /*padding: 10px;*/
+    !*width: 50%;*!
+    !*height: 200px;*!
+    !*margin: auto;*!
+    !*padding: 10px;*!
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-gap: 10px;
@@ -41,7 +43,7 @@ li a {
     text-decoration: none;
 }
 
-/* Change the link color to #111 (black) on hover */
+!* Change the link color to #111 (black) on hover *!
 li a:hover {
     background-color: #b04f3e;
 }
@@ -79,10 +81,10 @@ label{
 }
 .score{
     background-color: #04AA6D;
-    text-align: center; /* Right-align text */
-    padding-top: 10px; /* Add top padding */
-    padding-bottom: 10px; /* Add bottom padding */
-    color: white; /* White text color */
+    text-align: center; !* Right-align text *!
+    padding-top: 10px; !* Add top padding *!
+    padding-bottom: 10px; !* Add bottom padding *!
+    color: white; !* White text color *!
 }
 .score-container{
     width: 100%;
@@ -115,3 +117,4 @@ button:hover {
 }
 
 
+*/

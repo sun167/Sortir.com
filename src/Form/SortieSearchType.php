@@ -24,7 +24,7 @@ class SortieSearchType extends AbstractType
                 'choice_label' => 'nom'
             ])
             ->add('q', TextType::class, [
-                'label' => 'Le nom de la sortie contient :',
+                'label' => 'Le nom de la sortie contient ',
                 'empty_data' => '',
                 'required' => false,
                 'attr' => [
@@ -32,25 +32,25 @@ class SortieSearchType extends AbstractType
                 ]
             ])
             ->add('premierDate', DateType::class, [
-                'label' => 'Entre le :',
+                'label' => 'Entre ',
                 'widget' => 'single_text',
                 'required' => false,
             ])
             ->add('deuxiemeDate', DateType::class, [
-                'label' => 'Et le :',
+                'label' => 'et ',
                 'widget' => 'single_text',
                 'required' => false,
             ])
             ->add('sortiePassee', CheckboxType::class, [
-                'label' => 'Sorties Passées',
+                'label' => 'Sorties Passées ',
                 'required' => false,
             ])
             ->add('inscrit', CheckboxType::class, [
-                'label' => 'Sorties auxquelles je suis inscrit/e',
+                'label' => 'Sorties auxquelles je suis inscrit/e ',
                 'required' => false,
             ])
             ->add('nonInscrit', CheckboxType::class, [
-                'label' => 'Sorties auxquelles je ne suis pas inscrit/e',
+                'label' => 'Sorties auxquelles je ne suis pas inscrit/e ',
                 'required' => false,
             ])
         ;

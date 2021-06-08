@@ -3,17 +3,36 @@
 {% block title %} {{ parent() }} | Lieu {% endblock %}
 
 {% block body %}
-    <div class="nav_right">
-        <li><a href="{{ path('lieu_create') }}">Creation Lieu</a></li>
+
+
+    <div class="container">
+        <div class="row">
+            <div class="col-9">
+                <h2>Liste de lieux de sorties</h2>
+                <div>
+                    {% for lieu in lieu %}
+
+                        <button type="button" class="btn btn-outline-light mb-1">
+                            <a class="navbar-brand" href="{{ path('lieu_detail', {'id' : lieu.id}) }}" title="{{ lieu.nom }} | {{ lieu.rue }}">{{ lieu.nom }} | {{ lieu.rue }}</a>
+
+
+                        </button>
+
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-3">
+
+
+
+                <button type="button" class="btn btn-light">
+                    <a class="navbar-brand" href="{{ path('lieu_create') }}">Creation Lieu</a>
+                </button>
+
+            </div>
+        </div>
     </div>
-    <h2>Listes des lieux</h2>
-    <div>
-        {% for lieu in lieu %}
-            <article>
-                <a href="{{ path('lieu_detail', {'id' : lieu.id}) }}" title="{{ lieu.nom }} | {{ lieu.rue }}">{{ lieu.nom }} | {{ lieu.rue }}</a>
-            </article>
-        {% endfor %}
-    </div>
+
 
 {% endblock %}
 

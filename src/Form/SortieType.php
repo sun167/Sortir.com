@@ -22,15 +22,28 @@ class SortieType extends AbstractType
         $builder
             ->add('nom', null, ['label' => 'Nom de la sortie : '])
             ->add('description', null, ['label' => 'Description : '])
-            ->add('dateDebut', DateTimeType::class)
-            ->add('dateFin', DateTimeType::class)
+            ->add('dateDebut', DateType::class, [
+                'widget' => 'single_text',
+                'format'=> 'dd-MM-yyyy HH:mm',
+                'html5' => false,
+                'empty_data'=>'dd-MM-yyyy HH:mm',
+
+            ])
+
+
+            ->add('dateFin', DateType::class, [
+                'label' => 'Cloture inscriptions ',
+                'widget' => 'single_text',
+            ])
+
+
+            /*->add('dateFin', DateTimeType::class, ['label'=> 'fin d\'inscription'])*/
             ->add('duree', null, ['label' => 'Durée : '])
             ->add('nbInscriptionsMax', null, ['label' => 'Nombre d\'inscription max : '])
-            ->add('urlPhoto',  FileType::class, ['mapped' =>false, 'required' => false, 'constraints' => [new Image(['maxSize' => '7024k', 'mimeTypesMessage' => "Format de l'image non supporter"])]])
+            ->add('urlPhoto', FileType::class, ['mapped' => false, 'required' => false, 'constraints' => [new Image(['maxSize' => '7024k', 'mimeTypesMessage' => "Format de l'image non supporter"])]])
             ->add('lieu', EntityType::class, ['class' => Lieu::class, 'choice_label' => 'nom'])
             ->add('campus', EntityType::class, ['class' => Campus::class, 'choice_label' => 'nom'])
-            //->add('etat', EntityType::class, ['class' => Etat::class, 'choice_label' => 'libelle'])
-        ;
+            ->add('etat', EntityType::class, ['class' => Etat::class, 'choice_label' => 'libelle']);
     }
 
     public function configureOptions(OptionsResolver $resolver)

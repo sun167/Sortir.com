@@ -31,7 +31,7 @@ class VilleController extends AbstractController
     public function create(Request $request, EntityManagerInterface $entityManager, UpdateEntity $updateEntity): Response
     {
         $isAdmin = $this->isGranted("ROLE_PARTICIPANT");
-        if(!$isAdmin){
+        if (!$isAdmin) {
             throw new AccessDeniedException("Réservé aux personnes inscrites sur ce site!");
         }
 
@@ -41,7 +41,7 @@ class VilleController extends AbstractController
         $villeForm = $this->createForm(VilleType::class, $ville);
         $villeForm->handleRequest($request);
 
-        if($villeForm->isSubmitted() && $villeForm->isValid()) {
+        if ($villeForm->isSubmitted() && $villeForm->isValid()) {
             //Ajout
             $updateEntity->save($ville);
             $this->addFlash('succes', 'Nouvelle ville ajoutée !!');
@@ -50,7 +50,7 @@ class VilleController extends AbstractController
 
         return $this->render('ville/create.html.twig', [
             'villeForm' => $villeForm->createView(),
-            'participant'=> $participant
+            'participant' => $participant
         ]);
     }
 
@@ -60,18 +60,18 @@ class VilleController extends AbstractController
     public function detail($id, VilleRepository $villeRepository): Response
     {
         $isAdmin = $this->isGranted("ROLE_PARTICIPANT");
-        if(!$isAdmin){
+        if (!$isAdmin) {
             throw new AccessDeniedException("Réservé aux personnes inscrites sur ce site!");
         }
 
         $participant = $this->getUser();
         $ville = $villeRepository->find($id);
-        if(!$ville) {
+        if (!$ville) {
             throw $this->createNotFoundException("Aucune ville sélectionnée");
         }
         return $this->render('ville/detail.html.twig', [
             'ville' => $ville,
-            'participant'=>$participant
+            'participant' => $participant
         ]);
     }
 
@@ -81,18 +81,18 @@ class VilleController extends AbstractController
     public function list(VilleRepository $villeRepository): Response
     {
         $isAdmin = $this->isGranted("ROLE_PARTICIPANT");
-        if(!$isAdmin){
+        if (!$isAdmin) {
             throw new AccessDeniedException("Réservé aux personnes inscrites sur ce site!");
         }
 
         $participant = $this->getUser();
         $ville = $villeRepository->findAll();
-        if(!$ville) {
+        if (!$ville) {
             throw $this->createNotFoundException("Il n'y a pas de ville à afficher");
         }
         return $this->render('ville/list.html.twig', [
             'ville' => $ville,
-            'participant'=>$participant
+            'participant' => $participant
         ]);
     }
 }

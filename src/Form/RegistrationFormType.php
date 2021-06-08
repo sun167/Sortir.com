@@ -54,9 +54,10 @@ class RegistrationFormType extends AbstractType
                 'attr' => ['readonly' => true,
                 ]])
 
+            // TODO à revoir en plus du registrationController pour pouvoir choisir le role d'un participant créé
            /* ->add('roles', ChoiceType::class, [
                 'choices' =>[
-                    "ROLE_ADMIN"=>"admin",
+                    ["ROLE_ADMIN"]=>"admin",
                     "ROLE_PARTICIPANT"=>"participant"
                 ],
                 'multiple'=>false

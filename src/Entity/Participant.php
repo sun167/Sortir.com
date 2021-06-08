@@ -26,7 +26,6 @@ class Participant implements UserInterface
     /**
      *
      * @ORM\Column(type="string", length=180, unique=true)
-     * @Assert\NotBlank
      *
      */
     private $pseudo;
@@ -84,9 +83,20 @@ class Participant implements UserInterface
      */
     private $campus;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $urlPhoto;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Sortie::class, mappedBy="organisateur")
+     */
+    private $sorties;
+
     public function __construct()
     {
         $this->inscription = new ArrayCollection();
+        $this->sorties = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -273,6 +283,48 @@ class Participant implements UserInterface
     public function setCampus(?Campus $campus): self
     {
         $this->campus = $campus;
+
+        return $this;
+    }
+
+    public function getUrlPhoto(): ?string
+    {
+        return $this->urlPhoto;
+    }
+
+    public function setUrlPhoto(?string $urlPhoto): self
+    {
+        $this->urlPhoto = $urlPhoto;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Sortie[]
+     */
+    public function getSorties(): Collection
+    {
+        return $this->sorties;
+    }
+
+    public function addSorty(Sortie $sorty): self
+    {
+        if (!$this->sorties->contains($sorty)) {
+            $this->sorties[] = $sorty;
+            $sorty->setOrganisateur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSorty(Sortie $sorty): self
+    {
+        if ($this->sorties->removeElement($sorty)) {
+            // set the owning side to null (unless already changed)
+            if ($sorty->getOrganisateur() === $this) {
+                $sorty->setOrganisateur(null);
+            }
+        }
 
         return $this;
     }

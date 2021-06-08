@@ -6,7 +6,6 @@ use App\Entity\Lieu;
 use App\Form\LieuType;
 use App\ManageEntity\UpdateEntity;
 use App\Repository\LieuRepository;
-use App\Repository\ParticipantRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
@@ -32,7 +31,7 @@ class LieuController extends AbstractController
     public function create(Request $request, EntityManagerInterface $entityManager, UpdateEntity $updateEntity): Response
     {
         $isAdmin = $this->isGranted("ROLE_PARTICIPANT");
-        if(!$isAdmin){
+        if (!$isAdmin) {
             throw new AccessDeniedException("Réservé aux personnes inscrites sur ce site!");
         }
 
@@ -51,7 +50,7 @@ class LieuController extends AbstractController
 
         return $this->render('lieu/create.html.twig', [
             'lieuForm' => $lieuForm->createView(),
-            'participant'=> $participant
+            'participant' => $participant
         ]);
     }
 
@@ -62,7 +61,7 @@ class LieuController extends AbstractController
     public function detail($id, LieuRepository $lieuRepository): Response
     {
         $isAdmin = $this->isGranted("ROLE_PARTICIPANT");
-        if(!$isAdmin){
+        if (!$isAdmin) {
             throw new AccessDeniedException("Réservé aux personnes inscrites sur ce site!");
         }
 
@@ -83,7 +82,7 @@ class LieuController extends AbstractController
     public function list(LieuRepository $lieuRepository): Response
     {
         $isAdmin = $this->isGranted("ROLE_PARTICIPANT");
-        if(!$isAdmin){
+        if (!$isAdmin) {
             throw new AccessDeniedException("Réservé aux personnes inscrites sur ce site!");
         }
 
@@ -94,7 +93,7 @@ class LieuController extends AbstractController
         }
         return $this->render('lieu/list.html.twig', [
             'lieu' => $lieu,
-            'participant'=> $participant
+            'participant' => $participant
         ]);
     }
 }

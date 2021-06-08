@@ -25,26 +25,43 @@
         </div>
     </div>
 
-    <div>
+  {#  <div>
         <button><a href="{{ path('sortie_edit', {'id' : sortie.id}) }}" title="Modifier la serie">Modifier</a></button>
     </div>
     <div>
         <button><a href="{{ path('sortie_suppr', {'id' : sortie.id}) }}" title="Supprimer la serie">Supprimer</a>
         </button>
-    </div>
+    </div>#}
 
     <div>
         <h3>Listes des participants</h3>
-        <button class="button_inscription" value="1">Inscription</button>
-        <button class="button_inscription" value="0">Désinscription</button>
-        <div> Il y a <span id="nb_dispo">{{ sortie.nbDispo }}</span> personnes inscrites
-            sur {{ sortie.nbInscriptionsMax }}</div>
-        <input type="hidden" id="sortie_id" value="{{ sortie.id }}">
-        {#
-        {% for user in sortie.users %}
-            <h5>{{ user.nom }}</h5>
-        {% endfor %}
-        #}
+        <table>
+            <thead>
+            <tr>
+                <th>Pseudo</th>
+                <th>Nom</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+
+            {% for participant in sortie.participants %}
+                <tr>
+
+                    <td>{{ participant.pseudo }}</td>
+                    <td>{{ participant.nom ~ " " ~ participant.prenom }}</td>
+                    <td>
+                        <a href="{{ path('participant_detail',{id : participant.id}) }}">Details
+                        </a>
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+            </tbody>
+
+        </table>
+
     </div>
 
 {% endblock %}
