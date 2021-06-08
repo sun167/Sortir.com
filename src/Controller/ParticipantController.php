@@ -45,7 +45,7 @@ class ParticipantController extends AbstractController
 
         $campus = $campusRepository->find($id);
 
-        return $this->render('sortie/list.html.twig', [
+        return $this->render('participant/detail.html.twig', [
             "campus" => $campus,
             "participant" => $participant
         ]);

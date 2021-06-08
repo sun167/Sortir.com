@@ -1,15 +1,27 @@
 {% extends 'base.html.twig' %}
 
-{% block title %} {{ parent()  }} | Création Sortie{% endblock %}
+{% block title %} {{ parent() }} | Création Sortie{% endblock %}
 
 {% block body %}
-<h2>Création d'une nouvelle sortie</h2>
+    <h2>Création d'une nouvelle sortie</h2>
     <div class="sortie-create">
-        <div class="sortie-column">
-            {{ form_start(sortieForm) }}
-            <div class="form_widget">{{ form_widget(sortieForm) }}
-                <button>Valider</button>
+    <div class="sortie-column">
+        {{ form_start(sortieForm) }}
+        <div class="form_widget">
+            {{ form_widget(sortieForm) }}
+
             {{ form_end(sortieForm) }}
         </div>
     </div>
+<a href="{{ path('sortie_list') }}">
+
+<button>Enregistrer</button>
+</a>
+<a href="{{ path('sortie_list') }}">
+
+<button>Publier la sortie</button>
+</a>
+    <a href="{{ path('sortie_list') }}">
+        <button>Annuler</button>
+    </a>
 {% endblock %}

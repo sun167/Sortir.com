@@ -1,40 +1,12 @@
 {% extends '/base.html.twig' %}
 
 {% block title %} {{ parent() }} | Liste des Sorties{% endblock %}
-{% block scripts %}
-
-    <script>
-        window.onload = init;
-
-        function init() {
-            let sorties = Array.from(document.getElementsByClassName('uneSortie'));
-            let buttons = Array.from(document.getElementsByClassName('btn-inscire'));
-            let participant_id = document.querySelector('.participantID').value;
 
 
-            buttons.forEach(function (elem, idx) {
-                elem.addEventListener('click', function (event) {
-                    console.log(elem);
 
-                    event.preventDefault();
-                    let sortie_id = elem.querySelector('.sortieID').value;
-                    let data = {
-                        'sortieID': sortie_id,
-                        'participantID': participant_id
-                    };
-
-                    fetch("ajax-inscription", {method: 'POST', body: JSON.stringify(data)}).then(function (response) {
-                        return response.json()
-                    }).then(function (data) {
-                    });
-                });
-            });
-        }
-    </script>
-{% endblock %}
 {% block body %}
 
-    <h3>Bienvenue {{  participant.prenom}} {{  participant.nom}}</h3>
+    <h3>Bienvenue {{ participant.prenom }} {{ participant.nom }}</h3>
     <p>Nous sommes le : {{ "now"|date("m/d/Y") }}</p>
     <div class="nav_right">
 
@@ -47,17 +19,17 @@
         {{ form_widget(form) }}
         <button type="submit"> Recherche!</button>
         {{ form_end(form) }}
-</div>
-
-<div class="table-header">
-    <thead>
+    </div>
+    <table>
+        <div class="table-header">
+            <thead>
 
             <tr>
                 <th>Nom de la sortie</th>
                 <th>Date de la sortie</th>
                 <th>Cloture</th>
                 <th>Inscrits / Places</th>
-                <th>Etat </th>
+                <th>Etat</th>
                 <th>Inscrit</th>
                 <th>Organisateur</th>
                 <th>Actions</th>
@@ -76,18 +48,19 @@
                     <td>{{ sortie.nom }}</td>
                     <td>{{ sortie.dateDebut|date('d-m-Y H:m') }}</td>
                     <td>{{ sortie.dateFin|date('d-m-Y H:m') }}</td>
-                    <td> {{ sortie.participants|length }}/ {{ sortie.nbInscriptionsMax }}</td>
+                    <td id="inscription-{{ sortie.id }}"> {{ sortie.participants|length }}
+                        / {{ sortie.nbInscriptionsMax }}</td>
                     <td> {{ sortie.etat.libelle }}</td>
-                    <td>
+                    <td id="estInscrit-{{ sortie.id }}">
                         {% if participant in sortie.participants %}
                             x
                         {% endif %}
                     </td>
                     <td>
                         {% if sortie.organisateur %}
-                        <a href="{{ path('participant_detail',{id : sortie.organisateur.id}) }}">
-                            {{ sortie.organisateur.nom ~ " " ~ sortie.organisateur.prenom }}
-                        </a>
+                            <a href="{{ path('participant_detail',{id : sortie.organisateur.id}) }}">
+                                {{ sortie.organisateur.nom ~ " " ~ sortie.organisateur.prenom }}
+                            </a>
                         {% else %}
                             Admin
                         {% endif %}
@@ -98,17 +71,17 @@
                     {% if  "now"|date('d-m-Y') <= sortie.dateFin|date('d-m-Y')
                         and sortie.etat.libelle == "Ouverte" %}
                         <td>
-                            <a class="btn-inscire"
-                               href="{{ path('sortie_ajax_inscription') }}"
+                            <a href="{{ path('sortie_ajax_inscription') }}"
                             >
-                                <input type="hidden" class="sortieID" value="{{ sortie.id }}">
-                                <input type="hidden" class="participantID" value="{{ participant.id }}">
-                                <button>
-                                    {% if participant in sortie.participants %}
-                                        Desister
-                                    {% else %}
-                                        S'inscrire
-                                    {% endif %}
+                                <button class="btn-inscire">
+                                    <input type="hidden" class="sortieID" value="{{ sortie.id }}">
+                                    <input type="hidden" class="participantID" value="{{ participant.id }}">
+
+{#                                    {% if participant in sortie.participants %}#}
+{#                                        Desister#}
+{#                                    {% else %}#}
+                                        S'inscrire/ Desister
+{#                                    {% endif %}#}
 
                                 </button>
                             </a>
@@ -122,4 +95,11 @@
 
         </div>
     </table>
+{% endblock %}
+{% block script %}
+    <script>
+    const inscriptionBtnURL = "{{ path('sortie_ajax_inscription') }}";
+    </script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <script src="{{ asset('js/ajax.js') }}"></script>
 {% endblock %}

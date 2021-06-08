@@ -15,7 +15,6 @@
         <link rel="stylesheet" href="{{ asset('css/navigation.css') }}">        {# CSS DES LIEN DE NAVIGATION #}
         <link rel="stylesheet" href="{{ asset('css/search.css') }}">            {# CSS DE RECHERCHE #}
     {% endblock %}
-    <script src="{{ asset('js/ajax.js') }}"></script>
 </head>
 
 <body>
@@ -36,4 +35,6 @@
 </div>
 </body>
 {% include 'menu/footer.html.twig' %}
+{% block script %}
+{% endblock %}
 </html>
