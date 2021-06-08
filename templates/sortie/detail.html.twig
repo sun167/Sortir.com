@@ -33,16 +33,23 @@
         </div>
     </div>
 
-  {#  <div>
+   <div>
         <button><a href="{{ path('sortie_edit', {'id' : sortie.id}) }}" title="Modifier la serie">Modifier</a></button>
     </div>
     <div>
         <button><a href="{{ path('sortie_suppr', {'id' : sortie.id}) }}" title="Supprimer la serie">Supprimer</a>
         </button>
-    </div>#}
+    </div>
 
     <div>
         <h3>Listes des participants</h3>
+<<<<<<<<< Temporary merge branch 1
+        <button class="button_inscription" value="1">Inscription</button>
+        <button class="button_inscription" value="0">Désinscription</button>
+        <div> Il y a <span id="nb_dispo">{{ sortie.nbDispo }}</span> personnes inscrites
+            sur {{ sortie.nbInscriptionsMax }}</div>
+        <input type="hidden" id="sortie_id" value="{{ sortie.id }}">
+=========
         <table>
             <thead>
             <tr>
@@ -70,6 +77,15 @@
 
         </table>
 
+        {# <button class="button_inscription" value="1">Inscription</button> #}
+        {# <button class="button_inscription" value="0">Désinscription</button> #}
+        {# <div> Il y a <span id="nb_dispo">{{ sortie.nbDispo }}</span> personnes inscrites sur {{ sortie.nbInscriptionsMax }}</div> #}
+        {# <input type="hidden" id="sortie_id" value="{{ sortie.id }}"> #}
+        {#
+        {% for user in sortie.users %}
+            <h5>{{ user.nom }}</h5>
+        {% endfor %}
+        #}
     </div>
 
 {% endblock %}

@@ -82,7 +82,6 @@ class Participant implements UserInterface
      * @ORM\ManyToOne(targetEntity=Campus::class, inversedBy="participants")
      */
     private $campus;
-
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
