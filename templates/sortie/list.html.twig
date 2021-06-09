@@ -54,7 +54,6 @@
                             </div>
                         </div>
 
-
                         <div class="ms-3">Date : {{ sortie.dateDebut|date('d-m-Y H:m') }}</div>
                         <div class="ms-3">Clotûre : {{ sortie.dateFin|date('d-m-Y H:m') }}</div>
                         <div class="ms-3" id="inscription-{{ sortie.id }}">Inscrits/places dispos
@@ -85,35 +84,41 @@
                         <div class="row">
 
                             <div class="col-6">
-                                {% if "now"|date('d-m-Y') <= sortie.dateFin|date('d-m-Y')
-                                    and sortie.etat.libelle == "Ouverte" %}
-                                    <p>
-                                        <button class="btn btn-outline-secondary ms-3 btn-inscrire btn-{{ sortie.id }}"
-                                                style="visibility: {% if participant not in sortie.participants %}visible{% else %}hidden{% endif %}">
-                                            <a class="text-decoration-none" href="{{ path('sortie_ajax_inscription') }}">
-                                                <input type="hidden" class="sortieID" value="{{ sortie.id }}">
-                                                <input type="hidden" class="participantID" value="{{ participant.id }}">
-                                                S'inscrire</a>
-                                        </button>
-                                    </p>
-                                {% endif %}
+
+                    {% if  "now"|date('d-m-Y') <= sortie.dateFin|date('d-m-Y')
+                        and sortie.etat.libelle == "Ouverte"
+                        and sortie.participants|length <= sortie.nbInscriptionsMax
+                        and participant not in sortie.participants %}
+
+                        <p>
+                            <button class="btn btn-outline-secondary ms-3 btn-inscrire btn-{{ sortie.id }}"
+                                    style="visibility: {% if participant not in sortie.participants %}visible{% else %}hidden{% endif %}">
+                                <a class="text-decoration-none" href="{{ path('sortie_ajax_inscription') }}">
+                                    <input type="hidden" class="sortieID" value="{{ sortie.id }}">
+                                    <input type="hidden" class="participantID" value="{{ participant.id }}">
+                                    S'inscrire</a>
+                            </button>
+                        </p>
+                    {% endif %}
                             </div>
                             <div class="col-6">
-                                {% if  "now"|date('Y-m-d') <= sortie.dateDebut|date('Y-m-d') %}
-                                    <button class="btn btn-outline-danger ms-3 btn-desister btn-{{ sortie.id }}"
-                                            style="visibility: {% if participant in sortie.participants %}visible{% else %}hidden{% endif %}">
-                                        <input type="hidden" class="sortieID" value="{{ sortie.id }}">
-                                        <input type="hidden" class="participantID" value="{{ participant.id }}">
-                                        Se désister
-                                    </button>
+                    {% if participant in sortie.participants
+                        and  "now"|date('d-m-Y') <= sortie.dateDebut|date('d-m-Y') %}
 
-                                {% endif %}
-                            </div>
+                        <button class="btn btn-outline-danger ms-3 btn-desister btn-{{ sortie.id }}"
+                                style="visibility: {% if participant in sortie.participants %}visible{% else %}hidden{% endif %}">
+                            <input type="hidden" class="sortieID" value="{{ sortie.id }}">
+                            <input type="hidden" class="participantID" value="{{ participant.id }}">
+                            Se désister
+                        </button>
+                    {% endif %}
+                        </div>>
 
                         </div>
                     </div>
                 </div>
-                </div>{% endfor %}
+                </div>
+            {% endfor %}
         </div>
     </div>
 

@@ -13,15 +13,19 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Security\Core\Security;
 
 class SortieSearchType extends AbstractType
 {
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('campus',EntityType::class, [
                 'class' => Campus::class,
-                'choice_label' => 'nom'
+                'choice_label' => 'nom',
+                'placeholder' => 'Choisir un campus',
+                'required' => false
             ])
             ->add('q', TextType::class, [
                 'label' => 'Le nom de la sortie contient ',
@@ -53,6 +57,10 @@ class SortieSearchType extends AbstractType
                 'label' => 'Sorties auxquelles je ne suis pas inscrit/e ',
                 'required' => false,
             ])
+            ->add('organisateur', CheckboxType::class, [
+                'label' => "Sorties dont je suis l'organisateur / trice",
+                'required' => false
+            ])
         ;
         ;
     }
@@ -64,5 +72,6 @@ class SortieSearchType extends AbstractType
             'method' => 'GET',
             'csrf_protection' => false
         ]);
+
     }
 }

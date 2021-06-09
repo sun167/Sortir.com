@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Participant;
 use App\Entity\Sortie;
 use App\Entity\SortieSearch;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -22,11 +23,11 @@ class SortieRepository extends ServiceEntityRepository
         parent::__construct($registry, Sortie::class);
     }
 
-     /**
-      * @return Sortie[] Returns an array of searched objects
-      */
+    /**
+     * @return Sortie[] Returns an array of searched objects
+     */
 
-    public function findSearch(SortieSearch $search)
+    public function findSearch(SortieSearch $search, Participant $participant)
     {
         $query = $this
             ->createQueryBuilder('s')
@@ -59,13 +60,24 @@ class SortieRepository extends ServiceEntityRepository
         }
         if (!empty($search->isInscrit()) && empty($search->isNonInscrit())) {
             $query = $query
-                ->andWhere($query->expr()->isMemberOf(':participants','s.participants'))
-                ->setParameter('participants',$search->isInscrit());
+                ->addSelect('p')
+                ->join('s.participants', 'p');
+//                ->andWhere($query->expr()->isMemberOf(':participant', 's.participants'))
+//                ->setParameter('participant', $participant);
         }
         if (!empty($search->isNonInscrit()) && empty($search->isInscrit())) {
             $query = $query
-                ->andWhere(':participants NOT MEMBER OF s.participants')
-                ->setParameter('participants',$search->isNonInscrit());
+                ->addSelect('p')
+                ->leftJoin('s.participants', 'p')
+                ->andWhere(':participant NOT MEMBER OF s.participants')
+                ->setParameter('participant', $participant);
+        }
+        if (!empty($search->isOrganisateur())) {
+            $query = $query
+                ->addSelect('o')
+                ->join('s.organisateur','o')
+                ->andWhere(':organisateur = s.organisateur')
+                ->setParameter('organisateur', $participant);
         }
         return $query->getQuery()->getResult();
 
