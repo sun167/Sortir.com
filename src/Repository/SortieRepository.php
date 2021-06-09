@@ -61,9 +61,9 @@ class SortieRepository extends ServiceEntityRepository
         if (!empty($search->isInscrit()) && empty($search->isNonInscrit())) {
             $query = $query
                 ->addSelect('p')
-                ->join('s.participants', 'p');
-//                ->andWhere($query->expr()->isMemberOf(':participant', 's.participants'))
-//                ->setParameter('participant', $participant);
+                ->join('s.participants', 'p')
+                ->andWhere($query->expr()->isMemberOf(':participant', 's.participants'))
+                ->setParameter('participant', $participant);
         }
         if (!empty($search->isNonInscrit()) && empty($search->isInscrit())) {
             $query = $query
