@@ -5,23 +5,21 @@
 {% block body %}
     <h2>Création d'une nouvelle sortie</h2>
     <div class="sortie-create">
-    <div class="sortie-column">
-        {{ form_start(sortieForm) }}
+        <div class="sortie-column">
+            {{ form_start(sortieForm) }}
         <div class="form_widget">
-            {{ form_widget(sortieForm) }}
-
-            {{ form_end(sortieForm) }}
+                {{ form_widget(sortieForm) }}
+            <a href="{{ path('sortie_list') }}">
+                <button>Enregistrer</button>
+            </a>
+            <a href="{{ path('sortie_list') }}">
+                <button>Publier la sortie</button>
+            </a>
+                {{ form_end(sortieForm) }}
+            </div>
         </div>
+        <a href="{{ path('sortie_list') }}">
+            <button>Annuler</button>
+        </a>
     </div>
-<a href="{{ path('sortie_list') }}">
-
-<button>Enregistrer</button>
-</a>
-<a href="{{ path('sortie_list') }}">
-
-<button>Publier la sortie</button>
-</a>
-    <a href="{{ path('sortie_list') }}">
-        <button>Annuler</button>
-    </a>
 {% endblock %}

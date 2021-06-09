@@ -94,7 +94,6 @@ class Participant implements UserInterface
      * @ORM\OneToMany(targetEntity=Sortie::class, mappedBy="organisateur")
      */
     private $sorties;
->>>>>>>>> Temporary merge branch 2
 
     public function __construct()
     {
@@ -328,17 +327,6 @@ class Participant implements UserInterface
                 $sorty->setOrganisateur(null);
             }
         }
-
-        return $this;
-    }
-    public function getUrlPhoto(): ?string
-    {
-        return $this->urlPhoto;
-    }
-
-    public function setUrlPhoto(?string $urlPhoto): self
-    {
-        $this->urlPhoto = $urlPhoto;
 
         return $this;
     }
