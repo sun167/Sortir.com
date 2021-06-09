@@ -21,7 +21,7 @@ class RegistrationController extends AbstractController
     public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, GuardAuthenticatorHandler $guardHandler, AppAuthenticator $authenticator): Response
     {
         $isAdmin = $this->isGranted("ROLE_ADMIN");
-        if(!$isAdmin){
+        if (!$isAdmin) {
             throw new AccessDeniedException("Réservé aux administrateurs de ce site!");
         }
 
@@ -47,16 +47,16 @@ class RegistrationController extends AbstractController
             $this->addFlash('success', 'Participant créé avec succès!!');
             // do anything else you need here, like send an email
 
-           // return $guardHandler->authenticateUserAndHandleSuccess(
-           //     $participant,
-           //     $request,
-           //     $authenticator,
-           //     'main' // firewall name in security.yaml
-           // );
+            // return $guardHandler->authenticateUserAndHandleSuccess(
+            //     $participant,
+            //     $request,
+            //     $authenticator,
+            //     'main' // firewall name in security.yaml
+            // );
         }
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form->createView(),
-            'participant'=> $participant
+            'participant' => $participant
         ]);
     }
 }

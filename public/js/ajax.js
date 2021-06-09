@@ -16,14 +16,19 @@ buttonsInscrire.forEach(button =>
                 let nbInscritContainer = document.getElementById("inscription-" + sortieID);
                 let estInscritContainer = document.getElementById("estInscrit-" + sortieID);
                 nbInscritContainer.innerHTML = response.data;
-                estInscritContainer.innerHTML = "x";
-                button.style.display = "none";
+                estInscritContainer.innerHTML = "<div class=\"text-success\"> Inscrit/e</div>";
+                button.style.visibility = 'hidden';
+                let buttonDesister = document.getElementsByClassName('btn-desister btn-'+sortieID)[0]
+                console.log(buttonDesister);
+                buttonDesister.style.visibility= 'visible';
+
             });
     })
 );
 let buttonsDesister = Array.from(document.getElementsByClassName('btn-desister'));
 buttonsDesister.forEach(button =>
     button.addEventListener('click', function (event) {
+        console.log(button);
         event.preventDefault();
         sortieID = button.querySelector('.sortieID').value;
         axios.get(desisterBtnURL, {
@@ -38,9 +43,14 @@ buttonsDesister.forEach(button =>
                     let estInscritContainer = document.getElementById("estInscrit-" + sortieID);
 
                     nbInscritContainer.innerHTML = response.data;
-                    estInscritContainer.innerHTML = "";
-                    button.style.display = "none";
+                    estInscritContainer.innerHTML = "<div> Non inscrit/e</div>";
+                    button.style.visibility= 'hidden';
+                    let buttonInscrire = document.getElementsByClassName('btn-inscrire btn-'+sortieID)[0]
+                console.log(buttonInscrire);
+                buttonInscrire.style.visibility= 'visible';
+
                 }
-            );
+            )
+            .catch(error=> console.error(error));
     })
 );

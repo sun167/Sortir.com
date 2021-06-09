@@ -74,7 +74,12 @@ class AppAuthenticator extends AbstractFormLoginAuthenticator implements Passwor
             throw new UsernameNotFoundException('Email could not be found.');
         }
 
-        return $user;
+        if($user instanceof Participant){
+            return $user;
+        }else{
+            return null;
+        }
+
     }
 
     public function checkCredentials($credentials, UserInterface $user)

@@ -3,17 +3,32 @@
 {% block title %} {{ parent() }} | Campus {% endblock %}
 
 {% block body %}
-    <div class="nav_right">
-        <li><a href="{{ path('campus_create') }}">Creation Campus</a></li>
+
+
+    <div class="container">
+        <div class="row">
+            <div class="col-9">
+                <h2>Liste de lieux de sorties</h2>
+                <div>
+                    {% for campus in campus %}
+
+                        <button type="button" class="btn btn-outline-light mb-1">
+                            <a class="navbar-brand" href="{{ path('campus_detail', {'id' : campus.id}) }}"
+                               title="{{ campus.nom }}">{{ campus.nom }}</a>
+                        </button>
+
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-3">
+                <button type="button" class="btn btn-light">
+                    <a class="navbar-brand" href="{{ path('campus_create') }}">Creation Campus</a>
+                </button>
+
+            </div>
+        </div>
     </div>
-    <h2>Listes des campus</h2>
-    <div>
-        {% for campus in campus %}
-            <article>
-                <a href="{{ path('campus_detail', {'id' : campus.id}) }}" title="{{ campus.nom }}">{{ campus.nom }}</a>
-            </article>
-        {% endfor %}
-    </div>
+
 
 {% endblock %}
 

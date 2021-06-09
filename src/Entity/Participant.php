@@ -26,7 +26,6 @@ class Participant implements UserInterface
     /**
      *
      * @ORM\Column(type="string", length=180, unique=true)
-     * @Assert\NotBlank
      *
      */
     private $pseudo;
@@ -287,6 +286,18 @@ class Participant implements UserInterface
         return $this;
     }
 
+    public function getUrlPhoto(): ?string
+    {
+        return $this->urlPhoto;
+    }
+
+    public function setUrlPhoto(?string $urlPhoto): self
+    {
+        $this->urlPhoto = $urlPhoto;
+
+        return $this;
+    }
+
     /**
      * @return Collection|Sortie[]
      */
@@ -313,17 +324,6 @@ class Participant implements UserInterface
                 $sorty->setOrganisateur(null);
             }
         }
-
-        return $this;
-    }
-    public function getUrlPhoto(): ?string
-    {
-        return $this->urlPhoto;
-    }
-
-    public function setUrlPhoto(?string $urlPhoto): self
-    {
-        $this->urlPhoto = $urlPhoto;
 
         return $this;
     }
