@@ -131,7 +131,7 @@ class SortieController extends AbstractController
         $searchSortieForm = $this->createForm(SortieSearchType::class, $data);
         $searchSortieForm->handleRequest($request);
 
-        $sorties = $sortieRepository->findSearch($data);
+        $sorties = $sortieRepository->findSearch($data, $participant);
 
         if (!$sorties) {
             throw $this->createNotFoundException("Sortie inexistant");
@@ -234,4 +234,5 @@ class SortieController extends AbstractController
         $entityManager->flush();
         return $this->render('sortie/detail.html.twig', ["sortie" => $sortie, 'participant' => $participant]);
     }
+
 }

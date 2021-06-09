@@ -1,4 +1,4 @@
-let buttonsInscrire = Array.from(document.getElementsByClassName('btn-inscire'));
+let buttonsInscrire = Array.from(document.getElementsByClassName('btn-inscrire'));
 let participantID = document.querySelector('.participantID').value;
 let sortieID;
 buttonsInscrire.forEach(button =>
