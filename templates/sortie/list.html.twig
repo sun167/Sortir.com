@@ -110,13 +110,27 @@
                                 {% endif %}
                             </div>
 
+                            <div class="col-6 row ">
+                                {% if participant == sortie.organisateur %}
+                                    <div class="col-6">
+                                        <button class="btn btn-outline-secondary ms-3"><a
+                                                    href="{{ path('sortie_edit', {'id' : sortie.id}) }}"
+                                                    title="Modifier">Modifier</a></button>
+                                    </div>
+                                    <div class="col-6">
+                                        <button class="btn btn-outline-secondary ms-3">
+                                            <a href="{{ path('sortie_suppr', {'id' : sortie.id}) }}"
+                                               title="Supprimer">Supprimer</a>
+                                        </button>
+                                    </div>
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
                 </div>
                 </div>{% endfor %}
         </div>
-    </div>
-
+    </table>
 {% endblock %}
 {% block script %}
     <script>
