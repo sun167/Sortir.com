@@ -79,7 +79,7 @@ class SortieRepository extends ServiceEntityRepository
         if (!empty($search->isOrganisateur())) {
             $query = $query
                 ->addSelect('o')
-                ->join('s.organisateur','o')
+                ->join('s.organisateur', 'o')
                 ->andWhere(':organisateur = s.organisateur')
                 ->setParameter('organisateur', $participant);
         }
@@ -99,4 +99,39 @@ class SortieRepository extends ServiceEntityRepository
         ;
     }
     */
+
+
+  /*  public function findSortieEnCour(Sortie $sortie)
+    {
+
+        $query = $this
+            ->createQueryBuilder('s')
+            ->select('s')
+            ->andWhere('CURRENT_TIMESTAMPS() = s.dateDebut');
+
+        return $query->getQuery()->getResult();
+    }
+
+    public function findSortieCloturee()
+    {
+        $query = $this
+            ->createQueryBuilder('s')
+            ->select('s')
+            ->andWhere('s.dateDebut <')
+            ->andWhere('CURRENT_TIMESTAMPS() < s.dateDebut."');
+
+        return $query->getQuery()->getResult();
+    }
+
+    public function findSortiePassee()
+    {
+    }
+
+    public function findSortieArchivee()
+    {
+    }
+
+    public function findSortieAnnulee()
+    {
+    }*/
 }

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Command\ChangeStateSortieCommand;
 use App\Entity\Etat;
 use App\Entity\Participant;
 use App\Entity\Sortie;
@@ -18,13 +19,12 @@ use App\Repository\SortieRepository;
 use App\Repository\VilleRepository;
 use App\Upload\SortieImage;
 use Doctrine\ORM\EntityManagerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Request;
 use App\ManageEntity\UpdateEntity;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -32,33 +32,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class SortieController extends AbstractController
 {
-
-    /**
-     * @Route("/accueil", name="accueil_list")
-     */
-    public function accueil(Request $request, SortieRepository $sortieRepository): Response
-    {
-        $isParticipant = $this->isGranted("ROLE_PARTICIPANT");
-        if (!$isParticipant) {
-            throw new AccessDeniedException("Réservé aux personnes inscrites sur ce site!");
-        }
-
-        $participant = $this->getUser();
-        $sorties = $sortieRepository->findAll();
-        $data = new SortieSearch();
-        $searchSortieForm = $this->createForm(SortieSearchType::class, $data);
-        $searchSortieForm->handleRequest($request);
-        //$sorties = $sortieRepository->findSearch($data);
-        if (!$sorties) {
-            throw $this->createNotFoundException("Sortie inexistant");
-        }
-        return $this->render('accueil.html.twig', [
-            'sorties' => $sorties,
-            'particpant' => $participant,
-            'form' => $searchSortieForm->createView()
-        ]);
-    }
-
 
     /**
      * @Route("/sortie/create", name="sortie_create")
@@ -145,8 +118,10 @@ class SortieController extends AbstractController
     /**
      * @Route("sortie/liste", name="sortie_list")
      */
-    public function list(Request $request, SortieRepository $sortieRepository): Response
+    public function list(Request $request, SortieRepository $sortieRepository, ChangeStateSortieCommand $changeStateSortieCommand): Response
     {
+
+
         $participant = $this->getUser();
         $isParticipant = $this->isGranted("ROLE_PARTICIPANT");
         if (!$isParticipant) {
@@ -267,18 +242,5 @@ class SortieController extends AbstractController
         return $this->render('sortie/annuler.html.twig', ['annulerForm' => $annulerForm->createView(),"sortie" => $sortie, 'participant' => $participant]);
     }
 
-
-    /**
-     * @Route("/sortie/archivage/{id}", name="sortie_archiver")
-     */
-    public function archive($id, EntityManagerInterface $entityManager, SortieRepository $sortieRepository): Response
-    {
-        $participant = $this->getUser();
-        //Archiver une sortie
-        $sortie = $entityManager->find(Sortie::class, $id);
-        $entityManager->remove($sortie);
-        $entityManager->flush();
-        return $this->render('sortie/detail.html.twig', ["sortie" => $sortie, 'participant' => $participant]);
-    }
 
 }
