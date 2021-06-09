@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Etat;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -18,6 +19,7 @@ class EtatRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Etat::class);
     }
+
 
     // /**
     //  * @return Etat[] Returns an array of Etat objects

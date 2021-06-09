@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} {{ parent() }} | Annuler Sortie{% endblock %}
+
+{% block body %}
+    <h2>Formuaire d'annulation de la sortie</h2>
+    <div class="sortie-create">
+        <div class="sortie-column">
+            <h4> Nom : {{ sortie.nom }}</h4>
+            <h4> Date de début : {{ sortie.dateDebut|date('d/m/Y') }}</h4>
+            <h4> Lieu : {{ sortie.lieu.nom }}</h4>
+            <h4> Ville : {{ sortie.lieu.ville.nom }}</h4>
+            {{ form_start(annulerForm) }}
+            <div class="form_widget">
+                {{ form_widget(annulerForm) }}
+                <button>Enregistrer</button>
+                {{ form_end(annulerForm) }}
+            </div>
+        </div>
+        <a href="{{ path('sortie_list') }}">
+            <button>Annuler</button>
+        </a>
+    </div>
+{% endblock %}

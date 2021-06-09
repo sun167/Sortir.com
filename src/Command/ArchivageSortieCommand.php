@@ -45,7 +45,7 @@ class ArchivageSortieCommand extends Command
          * @var Sortie $sortie
          */
         foreach ($sortie as $sorties) {
-            if($sortie->getDateDebut() < $date) {
+            if($sortie->getDateDebut()) {
                 $this->entityManager->remove($sorties);
                 $deletedSorties++;
                 $io->success('ET LA VICTOIRE REVIENT A : ARCHIVAGE');

@@ -26,6 +26,7 @@ class Participant implements UserInterface
     /**
      *@Assert\NotBlank()
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Assert\NotBlank
      *
      */
     private $pseudo;
@@ -87,7 +88,9 @@ class Participant implements UserInterface
      * @Assert\NotBlank
      */
     private $campus;
+
     /**
+<<<<<<<<< Temporary merge branch 1
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $urlPhoto;

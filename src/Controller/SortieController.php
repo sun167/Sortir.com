@@ -2,18 +2,23 @@
 
 namespace App\Controller;
 
+use App\Entity\Etat;
 use App\Entity\Participant;
 use App\Entity\Sortie;
+use App\Form\AnnulerSortieType;
+use App\Form\LieuType;
 use App\Entity\SortieSearch;
 use App\Form\SortieSearchType;
 use App\Form\SortieType;
 use App\Repository\EtatRepository;
 use App\Repository\LieuRepository;
+use App\Form\VilleType;
 use App\Repository\ParticipantRepository;
 use App\Repository\SortieRepository;
 use App\Repository\VilleRepository;
 use App\Upload\SortieImage;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Request;
@@ -99,6 +104,7 @@ class SortieController extends AbstractController
                 $etat = $etatRepository->find(2);
             }
             $sortie->setEtat($etat);
+
             //Ajout
             $updateEntity->save($sortie);
             $this->addFlash('succes', 'Nouvelle sortie ajoutée !!');
@@ -162,7 +168,6 @@ class SortieController extends AbstractController
             'form' => $searchSortieForm->createView()
         ]);
     }
-
 
     /**
      * @Route("sortie/ajax-inscription", name="sortie_ajax_inscription")
@@ -241,15 +246,27 @@ class SortieController extends AbstractController
     /**
      * @Route("/sortie/suppr/{id}", name="sortie_suppr")
      */
-    public function delete($id, EntityManagerInterface $entityManager): Response
+    public function delete($id, EntityManagerInterface $entityManager, SortieRepository $sortieRepository, Request $request): Response
     {
-        //Supprimer une sortie
-        //TODO PAGE DE RAISON DE SUPPRESSION
-        $sortie = $entityManager->find(Sortie::class, $id);
-        $entityManager->remove($sortie);
-        $entityManager->flush();
-        return $this->redirectToRoute('accueil_list');
+        //Annuler une nouvelle sortie
+        $participant = $this->getUser();
+        $sortie = $sortieRepository->find($id);
+        if (!$sortie) {
+            throw $this->createNotFoundException("Détail de la sortie inexistant");
+        }
+        $annulerForm = $this->createForm(AnnulerSortieType::class, $sortie);
+        $annulerForm->handleRequest($request);
+
+        if ($annulerForm->isSubmitted() && $annulerForm->isValid()) {
+            $entityManager->persist($sortie);
+            $entityManager->flush();
+
+            $this->addFlash('succes', 'Sortie annulée!!');
+            return $this->redirectToRoute('sortie_detail', ['id' => $sortie->getId()]);
+        }
+        return $this->render('sortie/annuler.html.twig', ['annulerForm' => $annulerForm->createView(),"sortie" => $sortie, 'participant' => $participant]);
     }
+
 
     /**
      * @Route("/sortie/archivage/{id}", name="sortie_archiver")
@@ -257,9 +274,7 @@ class SortieController extends AbstractController
     public function archive($id, EntityManagerInterface $entityManager, SortieRepository $sortieRepository): Response
     {
         $participant = $this->getUser();
-
         //Archiver une sortie
-
         $sortie = $entityManager->find(Sortie::class, $id);
         $entityManager->remove($sortie);
         $entityManager->flush();

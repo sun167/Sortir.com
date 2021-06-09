@@ -1,94 +1,62 @@
-{# <nav>
-    <ul>
-        {% if app.user %}
-            <li><a href="{{ path('sortie_list') }}">Accueil - Sorties</a></li>
-        {% endif %}
-
-
-        <div class="nav_right">
-            {%  if is_granted("ROLE_ADMIN") %}
-                <li><a href="{{ path('campus_list') }}">Campus</a></li>
-            {% endif %}
-
-            {%  if is_granted("ROLE_PARTICIPANT") %}
-            <li><a href="{{ path('ville_list') }}">Ville</a></li>
-            <li><a href="{{ path('lieu_list') }}">Lieu</a></li>
-            {% endif %}
-            {% if is_granted("ROLE_ADMIN") %}
-                <li><a href="{{ path('app_register') }}">Inscription Utilisateur</a></li>
-            {% endif %}
-            {% if not app.user %}
-                <li><a href="{{ path('app_login') }}">Connexion</a></li>
-            {% endif %}
-            {% if app.user %}
-                <li><a href="{{ path('participant_edit', {'id': app.user.id}) }}">Mon Profil</a></li>
-                <li><a href="{{ path('app_logout') }}">Déconnexion</a></li>
-            {% endif %}
-
-        </div>
-    </ul>
-</nav> #}
-<div class="container">
-<nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light mb-3 ">
-
-    <form class="container-fluid">
-        {% if app.user %}
-            <button type="button" class="btn btn-outline-secondary">
-                <a class="navbar-brand nave-link active" href="{{ path('sortie_list') }}">Tout le monde Dehors</a>
-            </button>
-
-        {% endif %}
-        <div class="navbar-collaps justify-content-end" id="navbarText">
-            <ul class="nav ml-auto me-auto mb-2 mb-lg-2 ">
-
-                {% if is_granted("ROLE_PARTICIPANT") %}
-                    <li class="nav-item">
-                        <button type="button" class="btn btn-outline-light">
-                            <a class="nav-link" href="{{ path('ville_list') }}">Villes</a>
-                        </button>
-                    </li>
-                    <li class="nav-item">
-                        <button type="button" class="btn btn-outline-light">
-                            <a class="nav-link" href="{{ path('lieu_list') }}">Lieux</a>
-                        </button>
-                    </li>
-                {% endif %}
-                {% if is_granted("ROLE_ADMIN") %}
-                    <li class="nav-item">
-                        <button type="button" class="btn btn-outline-light">
-                            <a class="nav-link" href="{{ path('app_register') }}">Inscription participant</a>
-                        </button>
-                    </li>
-                {% endif %}
-                {% if is_granted("ROLE_ADMIN") %}
-                    <li class="nav-item">
-                        <button type="button" class="btn btn-outline-light">
-                            <a class="nav-link" href="{{ path('campus_list') }}">Campus</a>
-                        </button>
-                    </li>
-                {% endif %}
-                {% if not app.user %}
-                    <li class="nav-item">
-                        <button type="button" class="btn btn-outline-light">
-                            <a class="nav-link" href="{{ path('app_login') }}">Connexion</a>
-                        </button>
-                    </li>
-                {% endif %}
+<nav>
+    <div class="container">
+        <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light mb-3 ">
+            <form class="container-fluid">
                 {% if app.user %}
-                    <li class="nav-item">
-                        <button type="button" class="btn btn-outline-light">
-                            <a class="nav-link" href="{{ path('participant_edit', {'id': app.user.id}) }}">
-                                Mon profil</a>
-                        </button>
-                    </li>
-                    <li class="nav-item">
-                        <button type="button" class="btn btn-sm btn-light btn-outline-danger">
-                            <a class="nav-link" href="{{ path('app_logout') }}">Déconnexion</a>
-                        </button>
-                    </li>
+                    <button type="button" class="btn btn-outline-secondary">
+                        <a class="navbar-brand nave-link active" href="{{ path('sortie_list') }}">Tout le monde Dehors</a>
+                    </button>
                 {% endif %}
-            </ul>
-        </div>
-    </form>
+                <div class="navbar-collaps justify-content-end" id="navbarText">
+                    <ul class="nav ml-auto me-auto mb-2 mb-lg-2 ">
+                        {% if is_granted("ROLE_PARTICIPANT") %}
+                            <li class="nav-item">
+                                <button type="button" class="btn btn-outline-light">
+                                    <a class="nav-link" href="{{ path('ville_list') }}">Villes</a>
+                                </button>
+                            </li>
+                            <li class="nav-item">
+                                <button type="button" class="btn btn-outline-light">
+                                    <a class="nav-link" href="{{ path('lieu_list') }}">Lieux</a>
+                                </button>
+                            </li>
+                        {% endif %}
+                        {% if is_granted("ROLE_ADMIN") %}
+                            <li class="nav-item">
+                                <button type="button" class="btn btn-outline-light">
+                                    <a class="nav-link" href="{{ path('app_register') }}">Inscription participant</a>
+                                </button>
+                            </li>
+                        {% endif %}
+                        {% if is_granted("ROLE_ADMIN") %}
+                            <li class="nav-item">
+                                <button type="button" class="btn btn-outline-light">
+                                    <a class="nav-link" href="{{ path('campus_list') }}">Campus</a>
+                                </button>
+                            </li>
+                        {% endif %}
+                        {% if not app.user %}
+                            <li class="nav-item">
+                                <button type="button" class="btn btn-outline-light">
+                                    <a class="nav-link" href="{{ path('app_login') }}">Connexion</a>
+                                </button>
+                            </li>
+                        {% endif %}
+                        {% if app.user %}
+                            <li class="nav-item">
+                                <button type="button" class="btn btn-outline-light">
+                                    <a class="nav-link" href="{{ path('participant_edit', {'id': app.user.id}) }}">Mon profil</a>
+                                </button>
+                            </li>
+                            <li class="nav-item">
+                                <button type="button" class="btn btn-sm btn-light btn-outline-danger">
+                                    <a class="nav-link" href="{{ path('app_logout') }}">Déconnexion</a>
+                                </button>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </form>
+        </nav>
+    </div>
 </nav>
-</div>

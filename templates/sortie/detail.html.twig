@@ -14,22 +14,33 @@
                     <p> Nom : {{ sortie.nom }}</p>
                     <p> Description : {{ sortie.description }}</p>
                     <p> Date de début : {{ sortie.dateDebut|date('d/m/Y') }}</p>
+                    {%  if sortie.motif == null %}
                     <p> Date de fin d'inscription : {{ sortie.dateFin|date('d/m/Y') }}</p>
                     <p> Durée : {{ sortie.duree }} minutes</p>
+                    {% endif %}
                     <p>Etat : {{ sortie.etat.libelle }}</p>
+                    {%  if sortie.motif != null %}
+                        <p>Motif : {{ sortie.motif }}</p>
+                    {% endif %}
                 </div>
                 <div class="col-6">
+                    {%  if sortie.motif == null %}
                     <p> Lieu : {{ lieu.nom }}</p>
                     <p> Rue : {{ lieu.rue }}</p>
                     <p> Code Postal : {{ ville.codePostal }}</p>
+                    {%  endif %}
                     <p> Ville : {{ ville.nom }}</p>
+                    {%  if sortie.motif == null %}
                     <p> Latitude : {{ lieu.latitude }}</p>
                     <p> Longitude : {{ lieu.longitude }}</p>
+                    {%  endif %}
+
                 </div>
             </div>
 
         </div>
         <div>
+            {%  if sortie.motif == null %}
             <h3 class="mt-5">Listes des participants</h3>
 
 
@@ -43,7 +54,7 @@
 
             {% endfor %}
 
-
+{% endif %}
         </div>
     </div>
 

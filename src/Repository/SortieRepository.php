@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Controller\SortieController;
 use App\Entity\Participant;
 use App\Entity\Sortie;
 use App\Entity\SortieSearch;
@@ -18,6 +19,9 @@ use function Doctrine\ORM\QueryBuilder;
  */
 class SortieRepository extends ServiceEntityRepository
 {
+    /**
+     * @var \DateTime|false
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Sortie::class);

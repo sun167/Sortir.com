@@ -54,6 +54,8 @@ class Sortie
      */
     private $urlPhoto;
 
+
+
     /**
      * @ORM\ManyToOne(targetEntity=Etat::class, inversedBy="sortie")
      */
@@ -80,9 +82,20 @@ class Sortie
     private $nb_dispo;
 
     /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $Archive;
+
+
+    /**
      * @ORM\ManyToOne(targetEntity=Participant::class, inversedBy="sorties")
      */
     private $organisateur;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $motif;
 
 
     public function __construct()
@@ -256,6 +269,18 @@ class Sortie
         return $this;
     }
 
+    public function getArchive(): ?bool
+    {
+        return $this->Archive;
+    }
+
+    public function setArchive(?bool $Archive): self
+    {
+        $this->Archive = $Archive;
+
+        return $this;
+    }
+
     public function getOrganisateur(): ?Participant
     {
         return $this->organisateur;
@@ -264,6 +289,18 @@ class Sortie
     public function setOrganisateur(?Participant $organisateur): self
     {
         $this->organisateur = $organisateur;
+
+        return $this;
+    }
+
+    public function getMotif(): ?string
+    {
+        return $this->motif;
+    }
+
+    public function setMotif(?string $motif): self
+    {
+        $this->motif = $motif;
 
         return $this;
     }
