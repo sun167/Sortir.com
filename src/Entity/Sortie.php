@@ -74,11 +74,6 @@ class Sortie
      */
     private $participants;
 
-  /**
-     * @ORM\Column (type="integer", nullable=true)
-     */
-    private $nb_dispo;
-
     /**
      * @ORM\ManyToOne(targetEntity=Participant::class, inversedBy="sorties")
      */
@@ -242,16 +237,6 @@ class Sortie
         if ($this->participants->removeElement($participant)) {
             $participant->removeInscription($this);
         }
-
-        return $this;
-    }
-
-    //PARTIE AJAX SUR L'AJOUT D'INSCRIPTION
-    public function getNbDispo(): ?int {
-        return $this->nb_dispo;
-    }
-    public function setNbDispo(int $nb_dispo): self {
-        $this->nb_dispo = $nb_dispo;
 
         return $this;
     }

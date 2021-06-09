@@ -6,7 +6,6 @@ use App\Entity\Participant;
 use App\Entity\Sortie;
 use App\Entity\SortieSearch;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
 use function Doctrine\ORM\QueryBuilder;
 
@@ -32,11 +31,13 @@ class SortieRepository extends ServiceEntityRepository
         $query = $this
             ->createQueryBuilder('s')
             ->select('s');
+        // BARRE DE RECHERCHE
         if (!empty($search->getQ())) {
             $query = $query
                 ->andWhere('s.nom LIKE :q')
                 ->setParameter('q', "%{$search->getQ()}%");
         }
+        // FILTRE CAMPUS
         if (!empty($search->getCampus())) {
             $query = $query
                 ->addSelect('c')
@@ -44,6 +45,7 @@ class SortieRepository extends ServiceEntityRepository
                 ->andWhere('c.nom LIKE :nomCampus')
                 ->setParameter('nomCampus', "%{$search->getCampus()->getNom()}%");
         }
+        // FILTRE DE DATE
         if (!(empty($search->getPremierDate()) && empty($search->getDeuxiemeDate()))) {
             $query = $query
                 ->andWhere('s.dateDebut > :premierDate')
@@ -51,6 +53,7 @@ class SortieRepository extends ServiceEntityRepository
                 ->setParameter('premierDate', $search->getPremierDate())
                 ->setParameter('deuxiemeDate', $search->getDeuxiemeDate());
         }
+        // FILTRE DES SORTIE PASSEE
         if (!empty($search->isSortiePassee())) {
             $query = $query
                 ->addSelect('e')
@@ -58,6 +61,7 @@ class SortieRepository extends ServiceEntityRepository
                 ->andWhere('e.libelle LIKE :passe')
                 ->setParameter('passe', "Passée");
         }
+        // FILTRE INSCRIPTION
         if (!empty($search->isInscrit()) && empty($search->isNonInscrit())) {
             $query = $query
                 ->addSelect('p')
@@ -72,6 +76,7 @@ class SortieRepository extends ServiceEntityRepository
                 ->andWhere(':participant NOT MEMBER OF s.participants')
                 ->setParameter('participant', $participant);
         }
+        // FILTRE ORGANISATEUR
         if (!empty($search->isOrganisateur())) {
             $query = $query
                 ->addSelect('o')
@@ -82,17 +87,4 @@ class SortieRepository extends ServiceEntityRepository
         return $query->getQuery()->getResult();
 
     }
-
-
-    /*
-    public function findOneBySomeField($value): ?Sortie
-    {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }
