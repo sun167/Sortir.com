@@ -4,22 +4,34 @@
 
 {% block body %}
     <h2>Création d'une nouvelle sortie</h2>
-    <div class="sortie-create">
-        <div class="sortie-column">
-            {{ form_start(sortieForm) }}
-            {{ form_widget(sortieForm) }}
-            <button type="submit" class="btn btn-lg btn-outline-light mb-1 mt-3">
-                Publier
-            </button>
-            <button type="button" class="btn btn-lg btn-outline-light mb-1 mt-3">
-                <a class="text-decoration-none" href="{{ path('sortie_list') }}">
-                    Enregistrer</a></button>
-            <button type="button" class="btn btn-lg btn-outline-light mb-1 mt-3 ">
-                <a class="text-decoration-none" href="{{ path('sortie_list') }}">
-                    Annuler</a></button>
-            {{ form_end(sortieForm) }}
 
-
+    <div class="container sortie-create">
+        <div class="row">
+            <div class="col-9">
+                <div class="sortie-column">
+                    {{ form_start(sortieForm) }}
+                    {{ form_widget(sortieForm) }}
+                    <button type="submit" name="soumettre" value="publier" class="btn btn-lg btn-outline-light mb-1 mt-3">
+                        Publier
+                    </button>
+                    <button type="submit" name="soumettre" value="enregistrer" class="btn btn-lg btn-outline-light mb-1 mt-3">
+                        Enregistrer
+                    </button>
+                    <button type="button" class="btn btn-lg btn-outline-light mb-1 mt-3 ">
+                        <a class="text-decoration-none" href="{{ path('sortie_list') }}">
+                            Annuler</a></button>
+                    {{ form_end(sortieForm) }}
+                </div>
+            </div>
+            <div class="col-3">
+                <button type="button" class="btn btn-light mb-3">
+                    <a class="navbar-brand" href="{{ path('ville_create') }}">Ajouter Ville
+                    </a>
+                </button>
+                <button type="button" class="btn btn-light">
+                    <a class="navbar-brand" href="{{ path('lieu_create') }}">Ajouter lieu</a>
+                </button>
+            </div>
         </div>
     </div>
 

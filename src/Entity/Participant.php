@@ -24,29 +24,33 @@ class Participant implements UserInterface
     private $id;
 
     /**
-     *
+     *@Assert\NotBlank()
      * @ORM\Column(type="string", length=180, unique=true)
      *
      */
     private $pseudo;
 
     /**
+     * @Assert\NotBlank()
      * @ORM\Column(type="json")
      */
     private $roles = [];
 
     /**
+     * @Assert\NotBlank()
      * @var string The hashed password
      * @ORM\Column(type="string")
      */
     private $password;
 
     /**
+     * @Assert\NotBlank()
      * @ORM\Column(type="string", length=50)
      */
     private $nom;
 
     /**
+     * @Assert\NotBlank()
      * @ORM\Column(type="string", length=50)
      */
     private $prenom;
@@ -80,6 +84,7 @@ class Participant implements UserInterface
 
     /**
      * @ORM\ManyToOne(targetEntity=Campus::class, inversedBy="participants")
+     * @Assert\NotBlank
      */
     private $campus;
     /**

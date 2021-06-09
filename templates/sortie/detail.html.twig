@@ -3,88 +3,48 @@
 {% block title %} {{ parent() }} | Détail de la sortie{% endblock %}
 
 {% block body %}
-    <h1>Détail Sortie</h1>
+    <h1 class="mb-5">Détail Sortie</h1>
     <div class="sortie-container">
-        <div class="sortie-image">
+        <div class="sortie-image mb-5">
             <img src="{{ asset('img/photoVisite/' ~ sortie.urlPhoto) }}" alt="{{ sortie.urlPhoto }}" width="500">
         </div>
         <div>
-            <h4> Nom : {{ sortie.nom }}</h4>
-            <h4> Date de début : {{ sortie.dateDebut|date('d/m/Y') }}</h4>
-            <h4> Date de fin d'inscription : {{ sortie.dateFin|date('d/m/Y') }}</h4>
-            <h4> Durée : {{ sortie.duree }} minutes</h4>
-            <h4> Description : {{ sortie.description }}</h4>
-            {% for lieu in sortie.lieu %}
-                <h4> Lieu : {{ lieu.nom }}</h4>
-                <h4> Rue : {{ lieu.rue }}</h4>
-                {% for ville in lieu.ville %}
-                    <h4> Code Postal : {{ ville.code_postal }}</h4>
-                    <h4> Ville : {{ ville.nom }} minutes</h4>
-                {% endfor %}
-                <h4> Latitude : {{ lieu.latitude }}</h4>
-                <h4> Longitude : {{ lieu.longitude }}</h4>
-            {% endfor %}
-            {% for campus in sortie.campus %}
-                <h4> Organiser par : {{ campus.nom }}</h4>
-            {% endfor %}
-            {% for etat in sortie.etat %}
-                <h4>Etat : {{ sortie.etat }}</h4>
-            {% endfor %}
+            <div class="row">
+                <div class="col-6">
+                    <p> Nom : {{ sortie.nom }}</p>
+                    <p> Description : {{ sortie.description }}</p>
+                    <p> Date de début : {{ sortie.dateDebut|date('d/m/Y') }}</p>
+                    <p> Date de fin d'inscription : {{ sortie.dateFin|date('d/m/Y') }}</p>
+                    <p> Durée : {{ sortie.duree }} minutes</p>
+                    <p>Etat : {{ sortie.etat.libelle }}</p>
+                </div>
+                <div class="col-6">
+                    <p> Lieu : {{ lieu.nom }}</p>
+                    <p> Rue : {{ lieu.rue }}</p>
+                    <p> Code Postal : {{ ville.codePostal }}</p>
+                    <p> Ville : {{ ville.nom }}</p>
+                    <p> Latitude : {{ lieu.latitude }}</p>
+                    <p> Longitude : {{ lieu.longitude }}</p>
+                </div>
+            </div>
+
         </div>
-    </div>
+        <div>
+            <h3 class="mt-5">Listes des participants</h3>
 
-   <div>
-        <button><a href="{{ path('sortie_edit', {'id' : sortie.id}) }}" title="Modifier">Modifier</a></button>
-    </div>
-
-    <div>
-        <button><a href="{{ path('sortie_suppr', {'id' : sortie.id}) }}" title="Supprimer">Supprimer</a>
-        </button>
-    </div>
-
-    <div>
-        <h3>Listes des participants</h3>
-        <button class="button_inscription" value="1">Inscription</button>
-        <button class="button_inscription" value="0">Désinscription</button>
-        <div> Il y a <span id="nb_dispo">{{ sortie.nbDispo }}</span> personnes inscrites
-            sur {{ sortie.nbInscriptionsMax }}</div>
-        <input type="hidden" id="sortie_id" value="{{ sortie.nom }}">
-        <table>
-            <thead>
-            <tr>
-                <th>Pseudo</th>
-                <th>Nom</th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody>
 
             {% for participant in sortie.participants %}
-                <tr>
 
-                    <td>{{ participant.pseudo }}</td>
-                    <td>{{ participant.nom ~ " " ~ participant.prenom }}</td>
-                    <td>
-                        <a href="{{ path('participant_detail',{id : participant.id}) }}">Details
-                        </a>
-                    </td>
 
-                </tr>
+                <button type="button" class="btn btn-light">
+                    <a class="navbar-brand" href="{{ path('participant_detail',{id : participant.id}) }}">
+                        {{ participant.pseudo ~ " " ~ participant.nom ~ " " ~ participant.prenom }}</a>
+                </button>
 
             {% endfor %}
-            </tbody>
 
-        </table>
 
-        {# <button class="button_inscription" value="1">Inscription</button> #}
-        {# <button class="button_inscription" value="0">Désinscription</button> #}
-        {# <div> Il y a <span id="nb_dispo">{{ sortie.nbDispo }}</span> personnes inscrites sur {{ sortie.nbInscriptionsMax }}</div> #}
-        {# <input type="hidden" id="sortie_id" value="{{ sortie.id }}"> #}
-        {#
-        {% for user in sortie.users %}
-            <h5>{{ user.nom }}</h5>
-        {% endfor %}
-        #}
+        </div>
     </div>
 
 {% endblock %}

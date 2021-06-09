@@ -11,6 +11,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Image;
@@ -43,7 +44,9 @@ class SortieType extends AbstractType
             ->add('urlPhoto', FileType::class, ['mapped' => false, 'required' => false, 'constraints' => [new Image(['maxSize' => '7024k', 'mimeTypesMessage' => "Format de l'image non supporter"])]])
             ->add('lieu', EntityType::class, ['class' => Lieu::class, 'choice_label' => 'nom'])
             ->add('campus', EntityType::class, ['class' => Campus::class, 'choice_label' => 'nom'])
-            ->add('etat', EntityType::class, ['class' => Etat::class, 'choice_label' => 'libelle']);
+            ->add('publier', SubmitType::class, ['label'=> "Publier"])
+            ->add('enregistrer', SubmitType::class, ['label'=> "Enregistrer"]);
+            //->add('etat', EntityType::class, ['class' => Etat::class, 'choice_label' => 'libelle']);
     }
 
     public function configureOptions(OptionsResolver $resolver)
