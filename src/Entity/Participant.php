@@ -57,6 +57,7 @@ class Participant implements UserInterface
     private $prenom;
 
     /**
+     * @Assert\NotBlank()
      * @ORM\Column(type="string", length=15, nullable=true)
      */
     private $telephone;
@@ -90,7 +91,6 @@ class Participant implements UserInterface
     private $campus;
 
     /**
-<<<<<<<<< Temporary merge branch 1
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $urlPhoto;
