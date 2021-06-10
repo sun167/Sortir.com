@@ -86,7 +86,8 @@
 
                             <div class="col-6">
                                 {% if "now"|date('d-m-Y') <= sortie.dateFin|date('d-m-Y')
-                                    and sortie.etat.libelle == "Ouverte" %}
+                                    and sortie.etat.libelle == "Ouverte"
+                                    and sortie.participants|length != sortie.nbInscriptionsMax %}
                                     <p>
                                         <button class="btn btn-outline-secondary ms-3 btn-inscrire btn-{{ sortie.id }}"
                                                 style="visibility: {% if participant not in sortie.participants %}visible{% else %}hidden{% endif %}">
