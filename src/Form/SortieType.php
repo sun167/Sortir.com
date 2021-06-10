@@ -8,6 +8,7 @@ use App\Entity\Lieu;
 use App\Entity\Sortie;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\DataTransformer\DateTimeToHtml5LocalDateTimeTransformer;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -23,15 +24,13 @@ class SortieType extends AbstractType
         $builder
             ->add('nom', null, ['label' => 'Nom de la sortie : '])
             ->add('description', null, ['label' => 'Description : '])
-            ->add('dateDebut', DateType::class, [
-                'widget' => 'single_text',
-                'format'=> 'dd-MM-yyyy HH:mm',
-                'html5' => false,
-                'empty_data'=>'dd-MM-yyyy HH:mm',
+            ->add('dateDebut', DateTimeType::class, [
+                'label' => 'Date et heure de la sortie',
+                'date_widget' => 'single_text',
+                'time_widget' => 'single_text',
+//                'widget' => 'single_text',x`
 
             ])
-
-
             ->add('dateFin', DateType::class, [
                 'label' => 'Cloture inscriptions ',
                 'widget' => 'single_text',

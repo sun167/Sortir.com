@@ -54,8 +54,6 @@ class Sortie
      */
     private $urlPhoto;
 
-
-
     /**
      * @ORM\ManyToOne(targetEntity=Etat::class, inversedBy="sortie")
      */
@@ -75,17 +73,6 @@ class Sortie
      * @ORM\ManyToMany(targetEntity=Participant::class, mappedBy="inscription")
      */
     private $participants;
-
-  /**
-     * @ORM\Column (type="integer", nullable=true)
-     */
-    private $nb_dispo;
-
-    /**
-     * @ORM\Column(type="boolean", nullable=true)
-     */
-    private $Archive;
-
 
     /**
      * @ORM\ManyToOne(targetEntity=Participant::class, inversedBy="sorties")
@@ -255,28 +242,6 @@ class Sortie
         if ($this->participants->removeElement($participant)) {
             $participant->removeInscription($this);
         }
-
-        return $this;
-    }
-
-    //PARTIE AJAX SUR L'AJOUT D'INSCRIPTION
-    public function getNbDispo(): ?int {
-        return $this->nb_dispo;
-    }
-    public function setNbDispo(int $nb_dispo): self {
-        $this->nb_dispo = $nb_dispo;
-
-        return $this;
-    }
-
-    public function getArchive(): ?bool
-    {
-        return $this->Archive;
-    }
-
-    public function setArchive(?bool $Archive): self
-    {
-        $this->Archive = $Archive;
 
         return $this;
     }
