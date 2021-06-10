@@ -4,12 +4,10 @@
 
 {% block body %}
     <h2>Création d'une nouvelle ville</h2>
-    <div class="sortie-create">
-        <div class="sortie-column">
             {{ form_start(villeForm) }}
-            {{ form_widget(villeForm) }}
-            <button type="submit" class="Button-sortie">Ajouter</button></div>
+            <div class="form_widget mt-5 col-5">{{ form_widget(villeForm) }}
+                <button type="submit" class="btn btn-outline-light mt-5">
+                    Ajouter
+                </button></div>
             {{ form_end(villeForm) }}
-        </div>
-    </div>
 {% endblock %}

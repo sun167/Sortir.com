@@ -10,16 +10,17 @@
 
     {% if app.user %}
         <div class="mb-3">
-           <h3>You are logged in as {{ app.participant.pseudo }}</h3> , <a href="{{ path('app_logout') }}">Logout</a>
+           <h3>Tu es connnecté en tant que {{ app.participant.pseudo }}</h3> , <a href="{{ path('app_logout') }}">Logout</a>
         </div>
     {% endif %}
-
-    <h1 class="h3 mb-3 font-weight-normal">Authentification obligatoire pour l'accès au portail de sorties</h1>
+<div class="col-5">
+    <h1>Connexion</h1>
+    <h2> Acces aux sorties</h2>
     <label for="inputEmail">Email</label>
     <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
     <label for="inputPassword">Mot de passe</label>
     <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
-
+</div>
     <input type="hidden" name="_csrf_token"
            value="{{ csrf_token('authenticate') }}">
 

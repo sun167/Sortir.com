@@ -64,9 +64,9 @@
                                 <div class="ms-3 col-6">Inscription : {{ sortie.etat.libelle }}</div>
                                 <div class="ms-3 col-6" id="estInscrit-{{ sortie.id }}">
                                     {% if participant in sortie.participants %}
-                                        <div class="text-success"><h4>Inscrit/e</h4> </div>
+                                        <div class="text-success"><b>J'y serai !</b> </div>
                                     {% else %}
-                                        <div><h4>Non inscrit/e</h4> </div>
+                                        <div><b>Je n'y serai pas !</b> </div>
                                     {% endif %}
                                 </div>
                             </div>
@@ -99,7 +99,7 @@
                                                     <input type="hidden" class="sortieID" value="{{ sortie.id }}">
                                                     <input type="hidden" class="participantID"
                                                            value="{{ participant.id }}">
-                                                    S'inscrire</a>
+                                                    Je m'inscris</a>
                                             </button>
                                         </p>
                                     {% endif %}
@@ -110,7 +110,7 @@
                                                 style="visibility: {% if participant in sortie.participants %}visible{% else %}hidden{% endif %}">
                                             <input type="hidden" class="sortieID" value="{{ sortie.id }}">
                                             <input type="hidden" class="participantID" value="{{ participant.id }}">
-                                            Se désister
+                                            Je me désiste
                                         </button>
                                     {% endif %}
                                 </div>
