@@ -25,14 +25,14 @@
                 </div>
                 <div class="col-6">
                     {%  if sortie.motif == null %}
-                    <p> Lieu : {{ lieu.nom }}</p>
-                    <p> Rue : {{ lieu.rue }}</p>
-                    <p> Code Postal : {{ ville.codePostal }}</p>
+                    <p> Lieu : {{ sortie.lieu.nom }}</p>
+                    <p> Rue :  {{ sortie.lieu.rue }}</p>
+                    <p> Code Postal :  {{ sortie.lieu.ville.codePostal }}</p>
                     {%  endif %}
-                    <p> Ville : {{ ville.nom }}</p>
+                    <p> Ville :  {{ sortie.lieu.ville.nom }}</p>
                     {%  if sortie.motif == null %}
-                    <p> Latitude : {{ lieu.latitude }}</p>
-                    <p> Longitude : {{ lieu.longitude }}</p>
+                    <p> Latitude : {{ sortie.lieu.latitude }}</p>
+                    <p> Longitude : {{ sortie.lieu.longitude }}</p>
                     {%  endif %}
 
                 </div>
@@ -53,7 +53,6 @@
                 </button>
 
             {% endfor %}
-
 {% endif %}
         </div>
     </div>

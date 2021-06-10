@@ -62,8 +62,10 @@ class ChangeStateSortieCommand extends Command
                 && $now <= ($s->getDateDebut()->modify("+43800 minutes"))) {
                 $etat = $etatRepository->find(5);
                 $io->success('passée');
+
+
             } else if ($now > ($s->getDateDebut()->modify("+43800 minutes"))) {
-                $etat = $etatRepository->find(6);
+                $etat = $etatRepository->find(7);
                 $io->success('archivée');
             }
             if ($etat != $s->getEtat()) {

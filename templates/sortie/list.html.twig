@@ -32,8 +32,9 @@
         <div class="row {# row-cols-1 row-cols-sm-2 row-cols-md-3 g-3 #}">
 
             {% for sortie in sorties %}
+                {% if sortie.etat.libelle != "Archivée" %}
                 <div class="col-lg-4 mb-3">
-                    {% if sortie.etat.libelle != "Archivée" %}
+
                     <div class="card shadow-sm">
                         <div class="card">
                             <a class="text-decoration-none"
@@ -63,9 +64,9 @@
                                 <div class="ms-3 col-6">Inscription : {{ sortie.etat.libelle }}</div>
                                 <div class="ms-3 col-6" id="estInscrit-{{ sortie.id }}">
                                     {% if participant in sortie.participants %}
-                                        <div class="text-success"> Inscrit/e</div>
+                                        <div class="text-success"><h4>Inscrit/e</h4> </div>
                                     {% else %}
-                                        <div> Non inscrit/e</div>
+                                        <div><h4>Non inscrit/e</h4> </div>
                                     {% endif %}
                                 </div>
                             </div>
@@ -118,8 +119,9 @@
                             </div>
                         </div>
                     </div>
-                    {% endif %}
+
                 </div>
+                {% endif %}
             {% endfor %}
         </div>
     </div>

@@ -46,7 +46,7 @@ class SortieSearchType extends AbstractType
                 'required' => false,
             ])
             ->add('sortiePassee', CheckboxType::class, [
-                'label' => 'Sorties Passées ',
+                'label' => 'Sorties passées il  a moins d\'un mois',
                 'required' => false,
             ])
             ->add('inscrit', CheckboxType::class, [
