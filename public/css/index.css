@@ -1,5 +1,9 @@
 html body {
     background-color: #d3e1ed;
+
+}
+body {
+    margin-top: 300px;
 }
 
 main {
