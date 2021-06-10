@@ -103,52 +103,5 @@ class ParticipantController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/participant/create", name="participant_create")
-     */
-    public function create(Request $request,
-                           EntityManagerInterface $entityManager,
-                           UpdateEntity $updateEntity): Response
-
-    {
-
-        $isAdmin = $this->isGranted("ROLE_ADMIN");
-        if (!$isAdmin) {
-            throw new AccessDeniedException("Réservé aux admins !");
-        }
-
-        // Générer un formulaire pour créer un nouveau participant
-        $participant = new Participant();
-        $participantForm = $this->createForm(ParticipantType::class, $participant);
-
-        $participantForm->handleRequest($request);
-
-        // $file = $participantForm->get('poster')->getData();
-
-
-        if ($participantForm->isSubmitted() && $participantForm->isValid()) { // dans cet ordre là
-
-
-            //  $file = $participantForm->get('poster')->getData();
-            // /**
-            //  * @var UploadedFile $file
-            //  */
-            // if($file){
-            //     $directory = $this->getParameter('upload_posters_series_dir');
-            //     $serieImage->save($file,$participant,$directory);
-            // }
-
-            $updateEntity->save($participant);
-
-            $this->addFlash('success', 'Participant créé !!');
-
-            return $this->redirectToRoute('participant_detail', ['id' => $participant->getId()]);
-        }
-
-        return $this->render('participant/create.html.twig', [
-            'participantForm' => $participantForm->createView()
-        ]);
-    }
-
 
 }

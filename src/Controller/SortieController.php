@@ -197,7 +197,7 @@ class SortieController extends AbstractController
     /**
      * @Route("/sortie/edit/{id}", name="sortie_edit")
      */
-    public function edit($id, SortieRepository $sortieRepository, EntityManagerInterface $entityManager, Request $request, LieuRepository  $lieuRepository, VilleRepository $villeRepository): Response
+    public function edit($id, SortieRepository $sortieRepository, EntityManagerInterface $entityManager, Request $request, LieuRepository  $lieuRepository, VilleRepository $villeRepository, EtatRepository $etatRepository): Response
     {
         $isParticipant = $this->isGranted("ROLE_PARTICIPANT");
         if (!$isParticipant) {
@@ -218,8 +218,20 @@ class SortieController extends AbstractController
         $sortieForm->handleRequest($request);
 
         if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
+
+            //Logique pour différencier les deux boutons enregistrer et publier
+            if($sortieForm->get('enregistrer')->isClicked()){
+                $etat = $etatRepository->find(1);
+            }else{
+                $etat = $etatRepository->find(2);
+            }
+            $sortie->setEtat($etat);
+
+
             $entityManager->persist($sortie);
             $entityManager->flush();
+
+
 
             $this->addFlash('succes', 'Sortie modifier !!');
             return $this->redirectToRoute('sortie_detail', ['id' => $sortie->getId()]);

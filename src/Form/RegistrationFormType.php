@@ -54,16 +54,8 @@ class RegistrationFormType extends AbstractType
                 'attr' => ['readonly' => true,
                 ]])
 
-            // TODO à revoir en plus du registrationController pour pouvoir choisir le role d'un participant créé
-           /* ->add('roles', ChoiceType::class, [
-                'choices' =>[
-                    ["ROLE_ADMIN"]=>"admin",
-                    "ROLE_PARTICIPANT"=>"participant"
-                ],
-                'multiple'=>false
-                ])*/
 
-            ->add('plainPassword', PasswordType::class, [
+            ->add('password', PasswordType::class, [
                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
                 'mapped' => false,
@@ -73,10 +65,10 @@ class RegistrationFormType extends AbstractType
                         'message' => 'Please enter a password',
                     ]),
                     new Length([
-                        'min' => 6,
+                        'min' => 2,
                         'minMessage' => 'Your password should be at least {{ limit }} characters',
                         // max length allowed by Symfony for security reasons
-                        'max' => 4096,
+                        'max' => 10,
                     ]),
                 ],
             ])

@@ -25,18 +25,18 @@ class RegistrationController extends AbstractController
             throw new AccessDeniedException("Réservé aux administrateurs de ce site!");
         }
 
-        $participant = $this->getUser();
+        //$participant = $this->getUser();
         $newParticipant = new Participant();
         $newParticipant->setRoles(["ROLE_PARTICIPANT"]);
         $form = $this->createForm(RegistrationFormType::class, $newParticipant);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() /*&& $form->isValid()*/) {
             // encode the plain password
             $newParticipant->setPassword(
                 $passwordEncoder->encodePassword(
                     $newParticipant,
-                    $form->get('plainPassword')->getData()
+                    $form->get('password')->getData()
                 )
             );
 
@@ -45,18 +45,11 @@ class RegistrationController extends AbstractController
             $entityManager->flush();
 
             $this->addFlash('success', 'Participant créé avec succès!!');
-            // do anything else you need here, like send an email
-
-            // return $guardHandler->authenticateUserAndHandleSuccess(
-            //     $participant,
-            //     $request,
-            //     $authenticator,
-            //     'main' // firewall name in security.yaml
-            // );
+            return $this->redirectToRoute('sortie_list');
         }
-        return $this->render('participant/register.html.twig', [
+        return $this->render('registration/register.html.twig', [
             'registrationForm' => $form->createView(),
-            'participant' => $participant
+           // 'participant' => $participant
         ]);
     }
 }
