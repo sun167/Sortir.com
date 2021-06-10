@@ -1,0 +1,31 @@
+/*
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 1px;
+    overflow: hidden;
+    background-color: #999999;
+}
+
+li a:hover {
+    background-color: #5b6c8b;
+}
+
+li a {
+    float: left;
+    color: white;
+    text-align: center;
+    padding: 10px 15px;
+    text-decoration: none;
+}
+
+.nav_right {
+    display: flex;
+    justify-content: right;
+}
+
+.footer_zeneca{
+    background-color: #999999;
+    padding: 1px 0;
+    text-align: center;
+}*/

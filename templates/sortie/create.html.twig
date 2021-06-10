@@ -1,13 +1,32 @@
 {% extends 'base.html.twig' %}
 
-{% block title %} {{ parent()  }} | Création Sortie{% endblock %}
+{% block title %} {{ parent() }} | Création Sortie{% endblock %}
 
 {% block body %}
-<h2>Création d'une nouvelle sortie</h2>
-    <div>
-        {{ form_start(sortieForm) }}
-        {{ form_widget(sortieForm) }}
-        <button>Ajouter</button>
-        {{ form_end(sortieForm) }}
+    <h2>Création d'une nouvelle sortie</h2>
+
+    <div class="container sortie-create">
+        <div class="row">
+            <div class="col-9">
+                <div class="sortie-column">
+                    {{ form_start(sortieForm) }}
+                    {{ form_widget(sortieForm) }}
+                    <button type="button" class="btn btn-lg btn-outline-light mb-1 mt-3 ">
+                        <a class="text-decoration-none" href="{{ path('sortie_list') }}">
+                            Annuler</a></button>
+                    {{ form_end(sortieForm) }}
+                </div>
+            </div>
+            <div class="col-3">
+                <button type="button" class="btn btn-light mb-3">
+                    <a class="navbar-brand" href="{{ path('ville_create') }}">Ajouter Ville
+                    </a>
+                </button>
+                <button type="button" class="btn btn-light">
+                    <a class="navbar-brand" href="{{ path('lieu_create') }}">Ajouter lieu</a>
+                </button>
+            </div>
+        </div>
     </div>
+
 {% endblock %}

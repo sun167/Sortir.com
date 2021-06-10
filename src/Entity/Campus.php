@@ -20,7 +20,7 @@ class Campus
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=30)
+     * @ORM\Column(type="string", length=255)
      */
     private $nom;
 
@@ -30,14 +30,15 @@ class Campus
     private $sortie;
 
     /**
-     * @ORM\OneToMany(targetEntity=User::class, mappedBy="campus")
+     * @ORM\OneToMany(targetEntity=Participant::class, mappedBy="campus")
      */
-    private $users;
+    private $participants;
+
 
     public function __construct()
     {
         $this->sortie = new ArrayCollection();
-        $this->users = new ArrayCollection();
+        $this->participants = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -90,32 +91,34 @@ class Campus
     }
 
     /**
-     * @return Collection|User[]
+     * @return Collection|Participant[]
      */
-    public function getUsers(): Collection
+    public function getParticipants(): Collection
     {
-        return $this->users;
+        return $this->participants;
     }
 
-    public function addUser(User $user): self
+    public function addParticipant(Participant $participant): self
     {
-        if (!$this->users->contains($user)) {
-            $this->users[] = $user;
-            $user->setCampus($this);
+        if (!$this->participants->contains($participant)) {
+            $this->participants[] = $participant;
+            $participant->setCampus($this);
         }
 
         return $this;
     }
 
-    public function removeUser(User $user): self
+    public function removeParticipant(Participant $participant): self
     {
-        if ($this->users->removeElement($user)) {
+        if ($this->participants->removeElement($participant)) {
             // set the owning side to null (unless already changed)
-            if ($user->getCampus() === $this) {
-                $user->setCampus(null);
+            if ($participant->getCampus() === $this) {
+                $participant->setCampus(null);
             }
         }
 
         return $this;
     }
+
+
 }

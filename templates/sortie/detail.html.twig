@@ -1,18 +1,60 @@
 {% extends 'base.html.twig' %}
 
-{% block title %} {{ parent()  }} | Détail de la sortie{% endblock %}
+{% block title %} {{ parent() }} | Détail de la sortie{% endblock %}
 
 {% block body %}
-<h1>Détail Sortie</h1>
-    <div>
-        <h4> Numéro : {{ sortie.id }}</h4>
-        <h4> Nom : {{ sortie.nom }}</h4>
-        <h4> Date de début : {{ sortie.dateDebut|date('Y-m-d-h-m') }}</h4>
-        <h4> Date de Fin : {{ sortie.dateFin|date('Y-m-d-h-m')  }}</h4>
-        <h4> Durée : {{ sortie.duree }}</h4>
-        <h4> Nombre max d'Inscription : {{ sortie.nbInscriptionsMax }}</h4>
-        <h4> Description : {{ sortie.description }}</h4>
-        <h4> Photo : {{ sortie.urlPhoto }}</h4>
+    <h1 class="mb-5">Détail Sortie</h1>
+    <div class="sortie-container">
+        <div class="sortie-image mb-5">
+            <img src="{{ asset('img/photoVisite/' ~ sortie.urlPhoto) }}" alt="{{ sortie.urlPhoto }}" width="500">
+        </div>
+        <div>
+            <div class="row">
+                <div class="col-6">
+                    <p><b>Nom : </b> {{ sortie.nom }}</p>
+                    <p><b>Description :</b>  {{ sortie.description }}</p>
+                    <p><b>Date de début :</b>  {{ sortie.dateDebut|date('d/m/Y') }}</p>
+                    {%  if sortie.motif == null %}
+                    <p><b>Date de fin d'inscription :</b>  {{ sortie.dateFin|date('d/m/Y') }}</p>
+                    <p><b>Durée :</b> {{ sortie.duree }} minutes</p>
+                    {% endif %}
+                    <p><b>Etat :</b> {{ sortie.etat.libelle }}</p>
+                    {%  if sortie.motif != null %}
+                        <p><b>Motif : </b>{{ sortie.motif }}</p>
+                    {% endif %}
+                </div>
+                <div class="col-6">
+                    {%  if sortie.motif == null %}
+                    <p><b>Lieu :</b>  {{ sortie.lieu.nom }}</p>
+                    <p><b>Rue : </b>  {{ sortie.lieu.rue }}</p>
+                    <p><b>Code Postal : </b>  {{ sortie.lieu.ville.codePostal }}</p>
+                    {%  endif %}
+                    <p> <b>Ville :</b>  {{ sortie.lieu.ville.nom }}</p>
+                    {%  if sortie.motif == null %}
+                    <p><b>Latitude :</b>  {{ sortie.lieu.latitude }}</p>
+                    <p><b>Longitude :</b>  {{ sortie.lieu.longitude }}</p>
+                    {%  endif %}
+
+                </div>
+            </div>
+
+        </div>
+        <div>
+            {%  if sortie.motif == null %}
+            <h3 class="mt-5">Participants inscrits</h3>
+
+
+            {% for participant in sortie.participants %}
+
+
+                <button type="button" class="btn btn-light">
+                    <a class="navbar-brand" href="{{ path('participant_detail',{id : participant.id}) }}">
+                        {{ participant.pseudo ~ " " ~ participant.nom ~ " " ~ participant.prenom }}</a>
+                </button>
+
+            {% endfor %}
+{% endif %}
+        </div>
     </div>
 
 {% endblock %}

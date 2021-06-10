@@ -20,7 +20,7 @@ class Sortie
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=30)
+     * @ORM\Column(type="string", length=255)
      */
     private $nom;
 
@@ -50,14 +50,9 @@ class Sortie
     private $description;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255,nullable=true)
      */
     private $urlPhoto;
-
-    /**
-     * @ORM\ManyToMany(targetEntity=User::class, mappedBy="inscription")
-     */
-    private $user;
 
     /**
      * @ORM\ManyToOne(targetEntity=Etat::class, inversedBy="sortie")
@@ -75,13 +70,24 @@ class Sortie
     private $campus;
 
     /**
-     * @ORM\ManyToMany(targetEntity=User::class, mappedBy="inscription")
+     * @ORM\ManyToMany(targetEntity=Participant::class, mappedBy="inscription")
      */
-    private $users;
+    private $participants;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Participant::class, inversedBy="sorties")
+     */
+    private $organisateur;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $motif;
+
 
     public function __construct()
     {
-        $this->users = new ArrayCollection();
+        $this->participants = new ArrayCollection();
     }
 
 
@@ -214,29 +220,54 @@ class Sortie
     }
 
     /**
-     * @return Collection|User[]
+     * @return Collection|Participant[]
      */
-    public function getUsers(): Collection
+    public function getParticipants(): Collection
     {
-        return $this->users;
+        return $this->participants;
     }
 
-    public function addUser(User $user): self
+    public function addParticipant(Participant $participant): self
     {
-        if (!$this->users->contains($user)) {
-            $this->users[] = $user;
-            $user->addInscription($this);
+        if (!$this->participants->contains($participant)) {
+            $this->participants[] = $participant;
+            $participant->addInscription($this);
         }
 
         return $this;
     }
 
-    public function removeUser(User $user): self
+    public function removeParticipant(Participant $participant): self
     {
-        if ($this->users->removeElement($user)) {
-            $user->removeInscription($this);
+        if ($this->participants->removeElement($participant)) {
+            $participant->removeInscription($this);
         }
 
         return $this;
     }
+
+    public function getOrganisateur(): ?Participant
+    {
+        return $this->organisateur;
+    }
+
+    public function setOrganisateur(?Participant $organisateur): self
+    {
+        $this->organisateur = $organisateur;
+
+        return $this;
+    }
+
+    public function getMotif(): ?string
+    {
+        return $this->motif;
+    }
+
+    public function setMotif(?string $motif): self
+    {
+        $this->motif = $motif;
+
+        return $this;
+    }
+
 }

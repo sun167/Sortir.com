@@ -1,7 +1,151 @@
-{% extends 'base.html.twig' %}
+{% extends '/base.html.twig' %}
 
-{% block title %} {{ parent()  }} | Liste des Sorties{% endblock %}
+{% block title %} {{ parent() }} | Liste des Sorties{% endblock %}
+
+
 
 {% block body %}
 
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-9 col-sm-12 mb-4 ">
+                <div class="card">
+                    <div class="card-body ">
+                        <h4>Filtrer les sorties </h4>
+
+                        {{ form_start(form) }}
+                        <p class="mb-3">{{ form_widget(form) }}</p>
+                        <button type="submit" class="btn btn-outline-secondary">Rechercher</button>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-12 mb-4">
+                <h3>Bienvenue {{ participant.prenom }} {{ participant.nom }}</h3>
+                <p>Nous sommes le : {{ "now"|date("d/m/Y") }}</p>
+                <button type="button" class="btn btn-light">
+                    <a class="navbar-brand" href="{{ path('sortie_create') }}">Créer une sortie
+                    </a>
+                </button>
+            </div>
+        </div>
+        <div class="row {# row-cols-1 row-cols-sm-2 row-cols-md-3 g-3 #}">
+
+            {% for sortie in sorties %}
+                {% if sortie.etat.libelle != "Archivée" %}
+                    <div class="col-lg-4 mb-3">
+
+                        <div class="card shadow-sm">
+                            <div class="card">
+                                <a class="text-decoration-none"
+                                   href="{{ path('sortie_detail',{id : sortie.id}) }}">
+                                    <img src="{{ asset('img/photoVisite/' ~ sortie.urlPhoto) }}" class="card-img-top"
+                                         alt="{{ sortie.nom }}"></a>
+                                <p class="card-text">
+                                <div class="row">
+                                    <div class="mb-1 mt-1 col-6">
+                                        <button type="button" class="btn btn-outline-light">
+                                            <a class="navbar-brand ms-3"
+                                               href="{{ path('sortie_detail',{id : sortie.id}) }}">
+                                                {{ sortie.nom }}
+                                            </a>
+                                        </button>
+                                    </div>
+                                    <div class="mb-1 mt-1 col-6">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-8">
+                                        <div class="ms-3">Date : {{ sortie.dateDebut|date('d-m-Y H:m') }}</div>
+                                        <div class="ms-3">Clotûre : {{ sortie.dateFin|date('d-m-Y H:m') }}</div>
+                                        <div class="ms-3" id="inscription-{{ sortie.id }}">Inscrits/places dispos
+                                            : {{ sortie.participants|length }}
+                                            / {{ sortie.nbInscriptionsMax }}</div>
+                                        <div class="row">
+                                            <div class="ms-3 col-6">{{ sortie.etat.libelle }}</div>
+                                            <div class="ms-3 col-6" id="estInscrit-{{ sortie.id }}">
+                                                {% if participant in sortie.participants %}
+                                                    <div class="text-success"><b>J'y serai !</b></div>
+                                                {% else %}
+                                                    <div><b>Je n'y serai pas !</b></div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="ms-3">Organisée par :
+                                            {% if sortie.organisateur %}
+                                                <button type="button" class="btn btn-sm btn-outline-light mb">
+                                                    <a class="navbar-brand"
+                                                       href="{{ path('participant_detail',{id : sortie.organisateur.id}) }}">
+                                                        {{ sortie.organisateur.nom ~ " " ~ sortie.organisateur.prenom }}
+                                                    </a>
+                                                </button>
+                                            {% else %}
+                                                Admin
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        {% if participant == sortie.organisateur %}
+                                            <div class="col-7">
+                                            <div class="row">
+
+                                                <button class="petit btn btn-sm btn-outline-secondary ms-3"><a class="text-decoration-none"
+                                                            href="{{ path('sortie_edit', {'id' : sortie.id}) }}"
+                                                            title="Modifier">Modifier</a></button>
+                                            </div>
+                                            <div class="mt-3 row">
+                                                <button class="petit btn btn-sm btn-outline-secondary ms-3">
+                                                    <a class="text-decoration-none" href="{{ path('sortie_suppr', {'id' : sortie.id}) }}"
+                                                       title="Supprimer">Supprimer</a>
+                                                </button>
+                                            </div></div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        {% if  "now"|date('d-m-Y') <= sortie.dateFin|date('d-m-Y')
+                                            and sortie.etat.libelle == "Ouverte"
+                                            and sortie.participants|length <= sortie.nbInscriptionsMax %}
+                                            <p>
+                                                <button class="btn btn-outline-secondary ms-3 btn-inscrire btn-{{ sortie.id }}"
+                                                        style="visibility: {% if participant not in sortie.participants %}visible{% else %}hidden{% endif %}">
+                                                    <a class="text-decoration-none"
+                                                       href="{{ path('sortie_ajax_inscription') }}">
+                                                        <input type="hidden" class="sortieID" value="{{ sortie.id }}">
+                                                        <input type="hidden" class="participantID"
+                                                               value="{{ participant.id }}">
+                                                        Je m'inscris</a>
+                                                </button>
+                                            </p>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-6">
+                                        {% if "now"|date('d-m-Y') <= sortie.dateDebut|date('d-m-Y') %}
+                                            <button class="btn btn-outline-danger ms-3 btn-desister btn-{{ sortie.id }}"
+                                                    style="visibility: {% if participant in sortie.participants %}visible{% else %}hidden{% endif %}">
+                                                <input type="hidden" class="sortieID" value="{{ sortie.id }}">
+                                                <input type="hidden" class="participantID" value="{{ participant.id }}">
+                                                Je me désiste
+                                            </button>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}
+{% block script %}
+    <script>
+        const inscriptionBtnURL = "{{ path('sortie_ajax_inscription') }}";
+        const desisterBtnURL = "{{ path('sortie_ajax_desister') }}"
+    </script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="{{ asset('js/ajax.js') }}"></script>
 {% endblock %}

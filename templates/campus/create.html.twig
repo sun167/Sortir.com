@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} {{ parent()  }} | Création Campus{% endblock %}
+
+{% block body %}
+    <h2>Création d'un nouveau campus</h2>
+    <div class="sortie-create">
+        <div class="sortie-column">
+            {{ form_start(campusForm) }}
+            <div class="form_widget">{{ form_widget(campusForm) }}
+            <button type="submit" class="Button-sortie">Ajouter</button></div>
+            {{ form_end(campusForm) }}
+        </div>
+    </div>
+{% endblock %}
