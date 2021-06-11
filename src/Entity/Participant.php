@@ -26,7 +26,6 @@ class Participant implements UserInterface
     /**
      *@Assert\NotBlank()
      * @ORM\Column(type="string", length=180, unique=true)
-     * @Assert\NotBlank
      *
      */
     private $pseudo;
