@@ -68,7 +68,7 @@ class ParticipantController extends AbstractController
         $campus = $campusRepository->find($id);
         $participantForm = $this->createForm(ParticipantType::class, $participant);
         $participantForm->handleRequest($request);
-        $entityManager->refresh($participant);
+
 
         if ($participantForm->isSubmitted() && $participantForm->isValid()) { // dans cet ordre là
 
@@ -88,13 +88,14 @@ class ParticipantController extends AbstractController
                 $participant->setUrlPhoto($newFileName);
             }
 
-            // $this->getDoctrine()->getManager(); Deuxieme façon sans le metre en paramètre
             $entityManager->persist($participant);
             $entityManager->flush();
 
             $this->addFlash('success', 'Profil correctement modifié !!');
             return $this->redirectToRoute('sortie_list', ['id' => $participant->getId()]);
         }
+
+        $entityManager->refresh($participant);
 
         return $this->render('participant/edit.html.twig', [
             "campus" => $campus,

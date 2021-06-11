@@ -12,17 +12,13 @@
     <div class="mt-5">
         {{  form_start(participantForm) }}
         {{  form_widget(participantForm) }}
-        <button type="button" class="btn btn-lg btn-outline-light mb-1 mt-5">
+        <button type="submit" class="btn btn-lg btn-outline-light mb-1 mt-5">
             Modifier profil
         </button>
         {{  form_end(participantForm) }}
-
-
         <button type="button" class="btn btn-sm btn-outline-light mb-1 mt-3">
             <a class="navbar-brand text-primary" href="{{ path('sortie_list') }}">Annuler</a>
         </button>
-
-
 
     </div>
 {% endblock %}

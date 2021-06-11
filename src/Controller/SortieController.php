@@ -37,7 +37,8 @@ class SortieController extends AbstractController
     /**
      * @Route("/sortie/create", name="sortie_create")
      */
-    public function create(Request $request, UserInterface $userInterface, UpdateEntity $updateEntity, EtatRepository $etatRepository, EntityManagerInterface $entityManager): Response
+    public function create(Request $request, UserInterface $userInterface, UpdateEntity $updateEntity,
+                           EtatRepository $etatRepository, EntityManagerInterface $entityManager): Response
     {
 
         $isParticipant = $this->isGranted("ROLE_PARTICIPANT");
@@ -48,12 +49,7 @@ class SortieController extends AbstractController
         //Création d'une nouvelle sortie
 
         $participant = $this->getUser();
-
         $sortie = new Sortie();
-
-        //$participant_id = (int)$request->query->get('participantID');
-        //$participant = $participantRepository->find($participant_id);
-        dump($participant);
         $sortie->setOrganisateur($participant);
 
         $sortieForm = $this->createForm(SortieType::class, $sortie);
@@ -80,11 +76,8 @@ class SortieController extends AbstractController
             $sortie->setEtat($etat);
 
             //Ajout
-            // $updateEntity->save($sortie);
             $entityManager->persist($sortie);
             $entityManager->flush();
-
-
 
             $this->addFlash('succes', 'Nouvelle sortie ajoutée !!');
             return $this->redirectToRoute('sortie_list', ['id' => $sortie->getId()]);
@@ -139,9 +132,6 @@ class SortieController extends AbstractController
 
         $sorties = $sortieRepository->findSearch($data, $participant);
 
-        if (!$sorties) {
-            throw $this->createNotFoundException("Sortie inexistant");
-        }
         return $this->render('sortie/list.html.twig', [
             'sorties' => $sorties,
             'participant' => $participant,
@@ -152,7 +142,8 @@ class SortieController extends AbstractController
     /**
      * @Route("sortie/ajax-inscription", name="sortie_ajax_inscription")
      */
-    public function inscription(Request $request, ParticipantRepository $participantRepository, SortieRepository $sortieRepository, EntityManagerInterface $entityManager)
+    public function inscription(Request $request, ParticipantRepository $participantRepository,
+                                SortieRepository $sortieRepository, EntityManagerInterface $entityManager)
     {
 
         $isParticipant = $this->isGranted("ROLE_PARTICIPANT");
@@ -179,7 +170,8 @@ class SortieController extends AbstractController
     /**
      * @Route("sortie/ajax-desister", name="sortie_ajax_desister")
      */
-    public function desister(Request $request, ParticipantRepository $participantRepository, SortieRepository $sortieRepository, EntityManagerInterface $entityManager)
+    public function desister(Request $request, ParticipantRepository $participantRepository,
+                             SortieRepository $sortieRepository, EntityManagerInterface $entityManager)
     {
         $sortie_id = (int)$request->query->get('sortieID');
         $participant_id = (int)$request->query->get('participantID');
@@ -227,11 +219,8 @@ class SortieController extends AbstractController
             }
             $sortie->setEtat($etat);
 
-
             $entityManager->persist($sortie);
             $entityManager->flush();
-
-
 
             $this->addFlash('succes', 'Sortie modifier !!');
             return $this->redirectToRoute('sortie_detail', ['id' => $sortie->getId()]);
